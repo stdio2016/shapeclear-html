@@ -14,19 +14,19 @@ GameScreen.prototype.create = function(){
 	console.log("So don't expect me to make a game");
 	this.addDebugText();
 	this.ball = game.add.sprite(Math.random()*(game.width-100), Math.random()*(game.height-100), 'ball');
-	let angle = 2*Math.PI*Math.random();
-	let speed = 5;
+	var angle = 2*Math.PI*Math.random();
+	var speed = 5;
 	this.ball.velocity = {x: Math.cos(angle)*speed, y: Math.sin(angle)*speed};
 }
 
 GameScreen.prototype.addDebugText = function(){
-	let style = { font: "32px", fill: "green" };
+	var style = { font: "32px", fill: "green" };
 	this.debug = this.game.add.text(0, 0, "0", style);
 }
 
 GameScreen.prototype.update = function(){
 	this.debug.text = game.time.fps;
-	let ball = this.ball;
+	var ball = this.ball;
 	ball.x += ball.velocity.x;
 	ball.y += ball.velocity.y;
 	if(ball.velocity.x > 0 && ball.x > game.width-100){
