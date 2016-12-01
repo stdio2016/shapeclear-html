@@ -3,10 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<style>
+body{
+  margin: 0;
+  padding: 0;
+}
+#loading{
+  text-align: center;
+  top: 50%;
+  bottom: 50%;
+  position: absolute;
+  width: 100%;
+}
+#gameDiv canvas{
+  width: 100vw;
+  height: 100vh;
+}
+</style>
+<script>
+document.write("<div id='loading'>Loading phaser.js</div>");
+</script>
 <script src='lib/phaser.js'></script>
+<script>
+var loading = document.getElementById('loading');
+if (window.Phaser) {
+    loading.style.display = 'none';
+}
+else {
+    loading.innerHTML = "Unable to load phaser.js";
+}
+</script>
 <script src='js/GameScreen.js'></script>
 <script src='js/Boot.js'></script>
 </head>
-<body style='margin:0; padding:0;'>
+<body>
+  <div id='gameDiv'></div>
 </body>
 </html>
