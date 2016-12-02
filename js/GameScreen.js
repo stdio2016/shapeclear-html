@@ -3,6 +3,7 @@ function GameScreen(){
 	this.ball = null; // Ball to test animation
 	this.background = null;
 	this.speed = 5;
+	this.board = null;
 }
 
 GameScreen.prototype.preload = function(){
@@ -22,6 +23,8 @@ GameScreen.prototype.create = function(){
 	var speed = this.speed;
 	this.ball.velocity = {x: Math.cos(angle)*speed, y: Math.sin(angle)*speed};
 	game.input.addMoveCallback(this.move, this);
+	this.board = new Board(this.game);
+	this.board.generateSimple();
 };
 
 GameScreen.prototype.addDebugText = function(){
