@@ -8,35 +8,24 @@ body{
   margin: 0;
   padding: 0;
 }
-#loading{
+.center-of-screen{
   text-align: center;
   top: 50%;
   bottom: 50%;
   position: absolute;
   width: 100%;
 }
-#gameDiv canvas{
+.game-div canvas{
   width: 100vw;
   height: 100vh;
 }
 </style>
-<script>
-document.write("<div id='loading'>Loading phaser.js</div>");
-</script>
-<script src='lib/phaser.js'></script>
-<script>
-var loading = document.getElementById('loading');
-if (window.Phaser) {
-    loading.style.display = 'none';
-}
-else {
-    loading.innerHTML = "Unable to load phaser.js";
-}
-</script>
-<script src='js/GameScreen.js'></script>
-<script src='js/Boot.js'></script>
 </head>
 <body>
-  <div id='gameDiv'></div>
+  <div id='loading' class='center-of-screen'>Loading phaser.js</div>
+  <script src='lib/phaser.js'></script>
+  <script src='js/GameScreen.js'></script>
+  <script src='js/Boot.js'></script>
+  <div id='gameDiv' class='game-div'></div>
 </body>
 </html>
