@@ -9,6 +9,11 @@ function GameScreen(){
 GameScreen.prototype.preload = function(){
 	console.log("I don't know how to use Phaser game engine");
 	game.load.image('ball', 'assets/ball.png');
+	game.load.image('triangle', 'assets/shapes/triangle.svg');
+	game.load.image('square', 'assets/shapes/square.svg');
+	game.load.image('circle', 'assets/shapes/circle.svg');
+	game.load.image('hexagon', 'assets/shapes/hexagon.svg');
+	game.load.image('board', 'assets/shapes/board.svg');
 	game.load.image('background', 'assets/background.png');
 	game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
 	game.time.advancedTiming = true;
