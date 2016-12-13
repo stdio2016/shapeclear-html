@@ -17,8 +17,8 @@ Board.prototype.generateSimple = function () {
     var gridSize = Math.min(gameWidth, gameHeight) / 10;
     this.boardGroup = this.game.add.group();
     this.shapeGroup = this.game.add.group();
-    for(var i = 0; i < height; i++){
-        for(var j = 0; j < width; j++){
+    for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
             var r = Math.floor(Math.random() * 4);
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'board');
             board.width = board.height = gridSize;
