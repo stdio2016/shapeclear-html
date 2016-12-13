@@ -1,7 +1,3 @@
-// Before I start the game
-// If someone's browser doesn't support console, then make a dummy object
-console = window.console || { log: function(s){} };
-
 // Finished loading phaser.js
 var loading = document.getElementById('loading');
 if (window.Phaser) {
