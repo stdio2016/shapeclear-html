@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+</head>
+<body>
+<p id='detectRenderer'></p>
+<p>Change Phaser renderer to
+  <select>
+    <option value="CANVAS">Phaser.CANVAS</option>
+    <option value="WEBGL">Phaser.WEBGL</option>
+    <option value="AUTO">Phaser.AUTO</option>
+    <option value="HEADLESS">Phaser.HEADLESS</option>
+  </select>
+</p>
+<p><input value="OK" type="button"></p>
+</body>
+<script>
+var detectRenderer = document.getElementById('detectRenderer');
+var renderer = localStorage.getItem('ShapeClear.renderer');
+if (renderer) {
+    detectRenderer.innerText = 'You are using ' + renderer + ' as Phaser renderer';
+}
+else {
+    detectRenderer.innerText = 'You have not played Shape Clear yet';
+}
+</script>
+</html>
