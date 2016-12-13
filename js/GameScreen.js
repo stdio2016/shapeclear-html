@@ -15,8 +15,6 @@ GameScreen.prototype.preload = function () {
     game.load.image('hexagon', 'assets/shapes/hexagon.svg');
     game.load.image('board', 'assets/shapes/board.svg');
     game.load.image('background', 'assets/background.png');
-    game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
-    game.time.advancedTiming = true;
 };
 
 GameScreen.prototype.create = function () {

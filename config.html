@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 </head>
 <body>
+<script src='../js/perlin.js'></script>
 <p id='detectRenderer'></p>
 <p>Change Phaser renderer to
   <select>
@@ -15,7 +16,6 @@
   </select>
 </p>
 <p><input value="OK" type="button"></p>
-</body>
 <script>
 var detectRenderer = document.getElementById('detectRenderer');
 var renderer = localStorage.getItem('ShapeClear.renderer');
@@ -26,4 +26,5 @@ else {
     detectRenderer.innerText = 'You have not played Shape Clear yet';
 }
 </script>
+</body>
 </html>
