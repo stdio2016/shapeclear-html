@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+html, body, .center-of-screen {
+    height: 100%;
+}
+.center-of-screen {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.game-div canvas{
+    width: 100vw;
+    height: 100vh;
+}

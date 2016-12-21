@@ -1,25 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<style>
-body{
-  margin: 0;
-  padding: 0;
-}
-.center-of-screen{
-  text-align: center;
-  top: 50%;
-  bottom: 50%;
-  position: absolute;
-  width: 100%;
-}
-.game-div canvas{
-  width: 100vw;
-  height: 100vh;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="css/alertbox.css">
 </head>
 <body>
   <div id='loading' class='center-of-screen'>Loading phaser.js</div>
@@ -28,6 +13,15 @@ body{
   <script src='js/model/Board.js'></script>
   <script src='js/GameScreen.js'></script>
   <script src='js/Boot.js'></script>
+  <div id='alert' class='alert-box' style='display: none;'>
+    <div class='title'>
+      <span>Error</span>
+      <input class='x' value='X' type='button'>
+    </div>
+    <pre class='description' id='description'>
+錯誤訊息會顯示在這裡
+    </pre>
+  </div>
   <div id='gameDiv' class='game-div'></div>
 </body>
 </html>

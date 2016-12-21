@@ -36,3 +36,19 @@ var gameScreen = new GameScreen();
 game.state.add("GameScreen", gameScreen);
 game.state.add("Load", new Load());
 game.state.start("Load");
+
+var errobj = null;
+// Add error handler
+window.onerror = function (msg, source, lineno, colno, err) {
+    window.onerror = null;
+    document.getElementById('alert').style.display='';
+    var des =
+      'Shape Clear has encountered an error' + '\n' +
+      msg + '\n' +
+      'source: ' + source + '\n' +
+      'position: ' + lineno + ',' + colno + '\n' +
+      'stack trace: \n' + err.stack;
+    document.getElementById('description').innerText = des;
+    errobj = err;
+    throw err;
+};

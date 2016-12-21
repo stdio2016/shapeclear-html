@@ -1,0 +1,32 @@
+.alert-box {
+    position: fixed;
+    left: 15%;
+    right: 15%;
+    top: 15%;
+    bottom: 15%;
+    border: black solid;
+    background: white;
+    display: flex;
+    flex-direction: column;
+}
+.alert-box .title {
+    color: white;
+    background: gray;
+    font-weight: 500;
+    display: flex;
+    align-items: flex-start;
+    padding: 2px 2px 2px 5px;
+}
+.alert-box .title span {
+    flex: 1;
+}
+.alert-box .x {
+    background: red;
+    color: white;
+    flex: 0;
+}
+.alert-box .description {
+    flex: 1;
+    margin: 5px;
+    overflow: auto;
+}
