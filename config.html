@@ -8,22 +8,26 @@
 <script src='../js/perlin.js'></script>
 <p id='detectRenderer'></p>
 <p>Change Phaser renderer to
-  <select>
+  <select id='choice'>
     <option value="CANVAS">Phaser.CANVAS</option>
     <option value="WEBGL">Phaser.WEBGL</option>
     <option value="AUTO">Phaser.AUTO</option>
     <option value="HEADLESS">Phaser.HEADLESS</option>
   </select>
 </p>
-<p><input value="OK" type="button"></p>
+<p><input value="OK" type="button" onclick='setRenderer()'></p>
 <script>
 var detectRenderer = document.getElementById('detectRenderer');
+var choiceBox = document.getElementById('choice');
 var renderer = localStorage.getItem('ShapeClear.renderer');
 if (renderer) {
     detectRenderer.innerText = 'You are using ' + renderer + ' as Phaser renderer';
 }
 else {
     detectRenderer.innerText = 'You have not played Shape Clear yet';
+}
+function setRenderer() {
+    localStorage.setItem('ShapeClear.renderer', choiceBox.value);
 }
 </script>
 </body>
