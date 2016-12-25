@@ -29,5 +29,5 @@ Board.prototype.generateSimple = function () {
             sprite.height = gridSize;
         }
     }
-    this.boardGroup.alpha = 20;
+    this.boardGroup.alpha = 0.8;
 }
