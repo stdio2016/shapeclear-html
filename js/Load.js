@@ -9,6 +9,7 @@ Load.prototype.preload = function () {
     // some game settings
     game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
     game.time.advancedTiming = true;
+    game.stage.backgroundColor = '#0080ff';
 
     // load assets
     game.load.image('ball', 'assets/ball.png');
@@ -18,10 +19,12 @@ Load.prototype.preload = function () {
     game.load.image('hexagon', 'assets/shapes/hexagon.svg');
     game.load.image('board', 'assets/shapes/board.svg');
     game.load.image('background', 'assets/background.png');
+    this.loadCounter = 0;
 };
 
-Load.prototype.create = function () {
-    this.state.start('GameScreen');
+Load.prototype.update = function () {
+    if(++this.loadCounter >= 10)
+        this.state.start('GameScreen');
 }
 
 Load.prototype.testRenderer = function () {
