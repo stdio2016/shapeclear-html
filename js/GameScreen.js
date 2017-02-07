@@ -26,10 +26,53 @@ GameScreen.prototype.addDebugText = function () {
 };
 
 GameScreen.prototype.update = function () {
-    this.debug.text = game.time.fps;
+    this.debug.text = game.width + "x" + game.height;
     this.background.width = game.width;
     this.background.height = game.height;
+    this.resizeUI();
 };
+
+GameScreen.prototype.resizeUI = function(){
+    var gw = game.width;
+    var gh = game.height;
+    if (gw > gh * 7/5) { // wide landscape
+        var left = gh * 2/5;
+        var right = gw - left;
+        var tall = gh;
+        this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
+    }
+    else if (gw > gh) { // narror landscape
+        var left = gw * 2/7;
+        var right = gw * 5/7;
+        var tall = gw * 5/7;
+        this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
+    }
+    else if (gw < gh){ // TODO portrait
+
+    }
+};
+
+GameScreen.prototype.resizeBoard = function(leftX, topY, size){
+    var board = this.board;
+    var boardSize = 9;
+    var gridSize = size / boardSize;
+    var startX = leftX + (boardSize - board.width) / 2 * gridSize;
+    var startY = topY + (boardSize - board.height) / 2 * gridSize;
+    for (var y = 0; y < board.height; y++){
+        for (var x = 0; x < board.width; x++){
+            var shape = board.shapes[y * board.width + x].sprite;
+            shape.x = startX + x * gridSize;
+            shape.y = startY + y * gridSize;
+            shape.width = gridSize;
+            shape.height = gridSize;
+            var tile = board.tiles[y * board.width + x].sprite;
+            tile.x = startX + x * gridSize;
+            tile.y = startY + y * gridSize;
+            tile.width = gridSize;
+            tile.height = gridSize;
+        }
+    }
+}
 
 GameScreen.prototype.move = function(pointer, x, y){
     if (pointer.isDown) {

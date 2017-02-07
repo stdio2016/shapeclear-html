@@ -1,5 +1,6 @@
 function Board(game) {
     this.shapes = [];
+    this.tiles = [];
     this.height = 9;
     this.width = 9;
     this.game = game;
@@ -25,6 +26,7 @@ Board.prototype.generateSimple = function () {
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize,
               ['triangle', 'square', 'circle', 'hexagon'][r]);
             arr[i * width + j] = {shape: r, sprite: sprite};
+            this.tiles.push({sprite: board});
             sprite.width = gridSize;
             sprite.height = gridSize;
         }
