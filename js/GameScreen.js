@@ -41,14 +41,23 @@ GameScreen.prototype.resizeUI = function(){
         var tall = gh;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
     }
-    else if (gw > gh) { // narror landscape
+    else if (gw > gh) { // narrow landscape
         var left = gw * 2/7;
         var right = gw * 5/7;
         var tall = gw * 5/7;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
     }
-    else if (gw < gh){ // TODO portrait
-
+    else if (gw > gh * 8/11){ // short portrait
+        var up = gh * 1/11;
+        var middle = gh * 8/11;
+        var tall = middle;
+        this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
+    }
+    else { // long portrait
+        var up = gw * 1/8;
+        var middle = gh - up - gw * 2/8;
+        var tall = gw;
+        this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
     }
 };
 
