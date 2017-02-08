@@ -81,7 +81,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             tile.height = gridSize;
         }
     }
-}
+};
 
 GameScreen.prototype.move = function(pointer, x, y){
     if (pointer.isDown) {

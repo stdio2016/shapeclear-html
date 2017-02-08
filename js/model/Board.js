@@ -32,4 +32,4 @@ Board.prototype.generateSimple = function () {
         }
     }
     this.boardGroup.alpha = 0.8;
-}
+};
