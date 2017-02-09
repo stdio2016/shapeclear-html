@@ -25,7 +25,9 @@ Board.prototype.generateSimple = function () {
             board.width = board.height = gridSize;
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize,
               ['triangle', 'square', 'circle', 'hexagon'][r]);
-            arr[i * width + j] = {shape: r, sprite: sprite};
+            var sh = new Shape(i, j, r);
+            arr[i * width + j] = sh;
+            sh.sprite = sprite;
             this.tiles.push({sprite: board});
             sprite.width = gridSize;
             sprite.height = gridSize;
