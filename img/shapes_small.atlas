@@ -1,0 +1,41 @@
+
+shapes_small.png
+size: 128,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+board
+  rotate: false
+  xy: 1, 25
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+circle
+  rotate: false
+  xy: 73, 33
+  size: 28, 28
+  orig: 36, 36
+  offset: 4, 4
+  index: -1
+hexagon
+  rotate: false
+  xy: 39, 1
+  size: 26, 30
+  orig: 36, 36
+  offset: 5, 3
+  index: -1
+square
+  rotate: false
+  xy: 67, 5
+  size: 26, 26
+  orig: 36, 36
+  offset: 5, 5
+  index: -1
+triangle
+  rotate: false
+  xy: 39, 33
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1

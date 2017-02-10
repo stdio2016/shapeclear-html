@@ -1,0 +1,47 @@
+{"frames": [
+{
+	"filename": "board",
+	"frame": {"x":1,"y":25,"w":36,"h":36},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":36,"h":36},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
+	"filename": "circle",
+	"frame": {"x":73,"y":33,"w":28,"h":28},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":4,"w":28,"h":28},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
+	"filename": "hexagon",
+	"frame": {"x":39,"y":1,"w":26,"h":30},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":3,"w":26,"h":30},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
+	"filename": "square",
+	"frame": {"x":67,"y":5,"w":26,"h":26},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":5,"w":26,"h":26},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
+	"filename": "triangle",
+	"frame": {"x":39,"y":33,"w":32,"h":28},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":4,"w":32,"h":28},
+	"sourceSize": {"w":36,"h":36}
+}
+],
+	"meta": {
+		"app": "atlasConvert.py and LibGDX texture packer",
+		"version": "0.1"
+	}
+}

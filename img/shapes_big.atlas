@@ -1,0 +1,41 @@
+
+shapes_big.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+board
+  rotate: false
+  xy: 1, 53
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+circle
+  rotate: false
+  xy: 139, 69
+  size: 56, 56
+  orig: 72, 72
+  offset: 8, 8
+  index: -1
+hexagon
+  rotate: false
+  xy: 197, 65
+  size: 52, 60
+  orig: 72, 72
+  offset: 10, 6
+  index: -1
+square
+  rotate: false
+  xy: 1, 1
+  size: 50, 50
+  orig: 72, 72
+  offset: 11, 11
+  index: -1
+triangle
+  rotate: false
+  xy: 75, 71
+  size: 62, 54
+  orig: 72, 72
+  offset: 5, 9
+  index: -1
