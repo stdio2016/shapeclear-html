@@ -1,0 +1,7 @@
+{
+    "duplicatePadding": true,
+    "stripWhitespaceX": true,
+    "stripWhitespaceY": true,
+    "scale": [1, 0.5],
+    "scaleSuffix": ["_big", "_small"]
+}
