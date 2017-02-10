@@ -21,9 +21,9 @@ Board.prototype.generateSimple = function () {
     for (var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
             var r = Math.floor(Math.random() * 4);
-            var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'board');
+            var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
-            var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize,
+            var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
               ['triangle', 'square', 'circle', 'hexagon'][r]);
             var sh = new Shape(i, j, r);
             arr[i * width + j] = sh;

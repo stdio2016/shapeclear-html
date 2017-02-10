@@ -17,11 +17,7 @@ Load.prototype.preload = function () {
 
     // load assets
     game.load.image('ball', 'assets/ball.png');
-    game.load.image('triangle', 'assets/shapes/triangle.svg');
-    game.load.image('square', 'assets/shapes/square.svg');
-    game.load.image('circle', 'assets/shapes/circle.svg');
-    game.load.image('hexagon', 'assets/shapes/hexagon.svg');
-    game.load.image('board', 'assets/shapes/board.svg');
+    game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
     game.load.image('background', 'assets/background.png');
 };
 
