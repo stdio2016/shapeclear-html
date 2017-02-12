@@ -6,35 +6,49 @@ filter: Nearest,Nearest
 repeat: none
 board
   rotate: false
-  xy: 1, 53
+  xy: 1, 55
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 circle
   rotate: false
-  xy: 139, 69
+  xy: 193, 5
   size: 56, 56
   orig: 72, 72
   offset: 8, 8
   index: -1
 hexagon
   rotate: false
-  xy: 197, 65
+  xy: 75, 1
   size: 52, 60
   orig: 72, 72
   offset: 10, 6
   index: -1
+selected
+  rotate: false
+  xy: 75, 63
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+selection
+  rotate: false
+  xy: 141, 63
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 square
   rotate: false
-  xy: 1, 1
+  xy: 1, 3
   size: 50, 50
   orig: 72, 72
   offset: 11, 11
   index: -1
 triangle
   rotate: false
-  xy: 75, 71
+  xy: 129, 7
   size: 62, 54
   orig: 72, 72
   offset: 5, 9
