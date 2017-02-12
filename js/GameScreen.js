@@ -3,6 +3,8 @@ function GameScreen() {
     this.ball = null; // Ball to test animation
     this.background = null;
     this.board = null;
+    this.touchDetector = null;
+    this.selection = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -18,6 +20,9 @@ GameScreen.prototype.create = function () {
     game.input.addMoveCallback(this.move, this);
     this.board = new Board(this.game);
     this.board.generateSimple();
+    this.touchDetector = new TouchDetector(this.game, this.board);
+    this.selection = this.game.add.sprite(0, 0, 'shapes', 'selected');
+    this.selection.visible = false;
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -26,10 +31,12 @@ GameScreen.prototype.addDebugText = function () {
 };
 
 GameScreen.prototype.update = function () {
+    this.touchDetector.update();
     this.debug.text = game.width + "x" + game.height;
     this.background.width = game.width;
     this.background.height = game.height;
     this.resizeUI();
+    this.selection.alpha -= 1/60;
 };
 
 GameScreen.prototype.resizeUI = function(){
@@ -81,10 +88,26 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             tile.height = gridSize;
         }
     }
+    board.x = leftX;
+    board.y = topY;
+    board.gridSize = size / 9;
 };
 
 GameScreen.prototype.move = function(pointer, x, y){
     if (pointer.isDown) {
         this.ball.pointTo(x, y);
+        var board = this.board;
+        var grid = board.gridSize;
+        if (x > board.x && x < board.x + grid * 9 &&
+            y > board.y && y < board.y + grid * 9){
+
+            var xn = Math.floor((x - board.x) / grid);
+            var yn = Math.floor((y - board.y) / grid);
+            this.selection.visible = true;
+            this.selection.x = board.x + xn * grid;
+            this.selection.y = board.y + yn * grid;
+            this.selection.width = this.selection.height = grid;
+            this.selection.alpha = 1;
+        }
     }
 };
