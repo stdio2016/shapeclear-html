@@ -38,6 +38,14 @@ TouchDetector.prototype.process = function (index, pointer) {
                     console.log('swap from ' + myPoint.x + ',' + myPoint.y +
                       ' to ' + dir);
                     myPoint.tracking = false;
+                    // TODO add swap animation
+                    if(dir !== null){
+                        var shpos1 = myPoint.x + this.board.width * myPoint.y;
+                        var shpos2 = dir[0] + this.board.width * dir[1];
+                        var tmp = this.board.shapes[shpos1];
+                        this.board.shapes[shpos1] = this.board.shapes[shpos2];
+                        this.board.shapes[shpos2] = tmp;
+                    }
                 }
             }
         }
@@ -73,21 +81,26 @@ TouchDetector.prototype.calcDirection = function (from, to) {
     var board = this.board;
     var cx = board.x + (from.x + 1/2) * board.gridSize;
     var cy = board.y + (from.y + 1/2) * board.gridSize;
+    var out;
     // if (to.x + to.y) > (cx + cy), then direction is right or down
     if (to.x - cx > to.y - cy) { // up or right
         if (to.x + to.y > cx + cy) { // right
-            return [from.x+1, from.y];
+            out = [from.x+1, from.y];
         }
         else { // up
-            return [from.x, from.y-1];
+            out = [from.x, from.y-1];
         }
     }
     else { // down or left
         if (to.x + to.y > cx + cy) { // down
-            return [from.x, from.y+1];
+            out = [from.x, from.y+1];
         }
         else { // left
-            return [from.x-1, from.y];
+            out = [from.x-1, from.y];
         }
     }
+    if (out[0] < 9 && out[0] >= 0 && out[1] < 9 && out[1] >= 0) {
+        return out;
+    }
+    return null;
 };

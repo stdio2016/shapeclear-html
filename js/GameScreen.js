@@ -4,7 +4,6 @@ function GameScreen() {
     this.background = null;
     this.board = null;
     this.touchDetector = null;
-    this.selection = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -21,13 +20,21 @@ GameScreen.prototype.create = function () {
     this.board = new Board(this.game);
     this.board.generateSimple();
     this.touchDetector = new TouchDetector(this.game, this.board);
-    this.selection = this.game.add.sprite(0, 0, 'shapes', 'selected');
-    this.selection.visible = false;
+    this.addSelectSprite();
 };
 
 GameScreen.prototype.addDebugText = function () {
     var style = { font: "32px", fill: "black" };
     this.debug = this.game.add.text(0, 0, "0", style);
+};
+
+GameScreen.prototype.addSelectSprite = function(){
+    var ptrs = this.touchDetector.pointers;
+    for (var i=0; i<ptrs.length; i++) {
+        var spr = this.add.sprite(0, 0, 'shapes', 'selected');
+        ptrs[i].selectSprite = spr;
+        spr.visible = false;
+    }
 };
 
 GameScreen.prototype.update = function () {
@@ -36,7 +43,19 @@ GameScreen.prototype.update = function () {
     this.background.width = game.width;
     this.background.height = game.height;
     this.resizeUI();
-    this.selection.alpha -= 1/60;
+    this.updateSelectSprite();
+};
+
+GameScreen.prototype.updateSelectSprite = function () {
+    var ptrs = this.touchDetector.pointers;
+    for (var i=0; i<ptrs.length; i++) {
+        var spr = ptrs[i].selectSprite;
+        spr.visible = ptrs[i].isDown && ptrs[i].tracking;
+        spr.x = this.board.x + this.board.gridSize * ptrs[i].x;
+        spr.y = this.board.y + this.board.gridSize * ptrs[i].y;
+        spr.width = this.board.gridSize;
+        spr.height = this.board.gridSize;
+    }
 };
 
 GameScreen.prototype.resizeUI = function(){
@@ -96,18 +115,5 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
 GameScreen.prototype.move = function(pointer, x, y){
     if (pointer.isDown) {
         this.ball.pointTo(x, y);
-        var board = this.board;
-        var grid = board.gridSize;
-        if (x > board.x && x < board.x + grid * 9 &&
-            y > board.y && y < board.y + grid * 9){
-
-            var xn = Math.floor((x - board.x) / grid);
-            var yn = Math.floor((y - board.y) / grid);
-            this.selection.visible = true;
-            this.selection.x = board.x + xn * grid;
-            this.selection.y = board.y + yn * grid;
-            this.selection.width = this.selection.height = grid;
-            this.selection.alpha = 1;
-        }
     }
 };
