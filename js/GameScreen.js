@@ -39,6 +39,7 @@ GameScreen.prototype.addSelectSprite = function(){
 
 GameScreen.prototype.update = function () {
     this.touchDetector.update();
+    this.board.update();
     this.debug.text = game.width + "x" + game.height;
     this.background.width = game.width;
     this.background.height = game.height;
@@ -95,11 +96,12 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var startY = topY + (boardSize - board.height) / 2 * gridSize;
     for (var y = 0; y < board.height; y++){
         for (var x = 0; x < board.width; x++){
-            var shape = board.shapes[y * board.width + x].sprite;
-            shape.x = startX + x * gridSize;
-            shape.y = startY + y * gridSize;
-            shape.width = gridSize;
-            shape.height = gridSize;
+            var shape = board.shapes[y * board.width + x];
+            var spr = shape.sprite;
+            spr.x = startX + (x - shape.dir.x * shape.pos/10) * gridSize;
+            spr.y = startY + (y - shape.dir.y * shape.pos/10) * gridSize;
+            spr.width = gridSize;
+            spr.height = gridSize;
             var tile = board.tiles[y * board.width + x].sprite;
             tile.x = startX + x * gridSize;
             tile.y = startY + y * gridSize;

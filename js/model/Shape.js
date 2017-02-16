@@ -3,5 +3,6 @@ function Shape(type, x, y) {
     this.x = x;
     this.y = y;
     this.sprite = null;
-    this.dir = 0;
+    this.dir = {x:0, y:0};
+    this.pos = 0;
 }

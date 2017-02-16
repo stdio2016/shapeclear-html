@@ -6,6 +6,7 @@ function Board(game) {
     this.game = game;
     this.boardGroup = null;
     this.shapeGroup = null;
+    this.swaps = [];
 }
 
 Board.prototype.generateSimple = function () {
@@ -34,4 +35,43 @@ Board.prototype.generateSimple = function () {
         }
     }
     this.boardGroup.alpha = 0.8;
+};
+
+Board.prototype.getShape = function (x, y) {
+    // bound check
+    if (x >= this.width || x < 0) return null;
+    if (y >= this.height || y < 0) return null;
+    return this.shapes[x + y * this.width];
+};
+
+Board.prototype.addSwap = function(from, to) {
+    var sh1 = this.getShape(from.x, from.y);
+    var sh2 = this.getShape(to.x, to.y);
+    this.swaps.push({from: sh1, to: sh2, time: 10});
+    this.shapes[from.x + from.y * this.width] = sh2;
+    this.shapes[to.x + to.y * this.width] = sh1;
+    sh1.swapping = sh2.swapping = true;
+    var dx = to.x - from.x;
+    var dy = to.y - from.y;
+    sh1.dir = {x: dx, y: dy};
+    sh2.dir = {x: -dx, y: -dy};
+};
+
+Board.prototype.update = function () {
+    this.updateSwaps();
+};
+
+Board.prototype.updateSwaps = function () {
+    for (var i = 0; i < this.swaps.length; i++) {
+        var from = this.swaps[i].from;
+        var to = this.swaps[i].to;
+        this.swaps[i].time--;
+        from.pos = to.pos = this.swaps[i].time;
+        if (this.swaps[i].time == 0) {
+            this.swaps[i] = this.swaps[this.swaps.length - 1];
+            this.swaps.length--;
+            from.swapping = false;
+            to.swapping = false;
+        }
+    }
 };

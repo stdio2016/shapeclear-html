@@ -38,13 +38,8 @@ TouchDetector.prototype.process = function (index, pointer) {
                     console.log('swap from ' + myPoint.x + ',' + myPoint.y +
                       ' to ' + dir);
                     myPoint.tracking = false;
-                    // TODO add swap animation
                     if(dir !== null){
-                        var shpos1 = myPoint.x + this.board.width * myPoint.y;
-                        var shpos2 = dir[0] + this.board.width * dir[1];
-                        var tmp = this.board.shapes[shpos1];
-                        this.board.shapes[shpos1] = this.board.shapes[shpos2];
-                        this.board.shapes[shpos2] = tmp;
+                        this.board.addSwap(myPoint, {x: dir[0], y: dir[1]});
                     }
                 }
             }
