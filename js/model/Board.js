@@ -47,7 +47,7 @@ Board.prototype.getShape = function (x, y) {
 Board.prototype.addSwap = function(from, to) {
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
-    this.swaps.push({from: sh1, to: sh2, time: 10});
+    this.swaps.push(new Swap(sh1, sh2, 10));
     this.shapes[from.x + from.y * this.width] = sh2;
     this.shapes[to.x + to.y * this.width] = sh1;
     sh1.swapping = sh2.swapping = true;
@@ -65,9 +65,9 @@ Board.prototype.updateSwaps = function () {
     for (var i = 0; i < this.swaps.length; i++) {
         var from = this.swaps[i].from;
         var to = this.swaps[i].to;
-        this.swaps[i].time--;
-        from.pos = to.pos = this.swaps[i].time;
-        if (this.swaps[i].time == 0) {
+        this.swaps[i].tick--;
+        from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
+        if (this.swaps[i].tick == 0) {
             this.swaps[i] = this.swaps[this.swaps.length - 1];
             this.swaps.length--;
             from.swapping = false;
