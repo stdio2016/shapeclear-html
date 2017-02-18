@@ -41,12 +41,12 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.game.rnd.between(0, 3);
+                r = this.game.rnd.between(1, 4);
             } while (r1 == r || r2 == r) ;
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
-              ['triangle', 'square', 'circle', 'hexagon'][r]);
+              ['triangle', 'square', 'circle', 'hexagon'][r - 1]);
             var sh = new Shape(r, i, j);
             arr[i * width + j] = sh;
             sh.sprite = sprite;
@@ -80,6 +80,8 @@ Board.prototype.addSwap = function(from, to) {
 
 Board.prototype.update = function () {
     this.updateSwaps();
+    this.findVeritcalMatch();
+    this.findHorizontalMatch();
 };
 
 Board.prototype.updateSwaps = function () {
@@ -95,4 +97,53 @@ Board.prototype.updateSwaps = function () {
             to.swapping = false;
         }
     }
+};
+
+Board.prototype.findVeritcalMatch = function () {
+    var w = this.width;
+    var i;
+    for (var x = 0; x < this.height; x++) {
+        i = x;
+        for (var y = 0; y < w - 2; y++) {
+            var sh = this.shapes[i].type;
+            if (sh > 0 && !this.shapes[i].swapping) {
+                if (this.shapes[i + w].type === sh && !this.shapes[i + w].swapping
+                 && this.shapes[i + 2*w].type === sh && !this.shapes[i + 2*w].swapping) {
+                    do {
+                        // TODO make a match object
+                        this.shapes[i].type = 0;
+                        this.shapes[i].sprite.kill();
+                        y++;
+                        i += w;
+                    } while (y < w && this.shapes[i].type === sh) ;
+                }
+            }
+            i += w;
+        }
+    }
+};
+
+Board.prototype.findHorizontalMatch = function () {
+  var w = this.width;
+  var h = this.height;
+  var i;
+  for (var y = 0; y < h; y++) {
+      i = y * w;
+      for (var x = 0; x < w - 2; x++) {
+          var sh = this.shapes[i].type;
+          if (sh > 0 && !this.shapes[i].swapping) {
+              if (this.shapes[i + 1].type === sh && !this.shapes[i + 1].swapping
+               && this.shapes[i + 2].type === sh && !this.shapes[i + 2].swapping) {
+                  do {
+                      // TODO make a match object
+                      this.shapes[i].type = 0;
+                      this.shapes[i].sprite.kill();
+                      x++;
+                      i += 1;
+                  } while (x < h && this.shapes[i].type === sh) ;
+              }
+          }
+          i += 1;
+      }
+  }
 };
