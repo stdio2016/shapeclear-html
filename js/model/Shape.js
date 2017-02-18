@@ -5,4 +5,5 @@ function Shape(type, x, y) {
     this.sprite = null;
     this.dir = {x:0, y:0};
     this.pos = 0;
+    this.swapping = false;
 }

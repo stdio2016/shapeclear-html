@@ -7,6 +7,11 @@ function Board(game) {
     this.boardGroup = null;
     this.shapeGroup = null;
     this.swaps = [];
+
+    // position of board in the game
+    this.x = 0;
+    this.y = 0;
+    this.gridSize = 0;
 }
 
 Board.prototype.generateSimple = function () {
