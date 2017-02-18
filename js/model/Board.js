@@ -26,12 +26,28 @@ Board.prototype.generateSimple = function () {
     this.shapeGroup = this.game.add.group();
     for (var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
-            var r = Math.floor(Math.random() * 4);
+            var r1, r2;
+            if (i >= 2) {
+                r1 = this.getShape(j, i - 1).type;
+                if (this.getShape(j, i - 2).type !== r1) {
+                    r1 = -1;
+                }
+            }
+            if (j >= 2) {
+                r2 = this.getShape(j - 2, i).type;
+                if (this.getShape(j - 1, i).type !== r2) {
+                    r2 = -1;
+                }
+            }
+            var r;
+            do {
+                r = this.game.rnd.between(0, 3);
+            } while (r1 == r || r2 == r) ;
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
               ['triangle', 'square', 'circle', 'hexagon'][r]);
-            var sh = new Shape(i, j, r);
+            var sh = new Shape(r, i, j);
             arr[i * width + j] = sh;
             sh.sprite = sprite;
             this.tiles.push({sprite: board});
