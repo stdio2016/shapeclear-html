@@ -7,3 +7,11 @@ function Shape(type, x, y) {
     this.pos = 0;
     this.swapping = false;
 }
+
+Shape.prototype.canSwap = function () {
+    return !this.swapping && this.type > 0;
+};
+
+Shape.prototype.canMatch = function () {
+    return !this.swapping && this.type > 0;
+};

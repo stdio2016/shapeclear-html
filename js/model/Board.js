@@ -68,6 +68,9 @@ Board.prototype.getShape = function (x, y) {
 Board.prototype.addSwap = function(from, to) {
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
+    if (!sh1.canSwap() || !sh2.canSwap()) {
+        return ;
+    }
     this.swaps.push(new Swap(sh1, sh2, 10));
     this.shapes[from.x + from.y * this.width] = sh2;
     this.shapes[to.x + to.y * this.width] = sh1;
@@ -102,20 +105,21 @@ Board.prototype.updateSwaps = function () {
 Board.prototype.findVeritcalMatch = function () {
     var w = this.width;
     var i;
+    var shapes = this.shapes;
     for (var x = 0; x < this.height; x++) {
         i = x;
         for (var y = 0; y < w - 2; y++) {
-            var sh = this.shapes[i].type;
-            if (sh > 0 && !this.shapes[i].swapping) {
-                if (this.shapes[i + w].type === sh && !this.shapes[i + w].swapping
-                 && this.shapes[i + 2*w].type === sh && !this.shapes[i + 2*w].swapping) {
+            if (shapes[i].canMatch()) {
+                var sh = shapes[i].type;
+                if (shapes[i + w].canMatch() && shapes[i + w].type === sh
+                 && shapes[i + 2*w].canMatch() && shapes[i + 2*w].type === sh) {
                     do {
                         // TODO make a match object
-                        this.shapes[i].type = 0;
-                        this.shapes[i].sprite.kill();
+                        shapes[i].type = 0;
+                        shapes[i].sprite.kill();
                         y++;
                         i += w;
-                    } while (y < w && this.shapes[i].type === sh) ;
+                    } while (y < w && shapes[i].canMatch() && shapes[i].type === sh) ;
                 }
             }
             i += w;
@@ -124,26 +128,27 @@ Board.prototype.findVeritcalMatch = function () {
 };
 
 Board.prototype.findHorizontalMatch = function () {
-  var w = this.width;
-  var h = this.height;
-  var i;
-  for (var y = 0; y < h; y++) {
-      i = y * w;
-      for (var x = 0; x < w - 2; x++) {
-          var sh = this.shapes[i].type;
-          if (sh > 0 && !this.shapes[i].swapping) {
-              if (this.shapes[i + 1].type === sh && !this.shapes[i + 1].swapping
-               && this.shapes[i + 2].type === sh && !this.shapes[i + 2].swapping) {
-                  do {
-                      // TODO make a match object
-                      this.shapes[i].type = 0;
-                      this.shapes[i].sprite.kill();
-                      x++;
-                      i += 1;
-                  } while (x < h && this.shapes[i].type === sh) ;
-              }
-          }
-          i += 1;
-      }
-  }
+    var w = this.width;
+    var h = this.height;
+    var shapes = this.shapes;
+    var i;
+    for (var y = 0; y < h; y++) {
+        i = y * w;
+        for (var x = 0; x < w - 2; x++) {
+            if (shapes[i].canMatch()) {
+                var sh = shapes[i].type;
+                if (shapes[i + 1].canMatch() && shapes[i + 1].type === sh
+                 && shapes[i + 2].canMatch() && shapes[i + 2].type === sh) {
+                    do {
+                        // TODO make a match object
+                        shapes[i].type = 0;
+                        shapes[i].sprite.kill();
+                        x++;
+                        i += 1;
+                    } while (x < h && shapes[i].canMatch() && shapes[i].type === sh) ;
+                }
+            }
+            i += 1;
+        }
+    }
 };
