@@ -47,7 +47,7 @@ Board.prototype.generateSimple = function () {
             board.width = board.height = gridSize;
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
               ['triangle', 'square', 'circle', 'hexagon'][r - 1]);
-            var sh = new Shape(r, i, j);
+            var sh = new Shape(r, j, i);
             arr[i * width + j] = sh;
             sh.sprite = sprite;
             this.tiles.push({sprite: board});
@@ -94,10 +94,19 @@ Board.prototype.updateSwaps = function () {
         this.swaps[i].tick--;
         from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
         if (this.swaps[i].tick == 0) {
-            this.swaps[i] = this.swaps[this.swaps.length - 1];
-            this.swaps.length--;
             from.swapping = false;
             to.swapping = false;
+            [from.x, to.x] = [to.x, from.x];
+            [from.y, to.y] = [to.y, from.y];
+            if (this.isValidSwapAt(from.x, from.y) || this.isValidSwapAt(to.x, to.y)) {
+                this.swaps[i] = this.swaps[this.swaps.length - 1];
+                this.swaps.length--;
+            }
+            else {
+                this.swaps[i].tick = this.swaps[i].totalTicks;
+                from.swapping = true;
+                to.swapping = true;
+            }
         }
     }
 };
@@ -151,4 +160,62 @@ Board.prototype.findHorizontalMatch = function () {
             i += 1;
         }
     }
+};
+
+Board.prototype.isValidSwapAt = function (x, y) {
+    var leftMatch = 0, rightMatch = 0, upMatch = 0, downMatch = 0;
+    var sh = this.getShape(x, y);
+    if (!sh.canMatch()) {
+        return false;
+    }
+    var type = sh.type;
+    if (x >= 1) {
+        sh = this.getShape(x - 1, y);
+        if (sh.canMatch() && sh.type === type) {
+            leftMatch = 1;
+            if (x >= 2) {
+                sh = this.getShape(x - 2, y);
+                if (sh.canMatch() && sh.type === type) {
+                    return true;
+                }
+            }
+        }
+    }
+    if (x < 9 - 1) {
+        sh = this.getShape(x + 1, y);
+        if (sh.canMatch() && sh.type === type) {
+            rightMatch = 1;
+            if (x < 9 - 2) {
+                sh = this.getShape(x + 2, y);
+                if (sh.canMatch() && sh.type === type) {
+                    return true;
+                }
+            }
+        }
+    }
+    if (y >= 1) {
+        sh = this.getShape(x, y - 1);
+        if (sh.canMatch() && sh.type === type) {
+            upMatch = 1;
+            if (y >= 2) {
+                sh = this.getShape(x, y - 2);
+                if (sh.canMatch() && sh.type === type) {
+                    return true;
+                }
+            }
+        }
+    }
+    if (y < 9 - 1) {
+        sh = this.getShape(x, y + 1);
+        if (sh.canMatch() && sh.type === type) {
+            downMatch = 1;
+            if (y < 9 - 2) {
+                sh = this.getShape(x, y + 2);
+                if (sh.canMatch() && sh.type === type) {
+                    return true;
+                }
+            }
+        }
+    }
+    return upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
 };
