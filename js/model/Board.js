@@ -105,6 +105,7 @@ Board.prototype.updateSwaps = function () {
             if (this.isValidSwapAt(from.x, from.y) || this.isValidSwapAt(to.x, to.y) || this.swaps[i].status === 'reject') {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
+                --i;
             }
             else {
                 this.swaps[i].reject();
