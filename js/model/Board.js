@@ -72,13 +72,19 @@ Board.prototype.addSwap = function(from, to) {
         return ;
     }
     this.swaps.push(new Swap(sh1, sh2, 10));
-    this.shapes[from.x + from.y * this.width] = sh2;
-    this.shapes[to.x + to.y * this.width] = sh1;
+    this.swapShape(sh1, sh2);
+};
+
+Board.prototype.swapShape = function (sh1, sh2) {
+    this.shapes[sh1.x + sh1.y * this.width] = sh2;
+    this.shapes[sh2.x + sh2.y * this.width] = sh1;
     sh1.swapping = sh2.swapping = true;
-    var dx = to.x - from.x;
-    var dy = to.y - from.y;
+    var dx = sh2.x - sh1.x;
+    var dy = sh2.y - sh1.y;
     sh1.dir = {x: dx, y: dy};
     sh2.dir = {x: -dx, y: -dy};
+    [sh1.x, sh2.x] = [sh2.x, sh1.x];
+    [sh1.y, sh2.y] = [sh2.y, sh1.y];
 };
 
 Board.prototype.update = function () {
@@ -96,16 +102,14 @@ Board.prototype.updateSwaps = function () {
         if (this.swaps[i].tick == 0) {
             from.swapping = false;
             to.swapping = false;
-            [from.x, to.x] = [to.x, from.x];
-            [from.y, to.y] = [to.y, from.y];
-            if (this.isValidSwapAt(from.x, from.y) || this.isValidSwapAt(to.x, to.y)) {
+            if (this.isValidSwapAt(from.x, from.y) || this.isValidSwapAt(to.x, to.y) || this.swaps[i].status === 'reject') {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
             }
             else {
-                this.swaps[i].tick = this.swaps[i].totalTicks;
-                from.swapping = true;
-                to.swapping = true;
+                this.swaps[i].reject();
+                this.swapShape(from, to);
+                from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
             }
         }
     }
