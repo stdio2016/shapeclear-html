@@ -41,12 +41,12 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.game.rnd.between(1, 4);
+                r = this.game.rnd.between(1, 6);
             } while (r1 == r || r2 == r) ;
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
-              ['triangle', 'square', 'circle', 'hexagon'][r - 1]);
+              ['triangle', 'square', 'circle', 'hexagon', 'downTriangle', 'rhombus'][r - 1]);
             var sh = new Shape(r, j, i);
             arr[i * width + j] = sh;
             sh.sprite = sprite;

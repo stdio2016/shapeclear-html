@@ -9,18 +9,34 @@
 }
 ,{
 	"filename": "circle",
-	"frame": {"x":193,"y":5,"w":56,"h":56},
+	"frame": {"x":335,"y":71,"w":56,"h":56},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":8,"y":8,"w":56,"h":56},
 	"sourceSize": {"w":72,"h":72}
 }
 ,{
+	"filename": "downTriangle",
+	"frame": {"x":207,"y":73,"w":62,"h":54},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
 	"filename": "hexagon",
-	"frame": {"x":75,"y":1,"w":52,"h":60},
+	"frame": {"x":137,"y":1,"w":52,"h":60},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":10,"y":6,"w":52,"h":60},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "rhombus",
+	"frame": {"x":75,"y":1,"w":60,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
 	"sourceSize": {"w":72,"h":72}
 }
 ,{
@@ -49,7 +65,7 @@
 }
 ,{
 	"filename": "triangle",
-	"frame": {"x":129,"y":7,"w":62,"h":54},
+	"frame": {"x":271,"y":73,"w":62,"h":54},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},

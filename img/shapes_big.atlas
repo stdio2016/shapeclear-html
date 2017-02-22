@@ -1,6 +1,6 @@
 
 shapes_big.png
-size: 256,128
+size: 512,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -13,17 +13,31 @@ board
   index: -1
 circle
   rotate: false
-  xy: 193, 5
+  xy: 335, 71
   size: 56, 56
   orig: 72, 72
   offset: 8, 8
   index: -1
+downTriangle
+  rotate: false
+  xy: 207, 73
+  size: 62, 54
+  orig: 72, 72
+  offset: 5, 9
+  index: -1
 hexagon
   rotate: false
-  xy: 75, 1
+  xy: 137, 1
   size: 52, 60
   orig: 72, 72
   offset: 10, 6
+  index: -1
+rhombus
+  rotate: false
+  xy: 75, 1
+  size: 60, 60
+  orig: 72, 72
+  offset: 6, 6
   index: -1
 selected
   rotate: false
@@ -48,7 +62,7 @@ square
   index: -1
 triangle
   rotate: false
-  xy: 129, 7
+  xy: 271, 73
   size: 62, 54
   orig: 72, 72
   offset: 5, 9

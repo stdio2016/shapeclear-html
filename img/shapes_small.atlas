@@ -13,17 +13,31 @@ board
   index: -1
 circle
   rotate: false
-  xy: 73, 1
+  xy: 139, 35
   size: 28, 28
   orig: 36, 36
   offset: 4, 4
   index: -1
+downTriangle
+  rotate: false
+  xy: 39, 1
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1
 hexagon
   rotate: false
-  xy: 107, 33
+  xy: 107, 1
   size: 26, 30
   orig: 36, 36
   offset: 5, 3
+  index: -1
+rhombus
+  rotate: false
+  xy: 107, 33
+  size: 30, 30
+  orig: 36, 36
+  offset: 3, 3
   index: -1
 selected
   rotate: false
@@ -41,14 +55,14 @@ selection
   index: -1
 square
   rotate: false
-  xy: 135, 37
+  xy: 169, 37
   size: 26, 26
   orig: 36, 36
   offset: 5, 5
   index: -1
 triangle
   rotate: false
-  xy: 39, 1
+  xy: 73, 1
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
