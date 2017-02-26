@@ -9,21 +9,27 @@
     display: flex;
     flex-direction: column;
 }
+.alert-box-ie {
+  position: absolute;
+}
 .alert-box .title {
     color: white;
     background: gray;
     font-weight: 500;
-    display: flex;
     align-items: flex-start;
-    padding: 2px 2px 2px 5px;
+    padding: 2px;
+}
+.alert-box-ie .title {
+    height: 22px;
 }
 .alert-box .title span {
-    flex: 1;
+    padding: 5px;
+    float: left;
 }
 .alert-box .x {
     background: red;
     color: white;
-    flex: 0;
+    float: right;
 }
 .alert-box .description {
     flex: 1;

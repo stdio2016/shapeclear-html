@@ -17,14 +17,27 @@
   <script src='js/Ball.js'></script>
   <script src='js/TouchDetector.js'></script>
   <script src='js/Boot.js'></script>
+  <!--[if IE]>
+  <div id='alert' class='alert-box alert-box-ie'>
+  <![endif]-->
+  <!--[if !IE]> -->
   <div id='alert' class='alert-box' style='visibility: hidden;'>
+  <!-- <![endif]-->
     <div class='title'>
       <span>Error</span>
       <input id='close' class='x' value='X' type='button'>
     </div>
+    <!--[if IE]>
+    <pre class='description' id='description'>
+本遊戲不支援IE。請改用Firefox、Chrome或Safari
+This game does not support IE. Please use Firefox or Chrome.
+    </pre>
+    <![endif]-->
+    <!--[if !IE]> -->
     <pre class='description' id='description'>
 錯誤訊息會顯示在這裡
     </pre>
+    <!-- <![endif]-->
   </div>
   <script src='js/alertbox.js'></script>
   <div id='gameDiv' class='game-div'></div>
