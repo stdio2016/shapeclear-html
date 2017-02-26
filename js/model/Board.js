@@ -83,8 +83,12 @@ Board.prototype.swapShape = function (sh1, sh2) {
     var dy = sh2.y - sh1.y;
     sh1.dir = {x: dx, y: dy};
     sh2.dir = {x: -dx, y: -dy};
-    [sh1.x, sh2.x] = [sh2.x, sh1.x];
-    [sh1.y, sh2.y] = [sh2.y, sh1.y];
+    var tmp = sh1.x;
+    sh1.x = sh2.x;
+    sh2.x = tmp;
+    tmp = sh1.y;
+    sh1.y = sh2.y;
+    sh2.y = tmp;
 };
 
 Board.prototype.update = function () {
