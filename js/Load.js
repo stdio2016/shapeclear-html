@@ -15,7 +15,8 @@ Load.prototype.preload = function () {
     // some game settings
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     game.scale.onResize = function () {
-        game.scale.setGameSize(document.body.clientWidth, document.body.clientHeight);
+        var rect = document.body.getClientRects()[0];
+        game.scale.setGameSize(Math.floor(rect.width), Math.floor(rect.height));
     };
     game.time.advancedTiming = true;
     game.stage.backgroundColor = '#0080ff';
