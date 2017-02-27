@@ -10,7 +10,7 @@
     flex-direction: column;
 }
 .alert-box-ie {
-  position: absolute;
+    position: absolute;
 }
 .alert-box .title {
     color: white;
@@ -23,7 +23,7 @@
     height: 22px;
 }
 .alert-box .title span {
-    padding: 5px;
+    padding-left: 5px;
     float: left;
 }
 .alert-box .x {
