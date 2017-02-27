@@ -4,6 +4,7 @@ function GameScreen() {
     this.background = null;
     this.board = null;
     this.touchDetector = null;
+    this.music = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -21,6 +22,9 @@ GameScreen.prototype.create = function () {
     this.board.generateSimple();
     this.touchDetector = new TouchDetector(this.game, this.board);
     this.addSelectSprite();
+    this.music = this.game.add.sound('music');
+    this.music.loop = true;
+    this.music.play();
 };
 
 GameScreen.prototype.addDebugText = function () {
