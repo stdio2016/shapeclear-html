@@ -3,7 +3,7 @@
 
 目前還不能玩，但是可以來看一下：<https://stdio2016.github.io/shapeclear-html>
 
-如果想要可以玩的版本，可以玩Scretch版(註：這個版本的原始碼不在這個代碼庫，而且需要Flash)。
+如果想要可以玩的版本，可以玩Scratch版(註：這個版本的原始碼不在這個代碼庫，而且需要Flash)。
 網址： https://scratch.mit.edu/projects/17206808/
 
 ## 玩法
