@@ -12,7 +12,7 @@ else {
 function getRendererConfig() {
     var renderer;
     try {
-        renderer = localStorage.getItem('ShapeClear.renderer');
+        renderer = localStorage.getItem('ShapeClear_renderer');
         switch (renderer){
           case "WEBGL":
           case "CANVAS":
@@ -30,8 +30,28 @@ function getRendererConfig() {
     return renderer;
 }
 
+function getResolutionConfig() {
+    var res;
+    try {
+        res = +localStorage.getItem('ShapeClear_resolution');
+        if (res < 0.25) res = 1;
+        if (res != res) res = 1;
+        if (res > devicePixelRatio) res = devicePixelRatio;
+    }
+    catch (e) {
+        res = 1;
+    }
+    return res;
+}
+
 // Start my game!
-var game = new Phaser.Game('100', '100', getRendererConfig(), 'gameDiv');
+var game = new Phaser.Game({
+    "width": "100",
+    "height": "100",
+    "renderer": getRendererConfig(),
+    "parent": "gameDiv",
+    "resolution": getResolutionConfig()
+});
 var gameScreen = new GameScreen();
 game.state.add("GameScreen", gameScreen);
 game.state.add("Load", new Load());

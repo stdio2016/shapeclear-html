@@ -83,7 +83,7 @@ Load.prototype.testRenderer = function () {
         break;
     }
     try {
-        localStorage.setItem('ShapeClear.renderer', renderer);
+        localStorage.setItem('ShapeClear_renderer', renderer);
     }
     catch (e) {
         ;
