@@ -36,6 +36,8 @@ function getResolutionConfig() {
         res = +localStorage.getItem('ShapeClear_resolution');
         if (res < 0.25) res = 1;
         if (res != res) res = 1;
+        var devicePixelRatio = window.devicePixelRatio || 1;
+        devicePixelRatio = Math.round(devicePixelRatio * 4) / 4;
         if (res > devicePixelRatio) res = devicePixelRatio;
     }
     catch (e) {

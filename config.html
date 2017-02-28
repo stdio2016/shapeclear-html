@@ -18,7 +18,7 @@
 <p>Resolution: </p>
 <p>
   <input type="range" min='0.5' max='4' step='0.25' id='resolution'>
-  <output id='res'>0</output>
+  <span id='res'>0</span>
 </p>
 <p><input value="OK" type="button" onclick='setRenderer()'></p>
 <script>
@@ -36,14 +36,18 @@ else {
     detectRenderer.innerText = 'You have not played Shape Clear yet';
 }
 if (resolution) {
-    resIn.value = resOut.value = resolution;
+    resIn.value = resOut.innerText = resolution;
 }
 else {
-    resIn.value = resOut.value = 1;
+    resIn.value = resOut.innerText = 1;
 }
-resIn.max = devicePixelRatio;
+resIn.max = window.devicePixelRatio || 1;
+resIn.max = Math.round(resIn.max * 4) / 4;
 resIn.addEventListener('input', function() {
-    resOut.value = resIn.value;
+    resOut.innerText = resIn.value;
+});
+resIn.addEventListener('change', function() {
+    resOut.innerText = resIn.value;
 });
 function setRenderer() {
     localStorage.setItem('ShapeClear_renderer', choiceBox.value);
