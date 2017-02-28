@@ -29,8 +29,9 @@ Load.prototype.preload = function () {
 };
 
 Load.prototype.preloadUpdate = function () {
-    this.loadBar.x = this.game.width / 2 - this.loadBar.width / 2;
-    this.loadBar.y = this.game.height / 2 - this.loadBar.height / 2;
+    // HACK to get the text size
+    this.loadBar.x = this.game.width / 2 - this.loadBar.width / (2 * this.game.resolution);
+    this.loadBar.y = this.game.height / 2 - this.loadBar.height / (2 * this.game.resolution);
 };
 
 Load.prototype.create = function() {
@@ -49,8 +50,9 @@ Load.prototype.create = function() {
 Load.prototype.update = function () {
     var w = this.game.width;
     var h = this.game.height;
-    this.loadBar.x = w / 2 - this.loadBar.width / 2;
-    this.loadBar.y = h / 2 - this.loadBar.height / 2;
+    // HACK to get the text size
+    this.loadBar.x = w / 2 - this.loadBar.width / (2 * this.game.resolution);
+    this.loadBar.y = h / 2 - this.loadBar.height / (2 * this.game.resolution);
     this.playButton.x = w / 2 - this.playButton.width / 2;
     this.playButton.y = h / 2 - this.playButton.height / 2;
     this.background.width = w;
