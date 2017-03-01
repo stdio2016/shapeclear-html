@@ -6,6 +6,9 @@ function Shape(type, x, y) {
     this.dir = {x:0, y:0};
     this.pos = 0;
     this.swapping = false;
+
+    // is it part of a matching?
+    this.match = null;
 }
 
 Shape.prototype.canSwap = function () {
