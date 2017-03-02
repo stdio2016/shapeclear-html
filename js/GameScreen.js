@@ -148,4 +148,5 @@ GameScreen.prototype.render = function (game) {
             game.debug.geom(line, colors[i % colors.length]);
         }
     }
+    game.debug.dirty = true;
 };
