@@ -123,3 +123,29 @@ GameScreen.prototype.move = function(pointer, x, y){
         this.ball.pointTo(x, y);
     }
 };
+
+GameScreen.prototype.render = function (game) {
+    if (game.renderType === Phaser.AUTO) return;
+    var colors = ['brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'darkgray', 'white', 'black'];
+    var matches = this.board.matches;
+    var x, y, width, height, line;
+    for (var i = 0; i < matches.length; i++) {
+        var m = matches[i];
+        if (m.type & Match.HORIZONTAL) {
+            x = this.board.x + m.hx * this.board.gridSize;
+            width = m.hlength * this.board.gridSize;
+            y = this.board.y + (m.hy + 0.4) * this.board.gridSize;
+            height = 0.2 * this.board.gridSize;
+            line = new Phaser.Rectangle(x, y, width, height);
+            game.debug.geom(line, colors[i % colors.length]);
+        }
+        if (m.type & Match.VERTICAL) {
+            y = this.board.y + m.vy * this.board.gridSize;
+            height = m.vlength * this.board.gridSize;
+            x = this.board.x + (m.vx + 0.4) * this.board.gridSize;
+            width = 0.2 * this.board.gridSize;
+            line = new Phaser.Rectangle(x, y, width, height);
+            game.debug.geom(line, colors[i % colors.length]);
+        }
+    }
+};

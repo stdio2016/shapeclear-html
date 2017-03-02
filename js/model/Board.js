@@ -7,6 +7,7 @@ function Board(game) {
     this.boardGroup = null;
     this.shapeGroup = null;
     this.swaps = [];
+    this.matches = [];
 
     // position of board in the game
     this.x = 0;
@@ -93,6 +94,7 @@ Board.prototype.swapShape = function (sh1, sh2) {
 
 Board.prototype.update = function () {
     this.updateSwaps();
+    this.matches = [];
     this.findVeritcalMatch();
     this.findHorizontalMatch();
 };
@@ -131,13 +133,15 @@ Board.prototype.findVeritcalMatch = function () {
                 var sh = shapes[i].type;
                 if (shapes[i + w].canMatch() && shapes[i + w].type === sh
                  && shapes[i + 2*w].canMatch() && shapes[i + 2*w].type === sh) {
+                    var match = new Match(Match.VERTICAL, x, y);
                     do {
-                        // TODO make a match object
-                        shapes[i].type = 0;
-                        shapes[i].sprite.kill();
+                        shapes[i].match = match;
+                        match.vlength++;
                         y++;
                         i += w;
                     } while (y < w && shapes[i].canMatch() && shapes[i].type === sh) ;
+                    y--; i -= w;
+                    this.matches.push(match);
                 }
             }
             i += w;
@@ -157,13 +161,14 @@ Board.prototype.findHorizontalMatch = function () {
                 var sh = shapes[i].type;
                 if (shapes[i + 1].canMatch() && shapes[i + 1].type === sh
                  && shapes[i + 2].canMatch() && shapes[i + 2].type === sh) {
+                    var match = new Match(Match.HORIZONTAL, x, y);
                     do {
-                        // TODO make a match object
-                        shapes[i].type = 0;
-                        shapes[i].sprite.kill();
+                        match.hlength++;
                         x++;
                         i += 1;
                     } while (x < h && shapes[i].canMatch() && shapes[i].type === sh) ;
+                    x--; i -= 1;
+                    this.matches.push(match);
                 }
             }
             i += 1;
@@ -226,5 +231,6 @@ Board.prototype.isValidSwapAt = function (x, y) {
             }
         }
     }
+    return true;
     return upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
 };

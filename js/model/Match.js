@@ -1,15 +1,24 @@
-function Match() {
-    this.type = Match.HORIZONTAL;
+function Match(type, x, y) {
+    this.type = type || Match.HORIZONTAL;
 
     // vertical match
-    this.lengthv = 0;
-    this.xv = 0;
-    this.yv = 0;
+    this.vlength = 0;
+    this.vx = 0;
+    this.vy = 0;
 
     // horizontal match
-    this.lengthh = 0;
-    this.xh = 0;
-    this.yh = 0;
+    this.hlength = 0;
+    this.hx = 0;
+    this.hy = 0;
+
+    if (this.type === Match.HORIZONTAL) {
+        this.hx = x;
+        this.hy = y;
+    }
+    else if (this.type === Match.VERTICAL) {
+        this.vx = x;
+        this.vy = y;
+    }
 }
 
 Match.HORIZONTAL = 1;
