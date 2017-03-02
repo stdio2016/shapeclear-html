@@ -94,7 +94,7 @@ Board.prototype.swapShape = function (sh1, sh2) {
 
 Board.prototype.update = function () {
     this.updateSwaps();
-    this.matches = [];
+    this.initMatch();
     this.findVeritcalMatch();
     this.findHorizontalMatch();
 };
@@ -118,6 +118,15 @@ Board.prototype.updateSwaps = function () {
                 this.swapShape(from, to);
                 from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
             }
+        }
+    }
+};
+
+Board.prototype.initMatch = function () {
+    this.matches = [];
+    for (var i = 0; i < this.shapes.length; i++) {
+        if (this.shapes[i].match) {
+            this.shapes[i].match = null;
         }
     }
 };
@@ -162,13 +171,28 @@ Board.prototype.findHorizontalMatch = function () {
                 if (shapes[i + 1].canMatch() && shapes[i + 1].type === sh
                  && shapes[i + 2].canMatch() && shapes[i + 2].type === sh) {
                     var match = new Match(Match.HORIZONTAL, x, y);
+                    var cross = null;
                     do {
                         match.hlength++;
+                        if (cross === null && shapes[i].match !== null) {
+                            if(shapes[i].match.type === Match.VERTICAL) {
+                                cross = shapes[i].match;
+                            }
+                        }
                         x++;
                         i += 1;
                     } while (x < h && shapes[i].canMatch() && shapes[i].type === sh) ;
                     x--; i -= 1;
-                    this.matches.push(match);
+                    if (cross !== null) { // l/T shaped match
+                        cross.type = Match.CROSS;
+                        cross.hx = match.hx;
+                        cross.hy = match.hy;
+                        cross.hlength = match.hlength;
+                        match = cross;
+                    }
+                    else {
+                        this.matches.push(match);
+                    }
                 }
             }
             i += 1;
