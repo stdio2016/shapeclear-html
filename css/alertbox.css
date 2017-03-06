@@ -36,11 +36,14 @@
     margin: 5px;
     overflow: auto;
 }
+.grayed-out {
+    background-color: rgba(128, 128, 128, 0.5);
+}
 .prompt-box {
-    border: black solid;
+    border: black solid 1px;
     padding: 5px;
     background: white;
-    top: 25%;
+    margin-top: 25%;
     max-height: 50%;
     max-width: 50%;
     display: flex;
