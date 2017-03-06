@@ -30,6 +30,10 @@ GameScreen.prototype.create = function () {
 GameScreen.prototype.addDebugText = function () {
     var style = { font: "32px", fill: "black" };
     this.debug = this.game.add.text(0, 0, "0", style);
+    this.debug.inputEnabled = true;
+    this.debug.events.onInputUp.add(function () {
+        promptBox('Input debug command:');
+    }, this);
 };
 
 GameScreen.prototype.addSelectSprite = function(){

@@ -24,3 +24,34 @@ function closeErrorBox() {
 // Add error handler
 window.onerror = errorHandler;
 document.getElementById('close').addEventListener('click', closeErrorBox);
+
+var promptCallback = null;
+function promptBox(message, defaultValue, callback) {
+    var box = document.getElementById('prompt');
+    var msg = document.getElementById('promptMessage')
+    var input = document.getElementById('promptInput');
+    if (typeof message == 'undefined') {
+        message = '';
+    }
+    msg.innerText = message;
+    if (typeof defaultValue == 'undefined') {
+        defaultValue = '';
+    }
+    if (!callback) {
+        callback = function (result) {
+            console.log(result);
+        };
+    }
+    input.value = defaultValue;
+    box.style.visibility = 'visible';
+    promptCallback = function (ok) {
+        box.style.visibility = 'hidden';
+        promptCallback = null;
+        if (ok) {
+            callback(input.value);
+        }
+        else {
+            callback(null);
+        }
+    };
+}
