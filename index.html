@@ -22,6 +22,16 @@
   <div id='alert' class='alert-box alert-box-ie'>
   <![endif]-->
   <!--[if !IE]> -->
+  <div class="center-of-screen" id='prompt'>
+    <div class='prompt-box'>
+      <div class='description'></div>
+      <input>
+      <div class='yesno'>
+        <button onclick="promptCallback(true)">OK</button>
+        <button onclick="promptCallback(false)">Cancel</button>
+      </div>
+    </div>
+  </div>
   <div id='alert' class='alert-box' style='visibility: hidden;'>
   <!-- <![endif]-->
     <div class='title'>

@@ -4,8 +4,10 @@ body {
 }
 html, body, .center-of-screen {
     height: 100%;
+    width: 100%;
 }
 .center-of-screen {
+    position: fixed;
     display: -webkit-flex;
     display: flex;
     -webkit-align-items: center;

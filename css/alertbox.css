@@ -36,3 +36,25 @@
     margin: 5px;
     overflow: auto;
 }
+.prompt-box {
+    border: black solid;
+    padding: 5px;
+    background: white;
+    top: 25%;
+    max-height: 50%;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+.prompt-box * {
+    margin: 5px;
+}
+.prompt-box .description {
+    text-align: center;
+    overflow-y: auto;
+}
+.prompt-box .yesno {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
