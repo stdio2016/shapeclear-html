@@ -9,7 +9,7 @@ function Board(game) {
     this.swaps = [];
     this.matches = [];
     this.deletedShapes = [];
-    this.debugger = null;
+    this.debug = new Debug();
 
     // position of board in the game
     this.x = 0;
@@ -79,7 +79,7 @@ Board.prototype.clearShape = function (x, y) {
 Board.prototype.addSwap = function(from, to) {
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
-    if (!sh1.canSwap() || !sh2.canSwap()) {
+    if ((!sh1.canSwap() || !sh2.canSwap()) && !this.debug.allowIllegalMove) {
         return ;
     }
     this.swaps.push(new Swap(sh1, sh2, 10));
@@ -217,6 +217,7 @@ Board.prototype.findHorizontalMatch = function () {
 };
 
 Board.prototype.isValidSwapAt = function (x, y) {
+    if (this.debug.allowIllegalMove) return true;
     var leftMatch = 0, rightMatch = 0, upMatch = 0, downMatch = 0;
     var sh = this.getShape(x, y);
     if (!sh.canMatch()) {
@@ -271,11 +272,11 @@ Board.prototype.isValidSwapAt = function (x, y) {
             }
         }
     }
-    return true;
     return upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
 };
 
 Board.prototype.clearMatch = function () {
+    if (this.debug.disableMatching) return;
     for (var i = 0; i < this.matches.length; i++) {
         var m = this.matches[i];
         if (m.type & Match.HORIZONTAL) {

@@ -32,7 +32,10 @@ GameScreen.prototype.addDebugText = function () {
     this.debug = this.game.add.text(0, 0, "0", style);
     this.debug.inputEnabled = true;
     this.debug.events.onInputUp.add(function () {
-        promptBox('Input debug command:');
+        var debugging = this.board.debug;
+        promptBox('Input debug command:', '', function (result) {
+            debugging.runCommand(result);
+        });
     }, this);
 };
 
@@ -143,7 +146,7 @@ GameScreen.prototype.move = function(pointer, x, y){
 };
 
 GameScreen.prototype.render = function (game) {
-    if (game.renderType === Phaser.AUTO) return;
+    if (!this.board.debug.showMatching) return;
     var colors = ['brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'darkgray', 'white', 'black'];
     var matches = this.board.matches;
     var x, y, width, height, line;
