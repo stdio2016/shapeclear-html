@@ -106,10 +106,12 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         for (var x = 0; x < board.width; x++){
             var shape = board.shapes[y * board.width + x];
             var spr = shape.sprite;
-            spr.x = startX + (x - shape.dir.x * shape.pos/10) * gridSize;
-            spr.y = startY + (y - shape.dir.y * shape.pos/10) * gridSize;
-            spr.width = gridSize;
-            spr.height = gridSize;
+            if (spr !== null) {
+                spr.x = startX + (x - shape.dir.x * shape.pos/10) * gridSize;
+                spr.y = startY + (y - shape.dir.y * shape.pos/10) * gridSize;
+                spr.width = gridSize;
+                spr.height = gridSize;
+            }
             var tile = board.tiles[y * board.width + x].sprite;
             tile.x = startX + x * gridSize;
             tile.y = startY + y * gridSize;
@@ -120,6 +122,18 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     board.x = leftX;
     board.y = topY;
     board.gridSize = size / 9;
+    var delSh = this.board.deletedShapes;
+    for (var i = 0; i < delSh.length; i++) {
+        var sh = delSh[i];
+        sh.sprite.alpha -= 0.1;
+        if (sh.sprite.alpha <= 0) {
+            // QUESTION: how to remove items from array?
+            delSh[i] = delSh[delSh.length - 1];
+            delSh.length--;
+            i--;
+            sh.sprite.kill();
+        }
+    }
 };
 
 GameScreen.prototype.move = function(pointer, x, y){

@@ -48,8 +48,8 @@ function getResolutionConfig() {
 
 // Start my game!
 var game = new Phaser.Game({
-    "width": "100",
-    "height": "100",
+    "width": 0,
+    "height": 0,
     "renderer": getRendererConfig(),
     "parent": "gameDiv",
     "resolution": getResolutionConfig()

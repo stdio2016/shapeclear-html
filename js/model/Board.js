@@ -8,6 +8,8 @@ function Board(game) {
     this.shapeGroup = null;
     this.swaps = [];
     this.matches = [];
+    this.deletedShapes = [];
+    this.debugger = null;
 
     // position of board in the game
     this.x = 0;
@@ -66,6 +68,14 @@ Board.prototype.getShape = function (x, y) {
     return this.shapes[x + y * this.width];
 };
 
+Board.prototype.clearShape = function (x, y) {
+    // bound check
+    if (x >= this.width || x < 0) throw RangeError('x out of bound');
+    if (y >= this.height || y < 0) return RangeError('y out of bound');
+    // TODO: handle special shapes such as striped or wrapped ones
+    this.shapes[x + y * this.width] = new Shape(0, x, y);
+};
+
 Board.prototype.addSwap = function(from, to) {
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
@@ -97,6 +107,9 @@ Board.prototype.update = function () {
     this.initMatch();
     this.findVeritcalMatch();
     this.findHorizontalMatch();
+    // TODO: sort chains by their type
+    // first match-5, then cross, match-4, and finally match-3.
+    this.clearMatch();
 };
 
 Board.prototype.updateSwaps = function () {
@@ -108,7 +121,10 @@ Board.prototype.updateSwaps = function () {
         if (this.swaps[i].tick == 0) {
             from.swapping = false;
             to.swapping = false;
-            if (this.isValidSwapAt(from.x, from.y) || this.isValidSwapAt(to.x, to.y) || this.swaps[i].status === 'reject') {
+            if ( this.isValidSwapAt(from.x, from.y)
+              || this.isValidSwapAt(to.x, to.y)
+              || this.swaps[i].status === 'reject'
+            ) {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;
@@ -257,4 +273,24 @@ Board.prototype.isValidSwapAt = function (x, y) {
     }
     return true;
     return upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
+};
+
+Board.prototype.clearMatch = function () {
+    for (var i = 0; i < this.matches.length; i++) {
+        var m = this.matches[i];
+        if (m.type & Match.HORIZONTAL) {
+            for (var j = 0; j < m.hlength; j++) {
+                var sh = this.getShape(m.hx + j, m.hy);
+                this.clearShape(m.hx + j, m.hy);
+                this.deletedShapes.push(sh);
+            }
+        }
+        if (m.type & Match.VERTICAL) {
+            for (var j = 0; j < m.vlength; j++) {
+                var sh = this.getShape(m.vx, m.vy + j);
+                this.clearShape(m.vx, m.vy + j);
+                this.deletedShapes.push(sh);
+            }
+        }
+    }
 };
