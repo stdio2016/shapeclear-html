@@ -281,15 +281,19 @@ Board.prototype.clearMatch = function () {
         if (m.type & Match.HORIZONTAL) {
             for (var j = 0; j < m.hlength; j++) {
                 var sh = this.getShape(m.hx + j, m.hy);
-                this.clearShape(m.hx + j, m.hy);
-                this.deletedShapes.push(sh);
+                if (sh.sprite !== null) { // shape cannot be cleared twice
+                    this.clearShape(m.hx + j, m.hy);
+                    this.deletedShapes.push(sh);
+                }
             }
         }
         if (m.type & Match.VERTICAL) {
             for (var j = 0; j < m.vlength; j++) {
                 var sh = this.getShape(m.vx, m.vy + j);
-                this.clearShape(m.vx, m.vy + j);
-                this.deletedShapes.push(sh);
+                if (sh.sprite !== null) { // shape cannot be cleared twice
+                    this.clearShape(m.vx, m.vy + j);
+                    this.deletedShapes.push(sh);
+                }
             }
         }
     }
