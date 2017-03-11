@@ -2,7 +2,7 @@
 function Debug() {
     this.allowIllegalMove = false;
     this.disableMatching = false;
-    this.showMatching = true;
+    this.showMatching = false;
 }
 
 Debug.prototype.runCommand = function (cmd) {
