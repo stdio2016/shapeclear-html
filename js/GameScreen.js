@@ -5,6 +5,7 @@ function GameScreen() {
     this.board = null;
     this.touchDetector = null;
     this.music = null;
+    this.showMatches = [];
 }
 
 GameScreen.prototype.preload = function () {
@@ -147,27 +148,44 @@ GameScreen.prototype.move = function(pointer, x, y){
 
 GameScreen.prototype.render = function (game) {
     if (!this.board.debug.showMatching) return;
-    var colors = ['brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'darkgray', 'white', 'black'];
+    var colors = [0x7f0000, 0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0xff7fff, 0xc0c0c0, 0xffffff, 0x000000];
     var matches = this.board.matches;
     var x, y, width, height, line;
+    var j = 0;
+    var spr;
+    function getSprite () {
+        if (j < this.showMatches.length) {
+            spr = this.showMatches[j];
+        }
+        else {
+            spr = this.add.sprite(0, 0, 'whiteSquare');
+            this.showMatches.push(spr);
+        }
+        spr.visible = true;
+        j++;
+    };
+
     for (var i = 0; i < matches.length; i++) {
         var m = matches[i];
         if (m.type & Match.HORIZONTAL) {
-            x = this.board.x + m.hx * this.board.gridSize;
-            width = m.hlength * this.board.gridSize;
-            y = this.board.y + (m.hy + 0.4) * this.board.gridSize;
-            height = 0.2 * this.board.gridSize;
-            line = new Phaser.Rectangle(x, y, width, height);
-            game.debug.geom(line, colors[i % colors.length]);
+            getSprite.call(this);
+            spr.x = this.board.x + m.hx * this.board.gridSize;
+            spr.width = m.hlength * this.board.gridSize;
+            spr.y = this.board.y + (m.hy + 0.4) * this.board.gridSize;
+            spr.height = 0.2 * this.board.gridSize;
+            spr.tint = colors[i % colors.length];
         }
         if (m.type & Match.VERTICAL) {
-            y = this.board.y + m.vy * this.board.gridSize;
-            height = m.vlength * this.board.gridSize;
-            x = this.board.x + (m.vx + 0.4) * this.board.gridSize;
-            width = 0.2 * this.board.gridSize;
-            line = new Phaser.Rectangle(x, y, width, height);
-            game.debug.geom(line, colors[i % colors.length]);
+            getSprite.call(this);
+            spr.y = this.board.y + m.vy * this.board.gridSize;
+            spr.height = m.vlength * this.board.gridSize;
+            spr.x = this.board.x + (m.vx + 0.4) * this.board.gridSize;
+            spr.width = 0.2 * this.board.gridSize;
+            spr.tint = colors[i % colors.length];
         }
     }
-    game.debug.dirty = true;
+
+    for (var i = j; i < this.showMatches.length; i++) {
+        this.showMatches[i].visible = false;
+    }
 };

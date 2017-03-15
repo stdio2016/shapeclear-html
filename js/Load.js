@@ -26,6 +26,9 @@ Load.prototype.preload = function () {
     game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
     game.load.image('background', 'assets/background.png');
     game.load.audio('music', ['assets/music.ogg', 'assets/music.m4a', 'assets/music.wav']);
+
+    // create texture for showing match-3
+    this.game.create.texture('whiteSquare', ['2']);
 };
 
 Load.prototype.preloadUpdate = function () {
