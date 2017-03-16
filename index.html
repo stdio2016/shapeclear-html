@@ -7,8 +7,12 @@
 <link rel="stylesheet" type="text/css" href="css/alertbox.css">
 </head>
 <body>
-  <div id='loading' class='center-of-screen'>Loading phaser.js</div>
-  <script src='lib/phaser.js'></script>
+  <div id='loading' class='center-of-screen' style='flex-direction:column;'>
+    Loading phaser.js
+    <progress id='loadProgress'></progress>
+  </div>
+  <script src='js/GameLoader.js'></script>
+  <!--script src='lib/phaser.js'></script>
   <script src='js/Load.js'></script>
   <script src='js/model/Board.js'></script>
   <script src='js/model/Shape.js'></script>
@@ -18,7 +22,7 @@
   <script src='js/GameScreen.js'></script>
   <script src='js/Ball.js'></script>
   <script src='js/TouchDetector.js'></script>
-  <script src='js/Boot.js'></script>
+  <script src='js/Boot.js'></script-->
   <!--[if IE]>
   <div id='alert' class='alert-box alert-box-ie'>
   <![endif]-->
