@@ -43,7 +43,7 @@
     border: black solid 1px;
     padding: 5px;
     background: white;
-    margin-top: 25%;
+    margin-top: 25vh;
     max-height: 50%;
     max-width: 50%;
     display: flex;
@@ -57,7 +57,6 @@
     overflow-y: auto;
 }
 .prompt-box .yesno {
-    width: 100%;
     display: flex;
     justify-content: space-around;
 }

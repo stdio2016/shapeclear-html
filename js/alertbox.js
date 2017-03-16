@@ -43,7 +43,10 @@ function promptBox(message, defaultValue, callback) {
         };
     }
     input.value = defaultValue;
+    input.style.display = '';
     box.style.visibility = 'visible';
+    input.focus();
+    document.getElementById('promptCancel').style.display = '';
     promptCallback = function (ok) {
         box.style.visibility = 'hidden';
         promptCallback = null;
@@ -53,5 +56,26 @@ function promptBox(message, defaultValue, callback) {
         else {
             callback(null);
         }
+    };
+}
+
+function alertBox(message, callback) {
+    var box = document.getElementById('prompt');
+    var msg = document.getElementById('promptMessage')
+    var input = document.getElementById('promptInput');
+    if (typeof message == 'undefined') {
+        message = '';
+    }
+    msg.innerText = message;
+    if (!callback) {
+        callback = function () {};
+    }
+    input.style.display = 'none';
+    box.style.visibility = 'visible';
+    document.getElementById('promptCancel').style.display = 'none';
+    promptCallback = function (ok) {
+        box.style.visibility = 'hidden';
+        promptCallback = null;
+        callback();
     };
 }

@@ -24,14 +24,14 @@
   <![endif]-->
   <!--[if !IE]> -->
   <div class="center-of-screen grayed-out" id='prompt' style='visibility: hidden; align-items: baseline;'>
-    <div class='prompt-box'>
+    <form class='prompt-box' action="javascript:void 3">
       <div class='description' id='promptMessage'></div>
       <input id='promptInput'>
       <div class='yesno'>
         <button onclick="promptCallback(true)">OK</button>
-        <button onclick="promptCallback(false)">Cancel</button>
+        <button onclick="promptCallback(false)" id='promptCancel'>Cancel</button>
       </div>
-    </div>
+    </form>
   </div>
   <div id='alert' class='alert-box' style='visibility: hidden;'>
   <!-- <![endif]-->
