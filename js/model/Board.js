@@ -73,7 +73,11 @@ Board.prototype.clearShape = function (x, y) {
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
     if (y >= this.height || y < 0) return RangeError('y out of bound');
     // TODO: handle special shapes such as striped or wrapped ones
-    this.shapes[x + y * this.width] = new Shape(0, x, y);
+    var i = x + y * this.width;
+    if (this.shapes[i].type > 0) {
+        this.deletedShapes.push(this.shapes[i]);
+        this.shapes[i] = new Shape(0, x, y);
+    }
 };
 
 Board.prototype.addSwap = function(from, to) {
@@ -282,19 +286,13 @@ Board.prototype.clearMatch = function () {
         if (m.type & Match.HORIZONTAL) {
             for (var j = 0; j < m.hlength; j++) {
                 var sh = this.getShape(m.hx + j, m.hy);
-                if (sh.sprite !== null) { // shape cannot be cleared twice
-                    this.clearShape(m.hx + j, m.hy);
-                    this.deletedShapes.push(sh);
-                }
+                this.clearShape(m.hx + j, m.hy);
             }
         }
         if (m.type & Match.VERTICAL) {
             for (var j = 0; j < m.vlength; j++) {
                 var sh = this.getShape(m.vx, m.vy + j);
-                if (sh.sprite !== null) { // shape cannot be cleared twice
-                    this.clearShape(m.vx, m.vy + j);
-                    this.deletedShapes.push(sh);
-                }
+                this.clearShape(m.vx, m.vy + j);
             }
         }
     }
