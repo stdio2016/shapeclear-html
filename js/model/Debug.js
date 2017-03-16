@@ -21,8 +21,20 @@ Debug.prototype.runCommand = function (cmd) {
       case 'hide matching':
         this.showMatching = false; return ;
       case 'help': case '?':
-        alert("Can't help you"); return ;
-      default:
-        console.log('Unknown command: ' + cmd);
+        alertBox("Can't help you"); return ;
+    }
+    if (/^get /.test(cmd)) {
+        return this.runGetCommand(cmd.substr(4));
+    }
+    console.log('Unknown command: ' + cmd);
+};
+
+Debug.prototype.runGetCommand = function (cmd) {
+    if (cmd == 'inner height') {
+        alertBox(window.innerHeight);
+    }
+    else if (cmd == 'body client height') {
+        var rect = document.body.getClientRects()[0];
+        alertBox(rect.height);
     }
 };
