@@ -9,9 +9,10 @@ function loadScript(src, progressCallback, callback) {
         document.head.appendChild(script);
         if (callback) callback();
     };
-    xhr.responseType = 'text';
+    xhr.onerror = callback;
     xhr.onprogress = progressCallback || null;
     xhr.open('get', src);
+    xhr.responseType = 'text';
     xhr.send();
 }
 
@@ -30,7 +31,11 @@ loadScript('lib/phaser.js', function (e) {
         loadProgress.max = e.total;
         console.log(e.loaded / e.total);
     }
-}, function () {
+}, function (e) {
+    if (e) {
+        loading.innerText = 'Unable to load Phaser.js';
+        return;
+    }
     loading.innerText = 'Loading my program';
     var srcs = [
       'js/Load.js',
