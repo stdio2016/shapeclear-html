@@ -29,7 +29,10 @@ loadScript('lib/phaser.js', function (e) {
     if (e.lengthComputable) {
         loadProgress.value = e.loaded;
         loadProgress.max = e.total;
-        console.log(e.loaded / e.total);
+    }
+    else {
+        loadProgress.value = e.loaded;
+        loadProgress.max = 3169095;
     }
 }, function (e) {
     if (e) {
