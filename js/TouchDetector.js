@@ -35,8 +35,6 @@ TouchDetector.prototype.process = function (index, pointer) {
                     // move out of the selection
                     // it means swap
                     var dir = this.calcDirection(myPoint, pointer);
-                    console.log('swap from ' + myPoint.x + ',' + myPoint.y +
-                      ' to ' + dir);
                     myPoint.tracking = false;
                     if(dir !== null){
                         this.board.addSwap(myPoint, {x: dir[0], y: dir[1]});
