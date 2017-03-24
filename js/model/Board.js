@@ -297,3 +297,44 @@ Board.prototype.clearMatch = function () {
         }
     }
 };
+
+Board.forEachPossibleMatch = function (left, top, width, height, callback) {
+    function callbackArguments(x1, y1, x2, y2, x3, y3, x4, y4) {
+        // shapes at (x1,y1), (x2,y2), and (x3,y3) may match-3
+        // objects at (x3,y3) and (x4,y4) may be swapped
+    }
+    var right = left + width, bottom = top + height;
+    var x, y;
+    for (x = left; x < right-3; x++) {
+        for (y = top; y < bottom; y++) {
+            callback(x, y, x+1, y, x+3, y, x+2, y);
+            callback(x+3, y, x+2, y, x, y, x+1, y);
+        }
+    }
+    for (x = left; x < right-2; x++) {
+        for (y = top; y < bottom-1; y++) {
+            callback(x  ,y  ,x+1,y  ,x+2,y+1,x+2,y);
+            callback(x  ,y  ,x+2,y  ,x+1,y+1,x+1,y);
+            callback(x+1,y  ,x+2,y  ,x  ,y+1,x  ,y);
+            callback(x  ,y+1,x+1,y+1,x+2,y  ,x+2,y+1);
+            callback(x  ,y+1,x+2,y+1,x+1,y  ,x+1,y+1);
+            callback(x+1,y+1,x+2,y+1,x  ,y  ,x  ,y+1);
+        }
+    }
+    for (x = left; x < right-1; x++) {
+        for (y = top; y < bottom-2; y++) {
+            callback(x  ,y  ,x  ,y+1,x+1,y+2,x  ,y+2);
+            callback(x  ,y  ,x  ,y+2,x+1,y+1,x  ,y+1);
+            callback(x  ,y+1,x  ,y+2,x+1,y  ,x  ,y);
+            callback(x+1,y  ,x+1,y+1,x  ,y+2,x+1,y+2);
+            callback(x+1,y  ,x+1,y+2,x  ,y+1,x+1,y+1);
+            callback(x+1,y+1,x+1,y+2,x  ,y  ,x+1,y);
+        }
+    }
+    for (x = left; x < right; x++) {
+        for (y = top; y < bottom-3; y++) {
+            callback(x, y, x, y+1, x, y+3, x, y+2);
+            callback(x, y+3, x, y+2, x, y, x, y+1);
+        }
+    }
+};
