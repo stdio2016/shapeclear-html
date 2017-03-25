@@ -23,7 +23,7 @@ GameScreen.prototype.create = function () {
     this.board.generateSimple();
     this.touchDetector = new TouchDetector(this.game, this.board);
     this.addSelectSprite();
-    this.music = this.game.add.sound('music');
+    this.music = this.game.add.sound('music2');
     this.music.loop = true;
     this.music.play();
 };
