@@ -71,7 +71,15 @@ Load.prototype.update = function () {
 };
 
 Load.prototype.playGame = function () {
-    this.state.start('GameScreen');
+    var me = this;
+    AppleFools.getLife(function (result) {
+        if (result) {
+            me.state.start('GameScreen');
+        }
+        else {
+            alertBox('遊戲發生內部錯誤，無法繼續');
+        }
+    });
 };
 
 Load.prototype.testRenderer = function () {

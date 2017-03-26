@@ -50,6 +50,7 @@ loadScript('lib/phaser.js', function (e) {
       'js/GameScreen.js',
       'js/Ball.js',
       'js/TouchDetector.js',
+      'js/applefools/AppleFools.js',
       'js/Boot.js'
     ];
     for (var i = 0; i < srcs.length; i++) {
