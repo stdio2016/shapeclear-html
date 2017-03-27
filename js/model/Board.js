@@ -114,6 +114,7 @@ Board.prototype.update = function () {
     // TODO: sort chains by their type
     // first match-5, then cross, match-4, and finally match-3.
     this.clearMatch();
+    this.fall();
 };
 
 Board.prototype.updateSwaps = function () {
@@ -123,8 +124,8 @@ Board.prototype.updateSwaps = function () {
         this.swaps[i].tick--;
         from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
         if (this.swaps[i].tick == 0) {
-            from.swapping = false;
-            to.swapping = false;
+            from.stopSwapping();
+            to.stopSwapping();
             if ( this.isValidSwapAt(from.x, from.y)
               || this.isValidSwapAt(to.x, to.y)
               || this.swaps[i].status === 'reject'
@@ -335,6 +336,69 @@ Board.forEachPossibleMatch = function (left, top, width, height, callback) {
         for (y = top; y < bottom-3; y++) {
             callback(x, y, x, y+1, x, y+3, x, y+2);
             callback(x, y+3, x, y+2, x, y, x, y+1);
+        }
+    }
+};
+
+// Helper for Board.prototype.fall
+Board.prototype.tryFallAt = function (i, wd) {
+    var sh = this.shapes[i];
+    var d = false;
+    if (sh.isEmpty()) { // empty tile
+        return true;
+    }
+    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0) && !wd[i]) {
+        wd[i] = true;
+        // TODO: find the Down of i
+        if (i < 72) {
+            d = this.tryFallAt(i + 9, wd);
+        }
+        else {
+            d = false;
+        }
+        if (d) { //there is space for falling
+            if (sh.isStopped()) {
+                sh.speed = 0.2; // initial falling speed
+                sh.pos = 10 - sh.speed;
+                sh.dir = {x: 0, y: 1}; // assign direction
+            }
+            else {
+                sh.bouncing = false;
+                sh.pos += 10;
+            }
+            this.shapes[i] = new Shape(0, i % 9, Math.floor(i / 9));
+            // TODO: add support for other gravity directions
+            this.shapes[i + 9] = sh;
+            sh.y++;
+        }
+    }
+    return d;
+};
+
+Board.prototype.fall = function () {
+    var wd = []; // "shape will fall down or pass through" mark
+    for (var i = 0; i < this.shapes.length; i++) {
+        var sh = this.shapes[i];
+        if (sh.isMoving()) {
+            sh.speed += 0.1; // gravity acceleration
+            if(sh.speed > 10) { // maximum speed
+                sh.speed = 10;
+            }
+            sh.pos -= sh.speed;
+        }
+        wd.push(false);
+    }
+    for (var i = 0; i < this.shapes.length; i++) {
+        this.tryFallAt(i, wd);
+    }
+    for (var i = 0; i < this.shapes.length; i++) {
+        var sh = this.shapes[i];
+        // TODO: add support for other gravity direction
+        if (sh.isMoving() && sh.pos <= 0) {
+            if (i >= 72 || !this.shapes[i + 9].isEmpty()) {
+                // stop the shape from falling
+                sh.stopFalling();
+            }
         }
     }
 };
