@@ -9,7 +9,7 @@ function Board(game) {
     this.swaps = [];
     this.matches = [];
     this.deletedShapes = [];
-    this.debug = new Debug();
+    this.debug = new Debug(this);
 
     // position of board in the game
     this.x = 0;
@@ -115,6 +115,7 @@ Board.prototype.update = function () {
     // first match-5, then cross, match-4, and finally match-3.
     this.clearMatch();
     this.fall();
+    this.debug.autoSwipeTest();
 };
 
 Board.prototype.updateSwaps = function () {
