@@ -49,7 +49,7 @@ Board.prototype.generateSimple = function () {
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
-              ['triangle', 'square', 'circle', 'hexagon', 'downTriangle', 'rhombus'][r - 1]);
+              Shape.typeNames[r - 1]);
             var sh = new Shape(r, j, i);
             arr[i * width + j] = sh;
             sh.sprite = sprite;
@@ -399,6 +399,18 @@ Board.prototype.fall = function () {
                 // stop the shape from falling
                 sh.stopFalling();
             }
+        }
+    }
+    for (var i = 0; i < 9; i++) {
+        if (this.shapes[i].isEmpty()) {
+            var r = Math.floor(Math.random() * 6);
+            var sh = new Shape(r + 1, i, 0);
+            this.shapes[i] = sh;
+            sh.sprite = this.shapeGroup.create(
+              0, 0, 'shapes', Shape.typeNames[r]
+            );
+            sh.dir = {x: 0, y: 1};
+            sh.pos = 10;
         }
     }
 };
