@@ -69,3 +69,8 @@ Debug.prototype.autoSwipeTest = function () {
         this.board.addSwap(swipes[r][0], swipes[r][1]);
     }
 }
+
+Debug.prototype.getDebugMessage = function () {
+    return 'Happy Apple Fools Day!';
+    return this.board.game.time.fps;
+};

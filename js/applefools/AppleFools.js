@@ -76,4 +76,14 @@ AppleFools.chooseMode = function (mode) {
         Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
          'apple', 'pen', 'pineapple'];
     }
+    AppleFools.swapCounter = 0;
+    if (!AppleFools.Board_addSwap) {
+        AppleFools.Board_addSwap = Board.prototype.addSwap;
+        Board.prototype.addSwap = function (a, b) {
+            AppleFools.Board_addSwap.call(this, a, b);
+            if (++AppleFools.swapCounter == 3) {
+                alertBox('Do you know?\nToday is Apple Fools Day, and I prepared some fun features for you. Go and find them!');
+            }
+        };
+    }
 };
