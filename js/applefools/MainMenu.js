@@ -12,12 +12,14 @@ AppleFools.MainMenu.prototype.preload = function () {
 
 AppleFools.MainMenu.prototype.create = function () {
     this.selectAMode = this.add.text(145, 10, 'Select a mode');
-    this.classicMode = this.add.button(40, 90, 'ball');
+    this.classicMode = this.add.button(40, 90, 'ball', this.gotoClassicMode, this);
     this.classicMode.width = 160;
     this.classicMode.height = 160;
+    var tex = this.add.text(70, 135, 'Classic\nMode');
     this.afMode = this.add.button(280, 90, 'shapes', this.gotoAfMode, this, 'pen', 'apple', 'pineapple', 'pen');
     this.afMode.width = 160;
     this.afMode.height = 160;
+    var tex = this.add.text(325, 170, 'Apple\nFools');
     this.music = this.add.sound('music');
     this.music.loop = true;
     this.music.play();
@@ -43,6 +45,12 @@ AppleFools.MainMenu.prototype.shutdown = function () {
     this.music.destroy();
 };
 
+AppleFools.MainMenu.prototype.gotoClassicMode = function () {
+    AppleFools.chooseMode('classic');
+    this.state.start("GameScreen");
+};
+
 AppleFools.MainMenu.prototype.gotoAfMode = function () {
+    AppleFools.chooseMode('AppleFools');
     this.state.start("GameScreen");
 };

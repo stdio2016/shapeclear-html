@@ -45,7 +45,7 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.game.rnd.between(1, 3);
+                r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
             } while (r1 == r || r2 == r) ;
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
@@ -413,7 +413,7 @@ Board.prototype.fall = function () {
     for (var i = 0; i < 9; i++) {
         var dsh = this.shapes[i + 9];
         if (this.shapes[i].isEmpty()) {
-            var r = Math.floor(Math.random() * 3);
+            var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
             var sh = new Shape(r + 1, i, 0);
             this.shapes[i] = sh;
             sh.sprite = this.shapeGroup.create(

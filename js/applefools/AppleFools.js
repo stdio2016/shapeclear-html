@@ -59,3 +59,21 @@ AppleFools.getLife = function (callback) {
         callback(false);
     }
 };
+
+AppleFools.COLOR_COUNT = 6;
+AppleFools.DROP_COLOR_COUNT = 6;
+
+AppleFools.chooseMode = function (mode) {
+    if (mode === 'classic') {
+        AppleFools.COLOR_COUNT = 6;
+        AppleFools.DROP_COLOR_COUNT = 6;
+        Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
+         'downTriangle', 'rhombus'];
+    }
+    else {
+        AppleFools.COLOR_COUNT = 4;
+        AppleFools.DROP_COLOR_COUNT = 7;
+        Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
+         'apple', 'pen', 'pineapple'];
+    }
+};
