@@ -52,7 +52,7 @@ GameScreen.prototype.addSelectSprite = function(){
 GameScreen.prototype.update = function () {
     this.touchDetector.update();
     this.board.update();
-    this.debug.text = game.width + "x" + game.height;
+    this.debug.text = game.width + "x" + game.height + ', falling: ' + this.board.falling;
     this.background.width = game.width;
     this.background.height = game.height;
     this.resizeUI();

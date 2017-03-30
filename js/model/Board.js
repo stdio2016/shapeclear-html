@@ -9,6 +9,7 @@ function Board(game) {
     this.swaps = [];
     this.matches = [];
     this.deletedShapes = [];
+    this.falling = false;
     this.debug = new Debug(this);
 
     // position of board in the game
@@ -44,7 +45,7 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.game.rnd.between(1, 6);
+                r = this.game.rnd.between(1, 3);
             } while (r1 == r || r2 == r) ;
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
@@ -109,11 +110,14 @@ Board.prototype.swapShape = function (sh1, sh2) {
 Board.prototype.update = function () {
     this.updateSwaps();
     this.initMatch();
-    this.findVeritcalMatch();
-    this.findHorizontalMatch();
-    // TODO: sort chains by their type
-    // first match-5, then cross, match-4, and finally match-3.
-    this.clearMatch();
+    if (!this.falling) {
+        this.findVeritcalMatch();
+        this.findHorizontalMatch();
+        // TODO: sort chains by their type
+        // first match-5, then cross, match-4, and finally match-3.
+        this.clearMatch();
+    }
+    this.falling = false;
     this.fall();
     this.debug.autoSwipeTest();
 };
@@ -348,7 +352,7 @@ Board.prototype.tryFallAt = function (i, wd) {
     if (sh.isEmpty()) { // empty tile
         return true;
     }
-    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0) && !wd[i]) {
+    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && !wd[i]) {
         wd[i] = true;
         // TODO: find the Down of i
         if (i < 72) {
@@ -371,6 +375,7 @@ Board.prototype.tryFallAt = function (i, wd) {
             // TODO: add support for other gravity directions
             this.shapes[i + 9] = sh;
             sh.y++;
+            this.falling = true;
         }
     }
     return d;
@@ -386,6 +391,9 @@ Board.prototype.fall = function () {
                 sh.speed = 10;
             }
             sh.pos -= sh.speed;
+            if (!sh.bouncing) {
+                this.falling = true;
+            }
         }
         wd.push(false);
     }
@@ -403,15 +411,23 @@ Board.prototype.fall = function () {
         }
     }
     for (var i = 0; i < 9; i++) {
+        var dsh = this.shapes[i + 9];
         if (this.shapes[i].isEmpty()) {
-            var r = Math.floor(Math.random() * 6);
+            var r = Math.floor(Math.random() * 3);
             var sh = new Shape(r + 1, i, 0);
             this.shapes[i] = sh;
             sh.sprite = this.shapeGroup.create(
               0, 0, 'shapes', Shape.typeNames[r]
             );
             sh.dir = {x: 0, y: 1};
-            sh.pos = 10;
+            if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {
+                sh.pos = 10;
+                sh.speed = 0;
+            }
+            else {
+                sh.pos = this.shapes[i + 9].pos;
+                sh.speed = this.shapes[i + 9].speed;
+            }
         }
     }
 };
