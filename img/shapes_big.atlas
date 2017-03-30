@@ -4,6 +4,13 @@ size: 512,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+apple
+  rotate: false
+  xy: 207, 58
+  size: 56, 69
+  orig: 72, 72
+  offset: 9, 2
+  index: -1
 board
   rotate: false
   xy: 1, 55
@@ -13,14 +20,14 @@ board
   index: -1
 circle
   rotate: false
-  xy: 335, 71
+  xy: 387, 71
   size: 56, 56
   orig: 72, 72
   offset: 8, 8
   index: -1
 downTriangle
   rotate: false
-  xy: 207, 73
+  xy: 323, 73
   size: 62, 54
   orig: 72, 72
   offset: 5, 9
@@ -31,6 +38,20 @@ hexagon
   size: 52, 60
   orig: 72, 72
   offset: 10, 6
+  index: -1
+pen
+  rotate: false
+  xy: 255, 1
+  size: 55, 54
+  orig: 72, 72
+  offset: 10, 9
+  index: -1
+pineapple
+  rotate: false
+  xy: 265, 57
+  size: 56, 70
+  orig: 72, 72
+  offset: 8, 1
   index: -1
 rhombus
   rotate: false
@@ -62,7 +83,7 @@ square
   index: -1
 triangle
   rotate: false
-  xy: 271, 73
+  xy: 191, 1
   size: 62, 54
   orig: 72, 72
   offset: 5, 9
