@@ -71,6 +71,5 @@ Debug.prototype.autoSwipeTest = function () {
 }
 
 Debug.prototype.getDebugMessage = function () {
-    return 'Happy Apple Fools Day!';
-    return this.board.game.time.fps;
+    return +this.board.game.time.fps;
 };

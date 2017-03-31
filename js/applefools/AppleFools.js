@@ -4,6 +4,7 @@ if (!('AppleFools' in window)) {
 
 AppleFools.appleFoolsReady = (new Date()).getMonth() + 1 != 4;
 AppleFools.appleFoolsReady = false;
+AppleFools.foolsMsg = 'Left-top debug text';
 
 AppleFools.safeGetStorage = function (key) {
     try {
@@ -64,26 +65,66 @@ AppleFools.COLOR_COUNT = 6;
 AppleFools.DROP_COLOR_COUNT = 6;
 
 AppleFools.chooseMode = function (mode) {
+    AppleFools.preparePatch();
     if (mode === 'classic') {
         AppleFools.COLOR_COUNT = 6;
         AppleFools.DROP_COLOR_COUNT = 6;
         Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
          'downTriangle', 'rhombus'];
+        Debug.prototype.getDebugMessage = AppleFools.Debug_getDebugMessage;
+        Board.prototype.clearShape = AppleFools.Board_clearShape;
     }
     else {
         AppleFools.COLOR_COUNT = 4;
         AppleFools.DROP_COLOR_COUNT = 7;
         Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
          'apple', 'pen', 'pineapple'];
+        AppleFools.foolsMsg = 'Apple Fools!';
+        Debug.prototype.getDebugMessage = AppleFools.foolDebugMessage;
+        Board.prototype.clearShape = AppleFools.clearShape;
+        AppleFools.appleCount = 0;
     }
     AppleFools.swapCounter = 0;
+};
+
+AppleFools.preparePatch = function () {
     if (!AppleFools.Board_addSwap) {
         AppleFools.Board_addSwap = Board.prototype.addSwap;
-        Board.prototype.addSwap = function (a, b) {
-            AppleFools.Board_addSwap.call(this, a, b);
-            if (++AppleFools.swapCounter == 3) {
-                alertBox('Do you know?\nToday is Apple Fools Day, and I prepared some fun features for you. Go and find them!');
-            }
-        };
+        Board.prototype.addSwap = AppleFools.addSwap;
+        AppleFools.Debug_getDebugMessage = Debug.prototype.getDebugMessage;
+        AppleFools.Board_clearShape = Board.prototype.clearShape;
     }
+};
+
+AppleFools.addSwap = function (a, b) {
+    AppleFools.Board_addSwap.call(this, a, b);
+    if (++AppleFools.swapCounter == 3) {
+        alertBox('Do you know?\nToday is Apple Fools Day, and I prepared some fun features for you. Go and find them!');
+    }
+};
+
+AppleFools.clearShape = function (x, y) {
+    var sh = this.getShape(x, y).type;
+    if (sh == 5) {
+        AppleFools.IHave('an apple');
+        AppleFools.appleCount++;
+        if (AppleFools.appleCount >= 10) {
+            this.game.state.start('MainMenu');
+        }
+    }
+    if (sh == 6) {
+        AppleFools.IHave('a pen');
+    }
+    if (sh == 7) {
+        AppleFools.IHave('pineapple');
+    }
+    AppleFools.Board_clearShape.call(this, x, y);
+};
+
+AppleFools.IHave = function (obj) {
+    AppleFools.foolsMsg = 'I have ' + obj;
+};
+
+AppleFools.foolDebugMessage = function () {
+    return AppleFools.foolsMsg;
 };
