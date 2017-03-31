@@ -1,5 +1,13 @@
 {"frames": [
 {
+	"filename": "apple",
+	"frame": {"x":39,"y":28,"w":29,"h":35},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":1,"w":29,"h":35},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
 	"filename": "board",
 	"frame": {"x":1,"y":27,"w":36,"h":36},
 	"rotated": false,
@@ -9,7 +17,7 @@
 }
 ,{
 	"filename": "circle",
-	"frame": {"x":139,"y":35,"w":28,"h":28},
+	"frame": {"x":200,"y":35,"w":28,"h":28},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":4,"w":28,"h":28},
@@ -17,7 +25,7 @@
 }
 ,{
 	"filename": "downTriangle",
-	"frame": {"x":39,"y":1,"w":32,"h":28},
+	"frame": {"x":70,"y":1,"w":32,"h":28},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":2,"y":4,"w":32,"h":28},
@@ -25,15 +33,31 @@
 }
 ,{
 	"filename": "hexagon",
-	"frame": {"x":107,"y":1,"w":26,"h":30},
+	"frame": {"x":168,"y":1,"w":26,"h":30},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":3,"w":26,"h":30},
 	"sourceSize": {"w":36,"h":36}
 }
 ,{
+	"filename": "pen",
+	"frame": {"x":196,"y":3,"w":28,"h":28},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":4,"w":28,"h":28},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
+	"filename": "pineapple",
+	"frame": {"x":104,"y":27,"w":28,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":28,"h":36},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
 	"filename": "rhombus",
-	"frame": {"x":107,"y":33,"w":30,"h":30},
+	"frame": {"x":168,"y":33,"w":30,"h":30},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":3,"w":30,"h":30},
@@ -41,7 +65,7 @@
 }
 ,{
 	"filename": "selected",
-	"frame": {"x":39,"y":31,"w":32,"h":32},
+	"frame": {"x":70,"y":31,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -49,7 +73,7 @@
 }
 ,{
 	"filename": "selection",
-	"frame": {"x":73,"y":31,"w":32,"h":32},
+	"frame": {"x":134,"y":31,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -57,7 +81,7 @@
 }
 ,{
 	"filename": "square",
-	"frame": {"x":169,"y":37,"w":26,"h":26},
+	"frame": {"x":226,"y":7,"w":26,"h":26},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":5,"w":26,"h":26},
@@ -65,7 +89,7 @@
 }
 ,{
 	"filename": "triangle",
-	"frame": {"x":73,"y":1,"w":32,"h":28},
+	"frame": {"x":134,"y":1,"w":32,"h":28},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":2,"y":4,"w":32,"h":28},

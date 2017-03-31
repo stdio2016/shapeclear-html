@@ -1,5 +1,13 @@
 {"frames": [
 {
+	"filename": "apple",
+	"frame": {"x":207,"y":58,"w":56,"h":69},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":2,"w":56,"h":69},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
 	"filename": "board",
 	"frame": {"x":1,"y":55,"w":72,"h":72},
 	"rotated": false,
@@ -9,7 +17,7 @@
 }
 ,{
 	"filename": "circle",
-	"frame": {"x":335,"y":71,"w":56,"h":56},
+	"frame": {"x":387,"y":71,"w":56,"h":56},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":8,"y":8,"w":56,"h":56},
@@ -17,7 +25,7 @@
 }
 ,{
 	"filename": "downTriangle",
-	"frame": {"x":207,"y":73,"w":62,"h":54},
+	"frame": {"x":323,"y":73,"w":62,"h":54},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},
@@ -29,6 +37,22 @@
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":10,"y":6,"w":52,"h":60},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "pen",
+	"frame": {"x":255,"y":1,"w":55,"h":54},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":9,"w":55,"h":54},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "pineapple",
+	"frame": {"x":265,"y":57,"w":56,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":1,"w":56,"h":70},
 	"sourceSize": {"w":72,"h":72}
 }
 ,{
@@ -65,7 +89,7 @@
 }
 ,{
 	"filename": "triangle",
-	"frame": {"x":271,"y":73,"w":62,"h":54},
+	"frame": {"x":191,"y":1,"w":62,"h":54},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},

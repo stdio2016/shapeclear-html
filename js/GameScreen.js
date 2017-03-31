@@ -52,7 +52,8 @@ GameScreen.prototype.addSelectSprite = function(){
 GameScreen.prototype.update = function () {
     this.touchDetector.update();
     this.board.update();
-    this.debug.text = game.width + "x" + game.height;
+    this.debug.fontSize = Math.min(game.width, game.height) * 0.05 + 'pt';
+    this.debug.text = this.board.debug.getDebugMessage();
     this.background.width = game.width;
     this.background.height = game.height;
     this.resizeUI();
@@ -188,4 +189,9 @@ GameScreen.prototype.render = function (game) {
     for (var i = j; i < this.showMatches.length; i++) {
         this.showMatches[i].visible = false;
     }
+};
+
+GameScreen.prototype.shutdown = function () {
+    this.music.destroy();
+    this.music = null;
 };

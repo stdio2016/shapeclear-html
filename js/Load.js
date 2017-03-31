@@ -34,7 +34,7 @@ Load.prototype.preload = function () {
     this.game.create.texture('whiteSquare', ['2']);
 };
 
-Load.prototype.preloadUpdate = function () {
+Load.prototype.loadUpdate = function () {
     // HACK to get the text size
     this.loadBar.x = this.game.width / 2 - this.loadBar.width / (2 * this.game.resolution);
     this.loadBar.y = this.game.height / 2 - this.loadBar.height / (2 * this.game.resolution);
@@ -73,15 +73,7 @@ Load.prototype.update = function () {
 };
 
 Load.prototype.playGame = function () {
-    var me = this;
-    AppleFools.getLife(function (result) {
-        if (result) {
-            me.state.start('GameScreen');
-        }
-        else {
-            alertBox('遊戲發生內部錯誤，無法繼續');
-        }
-    });
+    this.state.start('GameScreen');
 };
 
 Load.prototype.testRenderer = function () {

@@ -13,6 +13,9 @@ function Shape(type, x, y) {
     this.match = null;
 }
 
+Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
+ 'downTriangle', 'rhombus', 'apple'];
+
 Shape.prototype.canSwap = function () {
     return !this.swapping && !this.isMoving() && this.type > 0;
 };
@@ -44,6 +47,7 @@ Shape.prototype.stopSwapping = function () {
 
 Shape.prototype.stopFalling = function () {
     if (this.speed > 0.5) {
+        this.pos += this.speed;
         this.speed /= -5;
         this.bouncing = true;
     }
@@ -51,6 +55,6 @@ Shape.prototype.stopFalling = function () {
         this.dir = {x: 0, y: 0};
         this.speed = 0;
         this.bouncing = false;
+        this.pos = 0;
     }
-    this.pos = 0;
 };

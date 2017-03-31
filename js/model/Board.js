@@ -9,7 +9,8 @@ function Board(game) {
     this.swaps = [];
     this.matches = [];
     this.deletedShapes = [];
-    this.debug = new Debug();
+    this.falling = false;
+    this.debug = new Debug(this);
 
     // position of board in the game
     this.x = 0;
@@ -44,12 +45,12 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.game.rnd.between(1, 6);
+                r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
             } while (r1 == r || r2 == r) ;
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
             var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
-              ['triangle', 'square', 'circle', 'hexagon', 'downTriangle', 'rhombus'][r - 1]);
+              Shape.typeNames[r - 1]);
             var sh = new Shape(r, j, i);
             arr[i * width + j] = sh;
             sh.sprite = sprite;
@@ -109,12 +110,16 @@ Board.prototype.swapShape = function (sh1, sh2) {
 Board.prototype.update = function () {
     this.updateSwaps();
     this.initMatch();
-    this.findVeritcalMatch();
-    this.findHorizontalMatch();
-    // TODO: sort chains by their type
-    // first match-5, then cross, match-4, and finally match-3.
-    this.clearMatch();
+    if (!this.falling) {
+        this.findVeritcalMatch();
+        this.findHorizontalMatch();
+        // TODO: sort chains by their type
+        // first match-5, then cross, match-4, and finally match-3.
+        this.clearMatch();
+    }
+    this.falling = false;
     this.fall();
+    this.debug.autoSwipeTest();
 };
 
 Board.prototype.updateSwaps = function () {
@@ -347,7 +352,7 @@ Board.prototype.tryFallAt = function (i, wd) {
     if (sh.isEmpty()) { // empty tile
         return true;
     }
-    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0) && !wd[i]) {
+    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && !wd[i]) {
         wd[i] = true;
         // TODO: find the Down of i
         if (i < 72) {
@@ -370,6 +375,7 @@ Board.prototype.tryFallAt = function (i, wd) {
             // TODO: add support for other gravity directions
             this.shapes[i + 9] = sh;
             sh.y++;
+            this.falling = true;
         }
     }
     return d;
@@ -385,6 +391,9 @@ Board.prototype.fall = function () {
                 sh.speed = 10;
             }
             sh.pos -= sh.speed;
+            if (!sh.bouncing) {
+                this.falling = true;
+            }
         }
         wd.push(false);
     }
@@ -398,6 +407,26 @@ Board.prototype.fall = function () {
             if (i >= 72 || !this.shapes[i + 9].isEmpty()) {
                 // stop the shape from falling
                 sh.stopFalling();
+            }
+        }
+    }
+    for (var i = 0; i < 9; i++) {
+        var dsh = this.shapes[i + 9];
+        if (this.shapes[i].isEmpty()) {
+            var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
+            var sh = new Shape(r + 1, i, 0);
+            this.shapes[i] = sh;
+            sh.sprite = this.shapeGroup.create(
+              0, 0, 'shapes', Shape.typeNames[r]
+            );
+            sh.dir = {x: 0, y: 1};
+            if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {
+                sh.pos = 10;
+                sh.speed = 0;
+            }
+            else {
+                sh.pos = this.shapes[i + 9].pos;
+                sh.speed = this.shapes[i + 9].speed;
             }
         }
     }
