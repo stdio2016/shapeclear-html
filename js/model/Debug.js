@@ -31,6 +31,14 @@ Debug.prototype.runCommand = function (cmd) {
     if (/^get /.test(cmd)) {
         return this.runGetCommand(cmd.substr(4));
     }
+    if (cmd == 'april fools') {
+        try {
+            localStorage.ShapeClear_AppleFools17 = +new Date();
+        }
+        catch (x) {
+            ;
+        }
+    }
     console.log('Unknown command: ' + cmd);
 };
 

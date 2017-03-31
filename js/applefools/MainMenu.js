@@ -52,6 +52,14 @@ AppleFools.MainMenu.prototype.gotoClassicMode = function () {
 };
 
 AppleFools.MainMenu.prototype.gotoAfMode = function () {
-    AppleFools.chooseMode('AppleFools');
-    this.state.start("GameScreen");
+    var me = this;
+    AppleFools.getLife(function (result) {
+        if (result) {
+            AppleFools.chooseMode('AppleFools');
+            me.state.start("GameScreen");
+        }
+        else {
+            alertBox('Sorry... Server is busy. Please try again. (You can still play Classic Mode)');
+        }
+    });
 };

@@ -2,8 +2,7 @@ if (!('AppleFools' in window)) {
     AppleFools = {};
 }
 
-AppleFools.appleFoolsReady = (new Date()).getMonth() + 1 != 4;
-AppleFools.appleFoolsReady = false;
+AppleFools.appleFoolsReady = (new Date()).getMonth() + 1 == 4;
 AppleFools.foolsMsg = 'Left-top debug text';
 
 AppleFools.safeGetStorage = function (key) {
@@ -15,9 +14,30 @@ AppleFools.safeGetStorage = function (key) {
     }
 };
 
-AppleFools.safeSetStorage = function (key, value) {
+(function () {
+    if (AppleFools.safeGetStorage('ShapeClear_AppleFools17')) {
+        AppleFools.appleFoolsReady = true;
+    }
+    if (!AppleFools.appleFoolsReady) return;
+    var saves = AppleFools.safeGetStorage('ShapeClear_AppleFools');
+    if (saves === null || saves.substr(0, 3) !== '17\n') {
+        AppleFools.livesInfo = +new Date();
+        AppleFools.hintCount = 0;
+    }
+    else {
+        var data = saves.substr(3).split(',');
+        AppleFools.livesInfo = +data[0];
+        AppleFools.hintCount = data[1]|0;
+    }
+    Load.prototype.playGame = function () {
+        this.state.start('MainMenu');
+    };
+})();
+
+AppleFools.safeSetStorage = function () {
+    var value = '17\n' + AppleFools.livesInfo + ',' + AppleFools.hintCount;
     try {
-        localStorage.setItem(key, value);
+        localStorage.setItem('ShapeClear_AppleFools', value);
     }
     catch (x) {
         console.log('Cannot access localStorage');
@@ -25,12 +45,8 @@ AppleFools.safeSetStorage = function (key, value) {
 };
 
 AppleFools.getLife = function (callback) {
-    var livesInfo = AppleFools.safeGetStorage('ShapeClear_AppleFools17');
-    if (typeof livesInfo !== 'string') {
-        livesInfo = +new Date();
-        AppleFools.safeSetStorage('ShapeClear_AppleFools17', livesInfo);
-    }
-    else {
+    var livesInfo = AppleFools.livesInfo;
+    {
         // To prevent > 5 lives
         livesInfo = Math.max(+livesInfo, +new Date());
     }
@@ -53,7 +69,8 @@ AppleFools.getLife = function (callback) {
     }
     if (lives > 0) {
         livesInfo += 30 * 60 * 1000;
-        AppleFools.safeSetStorage('ShapeClear_AppleFools17', livesInfo);
+        AppleFools.livesInfo = livesInfo;
+        AppleFools.safeSetStorage();
         callback(true);
     }
     else {
@@ -85,6 +102,7 @@ AppleFools.chooseMode = function (mode) {
         AppleFools.appleCount = 0;
     }
     AppleFools.swapCounter = 0;
+    AppleFools.framesCount = 0;
 };
 
 AppleFools.preparePatch = function () {
@@ -93,13 +111,38 @@ AppleFools.preparePatch = function () {
         Board.prototype.addSwap = AppleFools.addSwap;
         AppleFools.Debug_getDebugMessage = Debug.prototype.getDebugMessage;
         AppleFools.Board_clearShape = Board.prototype.clearShape;
+        AppleFools.GameScreen_update = GameScreen.prototype.update;
+        GameScreen.prototype.update = AppleFools.eachFrame;
     }
 };
+
+AppleFools.helloMsgs = [
+  'Do you know?\n' +
+    'Today is Apple Fools Day, and I prepared some fun features for you. Go and find them!',
+  'Do you know?\n' +
+    'I added a mode called Apple Fools Mode.\n' +
+    'You can see your score after you "eat" 10 apples.\n' +
+    'However, calculating score requires cloud computing, so if you played many times, the server might be busy~~',
+  'Do you know?\n' +
+    'When you swap 3 times in the game, this message will pop up.',
+  'Do you know?\n' +
+    '"Apple Fools Day" is a misspelling of "April Fools\' Day."',
+  'Do you know?\n' +
+    'In Apple Fools Mode, if you match 3 apples, you will see "I have an apple" on top left of the screen.',
+  'I love PPAP!',
+  'Did you see any apple, pencil or pineapple in my game?',
+  'Do you know?\n' +
+    'This may not be the last message in the game.'
+];
 
 AppleFools.addSwap = function (a, b) {
     AppleFools.Board_addSwap.call(this, a, b);
     if (++AppleFools.swapCounter == 3) {
-        alertBox('Do you know?\nToday is Apple Fools Day, and I prepared some fun features for you. Go and find them!');
+        alertBox(AppleFools.helloMsgs[AppleFools.hintCount++]);
+        if (AppleFools.hintCount >= AppleFools.helloMsgs.length) {
+            AppleFools.hintCount = 0;
+        }
+        AppleFools.safeSetStorage();
     }
 };
 
@@ -108,8 +151,12 @@ AppleFools.clearShape = function (x, y) {
     if (sh == 5) {
         AppleFools.IHave('an apple');
         AppleFools.appleCount++;
-        if (AppleFools.appleCount >= 10) {
-            this.game.state.start('MainMenu');
+        if (AppleFools.appleCount == 10) {
+            var time = AppleFools.framesCount;
+            var score = Math.ceil(1000 * 1800 / (time + 1800));
+            alertBox('Your score is ' + score, function () {
+                this.game.state.start('MainMenu');
+            });
         }
     }
     if (sh == 6) {
@@ -127,4 +174,9 @@ AppleFools.IHave = function (obj) {
 
 AppleFools.foolDebugMessage = function () {
     return AppleFools.foolsMsg;
+};
+
+AppleFools.eachFrame = function (game) {
+    AppleFools.GameScreen_update.call(this, game);
+    AppleFools.framesCount++;
 };
