@@ -190,3 +190,8 @@ GameScreen.prototype.render = function (game) {
         this.showMatches[i].visible = false;
     }
 };
+
+GameScreen.prototype.shutdown = function () {
+    this.music.destroy();
+    this.music = null;
+};

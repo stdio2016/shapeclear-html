@@ -43,6 +43,7 @@ AppleFools.MainMenu.prototype.shutdown = function () {
     this.camera.reset();
     this.camera.scale.x = this.camera.scale.y = 1;
     this.music.destroy();
+    this.music = null;
 };
 
 AppleFools.MainMenu.prototype.gotoClassicMode = function () {
