@@ -1,3 +1,9 @@
+function safeInnerHTML(str) {
+    str = '' + str;
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').
+      replace(/]]>/g, ']]%gt;').replace(/\n/g, '<br>');
+}
+
 function errorHandler(msg, source, lineno, colno, err) {
     window.onerror = null;
     document.getElementById('alert').style.visibility = 'visible';
@@ -13,7 +19,7 @@ function errorHandler(msg, source, lineno, colno, err) {
           'position: ' + lineno + ',' + colno + '\n' +
           'stack trace: \n' + err.stack;
     }
-    document.getElementById('description').innerText = des;
+    document.getElementById('description').innerHTML = safeInnerHTML(des);
 }
 
 function closeErrorBox() {
@@ -33,7 +39,7 @@ function promptBox(message, defaultValue, callback) {
     if (typeof message == 'undefined') {
         message = '';
     }
-    msg.innerText = message;
+    msg.innerHTML = safeInnerHTML(message);
     if (typeof defaultValue == 'undefined') {
         defaultValue = '';
     }
@@ -66,7 +72,7 @@ function alertBox(message, callback) {
     if (typeof message == 'undefined') {
         message = '';
     }
-    msg.innerText = message;
+    msg.innerHTML = safeInnerHTML(message);
     if (!callback) {
         callback = function () {};
     }

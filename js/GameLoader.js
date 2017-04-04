@@ -3,7 +3,12 @@ function loadScript(src, progressCallback, callback) {
     xhr.onload = function () {
         var result = xhr.response;
         var script = document.createElement('script');
-        script.src = src;
+        if (result) {
+            script.innerHTML = result;
+        }
+        else {
+            script.src = src;
+        }
         script.async = false;
         script.defer = false;
         document.head.appendChild(script);
@@ -58,3 +63,19 @@ loadScript('lib/phaser.js', function (e) {
         addScriptTag(srcs[i]);
     }
 });
+
+// To punish IE user
+Object.assign = Object.assign || function (target, sources) {
+    var to = Object(target);
+    for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+        if (source != null) {
+            for (var k in source) {
+                if (source.hasOwnProperty(k)) {
+                    to[k] = source[k];
+                }
+            }
+        }
+    }
+    return to;
+};
