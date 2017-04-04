@@ -1,15 +1,15 @@
 <svg width='72' height='72'
   xmlns="http://www.w3.org/2000/svg">
   <clipPath id='stripe1'>
-    <rect x='0' y='13.5' height='9' width='72'/>
-    <rect x='0' y='31.5' height='9' width='72'/>
-    <rect x='0' y='49.5' height='9' width='72'/>
+    <rect x='16' y='0' height='72' width='8'/>
+    <rect x='32' y='0' height='72' width='8'/>
+    <rect x='48' y='0' height='72' width='8'/>
   </clipPath>
   <clipPath id='stripe2'>
-    <rect x='0' y='4.5' height='9' width='72'/>
-    <rect x='0' y='22.5' height='9' width='72'/>
-    <rect x='0' y='40.5' height='9' width='72'/>
-    <rect x='0' y='58.5' height='9' width='72'/>
+    <rect x='8' y='0' height='72' width='8'/>
+    <rect x='24' y='0' height='72' width='8'/>
+    <rect x='40' y='0' height='72' width='8'/>
+    <rect x='56' y='0' height='72' width='8'/>
   </clipPath>
   <path
     style='fill:#2244cc; clip-path:url(#stripe1);'
