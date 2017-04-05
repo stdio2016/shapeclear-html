@@ -6,6 +6,7 @@ function GameScreen() {
     this.touchDetector = null;
     this.music = null;
     this.showMatches = [];
+    this.shapeGroup = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -21,6 +22,7 @@ GameScreen.prototype.create = function () {
     game.input.addMoveCallback(this.move, this);
     this.board = new Board(this.game);
     this.board.generateSimple();
+    this.shapeGroup = this.add.group();
     this.touchDetector = new TouchDetector(this.game, this.board);
     this.addSelectSprite();
     this.music = this.game.add.sound('music2');
@@ -110,6 +112,10 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     for (var y = 0; y < board.height; y++){
         for (var x = 0; x < board.width; x++){
             var shape = board.shapes[y * board.width + x];
+            if (shape.sprite === null && shape.type > 0) {
+                shape.sprite = this.shapeGroup.getFirstDead(true, 100, 100, 'shapes', Shape.typeNames[shape.type - 1]);
+                shape.sprite.alpha = 1;
+            }
             var spr = shape.sprite;
             if (spr !== null) {
                 spr.x = startX + (x - shape.dir.x * shape.pos/10) * gridSize;

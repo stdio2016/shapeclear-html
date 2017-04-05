@@ -5,7 +5,6 @@ function Board(game) {
     this.width = 9;
     this.game = game;
     this.boardGroup = null;
-    this.shapeGroup = null;
     this.swaps = [];
     this.matches = [];
     this.deletedShapes = [];
@@ -27,7 +26,6 @@ Board.prototype.generateSimple = function () {
     var gameHeight = this.game.height;
     var gridSize = Math.min(gameWidth, gameHeight) / 10;
     this.boardGroup = this.game.add.group();
-    this.shapeGroup = this.game.add.group();
     for (var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
             var r1, r2;
@@ -49,14 +47,10 @@ Board.prototype.generateSimple = function () {
             } while (r1 == r || r2 == r) ;
             var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
             board.width = board.height = gridSize;
-            var sprite = this.shapeGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes',
-              Shape.typeNames[r - 1]);
             var sh = new Shape(r, j, i);
             arr[i * width + j] = sh;
-            sh.sprite = sprite;
+            // TODO: Add Tile class
             this.tiles.push({sprite: board});
-            sprite.width = gridSize;
-            sprite.height = gridSize;
         }
     }
     this.boardGroup.alpha = 0.8;
@@ -416,9 +410,6 @@ Board.prototype.fall = function () {
             var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
             var sh = new Shape(r + 1, i, 0);
             this.shapes[i] = sh;
-            sh.sprite = this.shapeGroup.create(
-              0, 0, 'shapes', Shape.typeNames[r]
-            );
             sh.dir = {x: 0, y: 1};
             if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {
                 sh.pos = 10;
