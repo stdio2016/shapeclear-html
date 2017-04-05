@@ -46,10 +46,18 @@ function getResolutionConfig() {
     return res;
 }
 
+function getWindowSize() {
+    var rect = document.body.getClientRects()[0];
+    var width = Math.min(Math.floor(rect.width), innerWidth);
+    var height = Math.min(Math.floor(rect.height), innerHeight);
+    return [width, height];
+}
+
 // Start my game!
+var windowSize = getWindowSize();
 var game = new Phaser.Game({
-    "width": 0,
-    "height": 0,
+    "width": windowSize[0],
+    "height": windowSize[1],
     "renderer": getRendererConfig(),
     "parent": "gameDiv",
     "resolution": getResolutionConfig()
