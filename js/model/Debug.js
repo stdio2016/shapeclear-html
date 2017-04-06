@@ -76,7 +76,7 @@ Debug.prototype.autoSwipeTest = function () {
         var r = Math.floor(Math.random() * swipes.length);
         this.board.addSwap(swipes[r][0], swipes[r][1]);
     }
-}
+};
 
 Debug.prototype.getDebugMessage = function () {
     return +this.board.game.time.fps;

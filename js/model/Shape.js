@@ -34,11 +34,11 @@ Shape.prototype.isStopped = function () {
 
 Shape.prototype.isEmpty = function () {
     return this.type === 0;
-}
+};
 
 Shape.prototype.canFall = function () {
     return this.type > 0;
-}
+};
 
 Shape.prototype.stopSwapping = function () {
     this.swapping = false;

@@ -4,7 +4,7 @@ if (!window.AppleFools) {
 
 AppleFools.MainMenu = function () {
     this.selectAMode = null;
-}
+};
 
 AppleFools.MainMenu.prototype.preload = function () {
     this.camera.bounds = null;
