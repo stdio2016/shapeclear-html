@@ -31,7 +31,9 @@ function closeErrorBox() {
 window.onerror = errorHandler;
 document.getElementById('close').addEventListener('click', closeErrorBox);
 
-var promptCallback = null;
+function doesNothing() {}
+
+var promptCallback = doesNothing;
 function promptBox(message, defaultValue, callback) {
     var box = document.getElementById('prompt');
     var msg = document.getElementById('promptMessage')
@@ -55,7 +57,7 @@ function promptBox(message, defaultValue, callback) {
     document.getElementById('promptCancel').style.display = '';
     promptCallback = function (ok) {
         box.style.visibility = 'hidden';
-        promptCallback = null;
+        promptCallback = doesNothing;
         if (ok) {
             callback(input.value);
         }
@@ -81,7 +83,7 @@ function alertBox(message, callback) {
     document.getElementById('promptCancel').style.display = 'none';
     promptCallback = function (ok) {
         box.style.visibility = 'hidden';
-        promptCallback = null;
+        promptCallback = doesNothing;
         callback();
     };
 }
