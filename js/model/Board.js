@@ -102,6 +102,7 @@ Board.prototype.swapShape = function (sh1, sh2) {
 };
 
 Board.prototype.update = function () {
+    this.debug.autoSwipeTest();
     this.updateSwaps();
     this.initMatch();
     if (!this.falling) {
@@ -113,7 +114,6 @@ Board.prototype.update = function () {
     }
     this.falling = false;
     this.fall();
-    this.debug.autoSwipeTest();
 };
 
 Board.prototype.updateSwaps = function () {
