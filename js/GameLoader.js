@@ -1,35 +1,42 @@
 function loadScript(src, progressCallback, callback) {
     var xhr = new XMLHttpRequest();
+    if (xhr.onload === void 6) {
+        return void callback('error');
+    }
     xhr.onload = function () {
+        if (xhr.status != 200) return void callback('error');
         var result = xhr.response;
         var script = document.createElement('script');
         if (result) {
             script.innerHTML = result;
         }
-        else {
-            script.src = src;
+        else if (script.text !== void 0) {
+            script.text = xhr.responseText;
         }
         script.async = false;
         script.defer = false;
         document.head.appendChild(script);
         if (callback) callback();
     };
-    xhr.onerror = callback;
+    xhr.onerror = function() { callback('error'); };
     xhr.onprogress = progressCallback || null;
     xhr.open('get', src);
     xhr.responseType = 'text';
     xhr.send();
 }
 
-function addScriptTag(src) {
+function addScriptTag(src, onload, onerror) {
     var script = document.createElement('script');
     script.src = src;
     script.async = false;
     script.defer = false;
-    document.head.appendChild(script);
+    script.onload = onload;
+    script.onerror = onerror;
+    document.body.appendChild(script);
 }
 
 var loadProgress = document.getElementById('loadProgress');
+var loadingInfo = document.getElementById('loadingInfo');
 loadScript('lib/phaser.js', function (e) {
     if (e.lengthComputable) {
         loadProgress.value = e.loaded;
@@ -41,10 +48,10 @@ loadScript('lib/phaser.js', function (e) {
     }
 }, function (e) {
     if (e) {
-        loading.innerText = 'Unable to load Phaser.js';
+        loadingInfo.innerText = 'Unable to load Phaser.js';
         return;
     }
-    loading.innerText = 'Loading my program';
+    loadingInfo.innerText = 'Loading my program';
     var srcs = [
       'js/Load.js',
       'js/model/Board.js',
@@ -56,11 +63,23 @@ loadScript('lib/phaser.js', function (e) {
       'js/Ball.js',
       'js/TouchDetector.js',
       'js/applefools/AppleFools.js',
-      'js/applefools/MainMenu.js',
-      'js/Boot.js'
+      'js/applefools/MainMenu.js'
     ];
+    var count = srcs.length;
+    loadProgress.value = 0;
+    loadProgress.max = count;
+    function onload() {
+        count--;
+        loadProgress.value = srcs.length - count;
+        if (count == 0) {
+            addScriptTag('js/Boot.js');
+        }
+    }
+    function onerror() {
+        loading.innerText = 'Unable to load my program';
+    }
     for (var i = 0; i < srcs.length; i++) {
-        addScriptTag(srcs[i]);
+        addScriptTag(srcs[i], onload, onerror);
     }
 });
 
