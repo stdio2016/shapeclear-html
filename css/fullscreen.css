@@ -1,8 +1,14 @@
+html, body, .center-of-screen {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
 body {
-    margin: 0;
     padding: 0;
 }
-html, body, .center-of-screen {
+html.fullscreen, html.fullscreen body {
+    margin: 0;
     height: 100%;
     width: 100%;
 }

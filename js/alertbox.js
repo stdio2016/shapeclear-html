@@ -7,13 +7,15 @@ function safeInnerHTML(str) {
 function errorHandler(msg, source, lineno, colno, err) {
     window.onerror = null;
     document.getElementById('alert').style.visibility = 'visible';
+    var programName = document.title || 'This program';
     var des =
-      'Shape Clear has encountered an error' + '\n' +
+      programName +' has encountered an error' + '\n' +
       msg + '\n';
     if (msg.match(/script error/i)) {
         des += 'see Browser Console for more information';
     }
     else {
+        err = err || {stack: void 0};
         des +=
           'source: ' + source + '\n' +
           'position: ' + lineno + ',' + colno + '\n' +
@@ -29,7 +31,7 @@ function closeErrorBox() {
 
 // Add error handler
 window.onerror = errorHandler;
-document.getElementById('close').addEventListener('click', closeErrorBox);
+document.getElementById('close').onclick = closeErrorBox;
 
 function doesNothing() {}
 
