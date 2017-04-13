@@ -49,6 +49,12 @@
     display: flex;
     flex-direction: column;
 }
+/* This moves the input box to the top on small screen devices */
+@media only screen and (max-device-height: 480px) {
+    .prompt-box {
+        margin-top: 0;
+    }
+}
 .prompt-box * {
     margin: 5px;
 }
