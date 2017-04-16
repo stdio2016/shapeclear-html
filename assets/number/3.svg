@@ -15,9 +15,9 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="2.svg">
+   sodipodi:docname="3.svg">
   <title
-     id="title3340">2</title>
+     id="title3340">3</title>
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="75"
-     inkscape:cy="37.675934"
+     inkscape:zoom="8"
+     inkscape:cx="-0.8488493"
+     inkscape:cy="43.556557"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      showgrid="false"
@@ -58,10 +58,10 @@
      id="layer1" />
   <path
      style="fill:#ffffff;fill-rule:evenodd;stroke:#808080;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 5,44 28,0 0,-8 -12.5,0 C 25,31 30,27 31,22 32,17 31,11 26,8 20,4 12,4 5,8 l 3,8 c 9,-4 14,-1 14,4 -1,4 -9,10 -17,16 z"
+     d="m 9,28 c 5,0 12,1 12,4 0,3 -8,4 -14,4 l 0,8 c 11,0 24,-2.5 24,-9 0,-6.5 -2,-9 -5,-11 3,-2 5,-4.5 5,-11 C 31,6.5 19,4 7,4 l 0,8 c 6,0 14,0.5 14,4 0,3.5 -7,4 -12,4 z"
      id="path3336"
      inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccczzcczcc"
+     sodipodi:nodetypes="czcczczcczcc"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90" />
 </svg>
