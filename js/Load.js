@@ -33,33 +33,33 @@ Load.prototype.preload = function () {
 
 Load.prototype.loadUpdate = function () {
     // HACK to get the text size
-    this.loadBar.x = this.game.width / 2 - this.loadBar.width / (2 * this.game.resolution);
-    this.loadBar.y = this.game.height / 2 - this.loadBar.height / (2 * this.game.resolution);
+    this.loadBar.x = this.game.width / 2 - this.loadBar.width / 2;
+    this.loadBar.y = this.game.height / 2 - this.loadBar.height / 2;
 };
 
 Load.prototype.create = function() {
     this.background = this.add.sprite(0, 0, 'background');
-    this.background.width = this.game.width;
-    this.background.height = this.game.height;
+    this.background.width = this.game.width * this.game.resolution;
+    this.background.height = this.game.height * this.game.resolution;
     this.background.moveDown();
     this.loadBar.text = 'Start!';
     this.playButton = this.add.button(this.game.width / 2 - 100, this.game.height / 2 - 35,
       'ball', this.playGame, this);
     this.loadBar.moveUp();
-    this.playButton.width = 200;
-    this.playButton.height = 70;
+    this.playButton.width = 200 * this.game.resolution;
+    this.playButton.height = 70 * this.game.resolution;
 };
 
 Load.prototype.update = function () {
     var w = this.game.width;
     var h = this.game.height;
     // HACK to get the text size
-    this.loadBar.x = w / 2 - this.loadBar.width / (2 * this.game.resolution);
-    this.loadBar.y = h / 2 - this.loadBar.height / (2 * this.game.resolution);
-    this.playButton.x = w / 2 - this.playButton.width / 2;
-    this.playButton.y = h / 2 - this.playButton.height / 2;
-    this.background.width = w;
-    this.background.height = h;
+    this.loadBar.x = w / 2 - this.loadBar.width / 2;
+    this.loadBar.y = h / 2 - this.loadBar.height / 2;
+    this.playButton.x = w / 2 - 200 / 2;
+    this.playButton.y = h / 2 - 70 / 2;
+    this.background.width = w * this.game.resolution;
+    this.background.height = h * this.game.resolution;
 };
 
 Load.prototype.playGame = function () {

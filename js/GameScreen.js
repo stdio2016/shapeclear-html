@@ -56,8 +56,8 @@ GameScreen.prototype.update = function () {
     this.board.update();
     this.debug.fontSize = Math.min(game.width, game.height) * 0.05 + 'pt';
     this.debug.text = this.board.debug.getDebugMessage();
-    this.background.width = game.width;
-    this.background.height = game.height;
+    this.background.width = game.width * this.game.resolution;
+    this.background.height = game.height * this.game.resolution;
     this.resizeUI();
     this.updateSelectSprite();
 };
@@ -69,8 +69,8 @@ GameScreen.prototype.updateSelectSprite = function () {
         spr.visible = ptrs[i].isDown && ptrs[i].tracking;
         spr.x = this.board.x + this.board.gridSize * ptrs[i].x;
         spr.y = this.board.y + this.board.gridSize * ptrs[i].y;
-        spr.width = this.board.gridSize;
-        spr.height = this.board.gridSize;
+        spr.width = this.board.gridSize * this.game.resolution;
+        spr.height = this.board.gridSize * this.game.resolution;
     }
 };
 
@@ -107,6 +107,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var board = this.board;
     var boardSize = 9;
     var gridSize = size / boardSize;
+    var scale = gridSize / 36 * this.game.resolution;
     var startX = leftX + (boardSize - board.width) / 2 * gridSize;
     var startY = topY + (boardSize - board.height) / 2 * gridSize;
     for (var y = 0; y < board.height; y++){
@@ -120,14 +121,14 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             if (spr !== null) {
                 spr.x = startX + (x - shape.dir.x * shape.pos/10) * gridSize;
                 spr.y = startY + (y - shape.dir.y * shape.pos/10) * gridSize;
-                spr.width = gridSize;
-                spr.height = gridSize;
+                spr.scale.x = scale;
+                spr.scale.y = scale;
             }
             var tile = board.tiles[y * board.width + x].sprite;
             tile.x = startX + x * gridSize;
             tile.y = startY + y * gridSize;
-            tile.width = gridSize;
-            tile.height = gridSize;
+            tile.scale.x = scale;
+            tile.scale.y = scale;
         }
     }
     board.x = leftX;
