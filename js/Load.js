@@ -22,6 +22,7 @@ Load.prototype.preload = function () {
     // load assets
     game.load.image('ball', 'assets/ball.png');
     game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
+    game.load.atlasJSONArray('number', 'img/number_small.png', 'img/number_small.json');
     game.load.image('background', 'assets/background.png');
     game.load.audio('music', ['assets/music.ogg', 'assets/music.m4a', 'assets/music.wav']);
     game.load.audio('music2', ['assets/music2.ogg', 'assets/music2.m4a']);
