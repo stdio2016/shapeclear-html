@@ -62,6 +62,7 @@ loadScript('lib/phaser.js', function (e) {
       'js/GameScreen.js',
       'js/Ball.js',
       'js/TouchDetector.js',
+      'js/ScoreText.js',
       'js/applefools/AppleFools.js',
       'js/applefools/MainMenu.js'
     ];
