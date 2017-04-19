@@ -10,6 +10,8 @@ function Board(game) {
     this.deletedShapes = [];
     this.falling = false;
     this.debug = new Debug(this);
+    this.combo = 0;
+    this.gainScores = [];
 
     // position of board in the game
     this.x = 0;
@@ -103,6 +105,7 @@ Board.prototype.swapShape = function (sh1, sh2) {
 
 Board.prototype.update = function () {
     this.debug.autoSwipeTest();
+    this.gainScores = [];
     this.updateSwaps();
     this.initMatch();
     if (!this.falling) {
@@ -111,6 +114,9 @@ Board.prototype.update = function () {
         // TODO: sort chains by their type
         // first match-5, then cross, match-4, and finally match-3.
         this.clearMatch();
+        if (!this.falling && this.matches.length == 0) {
+            this.combo = 0;
+        }
     }
     this.falling = false;
     this.fall();
@@ -162,7 +168,7 @@ Board.prototype.findVeritcalMatch = function () {
                 var sh = shapes[i].type;
                 if (shapes[i + w].canMatch() && shapes[i + w].type === sh
                  && shapes[i + 2*w].canMatch() && shapes[i + 2*w].type === sh) {
-                    var match = new Match(Match.VERTICAL, x, y);
+                    var match = new Match(Match.VERTICAL, x, y, sh);
                     do {
                         shapes[i].match = match;
                         match.vlength++;
@@ -190,7 +196,7 @@ Board.prototype.findHorizontalMatch = function () {
                 var sh = shapes[i].type;
                 if (shapes[i + 1].canMatch() && shapes[i + 1].type === sh
                  && shapes[i + 2].canMatch() && shapes[i + 2].type === sh) {
-                    var match = new Match(Match.HORIZONTAL, x, y);
+                    var match = new Match(Match.HORIZONTAL, x, y, sh);
                     var cross = null;
                     do {
                         match.hlength++;
@@ -283,18 +289,23 @@ Board.prototype.clearMatch = function () {
     if (this.debug.disableMatching) return;
     for (var i = 0; i < this.matches.length; i++) {
         var m = this.matches[i];
+        var mx = m.vx, my = m.hy, type = m.shapeType;
         if (m.type & Match.HORIZONTAL) {
             for (var j = 0; j < m.hlength; j++) {
                 var sh = this.getShape(m.hx + j, m.hy);
                 this.clearShape(m.hx + j, m.hy);
             }
+            mx = m.hx + (m.hlength - 1) / 2;
         }
         if (m.type & Match.VERTICAL) {
             for (var j = 0; j < m.vlength; j++) {
                 var sh = this.getShape(m.vx, m.vy + j);
                 this.clearShape(m.vx, m.vy + j);
             }
+            my = m.vy + (m.vlength - 1) / 2;
         }
+        this.combo++;
+        this.gainScores.push({x: mx, y: my, type: m.shapeType, score: this.combo});
     }
 };
 
@@ -407,6 +418,7 @@ Board.prototype.fall = function () {
     for (var i = 0; i < 9; i++) {
         var dsh = this.shapes[i + 9];
         if (this.shapes[i].isEmpty()) {
+            this.falling = true;
             var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
             var sh = new Shape(r + 1, i, 0);
             this.shapes[i] = sh;
@@ -419,6 +431,22 @@ Board.prototype.fall = function () {
                 sh.pos = this.shapes[i + 9].pos;
                 sh.speed = this.shapes[i + 9].speed;
             }
+        }
+    }
+   for (var i = 0; i < this.shapes.length; i++) {
+        var j = i;
+        var sh = this.shapes[i];
+        if (sh.isMoving() || sh.swapping) {
+            do {
+                wd[j] = true;
+                if (j < (this.height - 1) * this.width) {
+                    j = j + 9;
+                }
+                else {
+                    break;
+                }
+                sh = this.shapes[j];
+            } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
         }
     }
 };

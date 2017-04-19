@@ -44,26 +44,39 @@ ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
         var d = this.digits[i];
         d.x = x + (i - (this.digits.length - 1) / 2) * charWidth;
         d.y = y;
+        var digit = "9";
         if (dec.length <= this.digits.length) {
             if (i < this.digits.length - dec.length) {
-                d.frameName = "0";
+                digit = "0";
             }
             else {
-                d.frameName = dec.charAt(dec.length - this.digits.length + i);
+                digit = dec.charAt(dec.length - this.digits.length + i);
             }
         }
-        else { // fill with "9"
-            d.frameName = "9";
+        if (d.frameName !== digit) {
+            d.frameName = digit;
         }
         d.width = charWidth;
         d.height = charHeight;
         d.tint = ScoreText.colorPalette[this.color];
+        d.alpha = this.lifetime / 100;
     }
 };
 
 ScoreText.prototype.popup = function (boardx, boardy, boardsize) {
     this.lifetime--;
-    this.showAtPosition(boardx + boardsize * this.x, boardy + boardsize * this.y, boardsize * (2/3));
+    if (this.lifetime >= 90) {
+        this.showAtPosition(
+          boardx + boardsize * (this.x + 0.5),
+          boardy + boardsize * (this.y + 0.5),
+          boardsize * (2/3) * (100 - this.lifetime) / 10);
+    }
+    else {
+        this.showAtPosition(
+          boardx + boardsize * (this.x + 0.5),
+          boardy + boardsize * (this.y + 0.5 + (this.lifetime - 90) / 100 * 0.4),
+          boardsize * (2/3));
+    }
     return this.lifetime <= 0;
 };
 

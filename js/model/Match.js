@@ -1,4 +1,4 @@
-function Match(type, x, y) {
+function Match(type, x, y, sh) {
     this.type = type || Match.HORIZONTAL;
 
     // vertical match
@@ -19,6 +19,8 @@ function Match(type, x, y) {
         this.vx = x;
         this.vy = y;
     }
+
+    this.shapeType = sh;
 }
 
 Match.HORIZONTAL = 1;
