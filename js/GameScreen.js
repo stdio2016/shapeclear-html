@@ -7,6 +7,8 @@ function GameScreen() {
     this.music = null;
     this.showMatches = [];
     this.shapeGroup = null;
+    this.scoreText = null;
+    this.scorePopups = [];
 }
 
 GameScreen.prototype.preload = function () {
@@ -28,6 +30,7 @@ GameScreen.prototype.create = function () {
     this.music = this.game.add.sound('music2');
     this.music.loop = true;
     this.music.play();
+    this.scoreText = new ScoreText(0, 0, 0, 0, this.game);
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -58,6 +61,9 @@ GameScreen.prototype.update = function () {
     this.debug.text = this.board.debug.getDebugMessage();
     this.background.width = game.width * this.game.resolution;
     this.background.height = game.height * this.game.resolution;
+    if (this.board.combo > this.scoreText.value) {
+        this.scoreText.setScore(this.board.combo);
+    }
     this.resizeUI();
     this.updateSelectSprite();
 };
@@ -82,6 +88,7 @@ GameScreen.prototype.resizeUI = function(){
         var right = gw - left;
         var tall = gh;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
+        this.scoreText.showWithBounds(left * 2/5, gh * 1/2, left * 2/3, gh * 1/10);
     }
     else if (gw > gh) { // narrow landscape
         var left = gw * 2/7;
@@ -146,6 +153,24 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             sh.sprite.kill();
         }
     }
+    var scores = this.board.gainScores, aliveScoreTexts = [];
+    for (var i = 0; i < scores.length; i++) {
+        var s = scores[i];
+        var st = new ScoreText(s.score, s.type, s.x, s.y, this.game);
+        st.popup(board.x, board.y, board.gridSize);
+        aliveScoreTexts.push(st);
+    }
+    for (var i = 0; i < this.scorePopups.length; i++) {
+        var st = this.scorePopups[i];
+        st.popup(board.x, board.y, board.gridSize);
+        if (st.lifetime <= 0) {
+            st.kill();
+        }
+        else {
+            aliveScoreTexts.push(st);
+        }
+    }
+    this.scorePopups = aliveScoreTexts;
 };
 
 GameScreen.prototype.move = function(pointer, x, y){

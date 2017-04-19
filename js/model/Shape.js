@@ -37,7 +37,7 @@ Shape.prototype.isEmpty = function () {
 };
 
 Shape.prototype.canFall = function () {
-    return this.type > 0;
+    return !this.swapping && this.type > 0;
 };
 
 Shape.prototype.stopSwapping = function () {
