@@ -95,7 +95,7 @@ AppleFools.chooseMode = function (mode) {
         AppleFools.COLOR_COUNT = 4;
         AppleFools.DROP_COLOR_COUNT = 7;
         Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
-         'apple', 'pen', 'pineapple'];
+         'apple', 'pineapple', 'pen'];
         AppleFools.foolsMsg = 'Apple Fools!';
         Debug.prototype.getDebugMessage = AppleFools.foolDebugMessage;
         Board.prototype.clearShape = AppleFools.clearShape;
