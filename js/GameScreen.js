@@ -64,6 +64,9 @@ GameScreen.prototype.update = function () {
     if (this.board.combo > this.scoreText.value) {
         this.scoreText.setScore(this.board.combo);
     }
+    // Uncomment this to test layout
+    //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
+    if (this.scoreText.value > 1e9) this.scoreText.setScore(1);
     this.resizeUI();
     this.updateSelectSprite();
 };
@@ -95,18 +98,25 @@ GameScreen.prototype.resizeUI = function(){
         var right = gw * 5/7;
         var tall = gw * 5/7;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
+        this.scoreText.showWithBounds(left * 2/5, tall * 1/2, left * 2/3, tall * 1/10);
     }
     else if (gw > gh * 8/11){ // short portrait
         var up = gh * 1/11;
         var middle = gh * 8/11;
+        var down = gh - up - middle;
         var tall = middle;
+        var wide = gh * 8/11;
         this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
+        this.scoreText.showWithBounds(gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
     }
     else { // long portrait
         var up = gw * 1/8;
         var middle = gh - up - gw * 2/8;
+        var down = gh - up - middle;
         var tall = gw;
+        var wide = gw;
         this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
+        this.scoreText.showWithBounds(gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
     }
 };
 
