@@ -139,7 +139,15 @@ Board.prototype.updateSwaps = function () {
                 this.swaps.length--;
                 --i;
             }
-            else {
+            else reject: {
+                if (from.type == 7) {
+                    this.clearShape(from.x, from.y);
+                    this.elcShape(to.type); break reject;
+                }
+                if (to.type == 7) {
+                    this.clearShape(to.x, to.y);
+                    this.elcShape(from.type); break reject;
+                }
                 this.swaps[i].reject();
                 this.swapShape(from, to);
                 from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
@@ -295,12 +303,20 @@ Board.prototype.clearMatch = function () {
                 var sh = this.getShape(m.hx + j, m.hy);
                 this.clearShape(m.hx + j, m.hy);
             }
+            if (m.hlength == 4) {
+                var r = this.game.rnd.between(1,2)+m.hx;
+                this.shapes[r + m.hy*this.width] = new Shape(7, r, m.hy);
+            }
             mx = m.hx + (m.hlength - 1) / 2;
         }
         if (m.type & Match.VERTICAL) {
             for (var j = 0; j < m.vlength; j++) {
                 var sh = this.getShape(m.vx, m.vy + j);
                 this.clearShape(m.vx, m.vy + j);
+            }
+            if (m.vlength == 4) {
+                var r = this.game.rnd.between(1,2)+m.vy;
+                this.shapes[m.vx + r*this.width] = new Shape(7, m.vx, r);
             }
             my = m.vy + (m.vlength - 1) / 2;
         }
@@ -447,6 +463,14 @@ Board.prototype.fall = function () {
                 }
                 sh = this.shapes[j];
             } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
+        }
+    }
+};
+
+Board.prototype.elcShape = function (type) {
+    for (var i = 0; i < this.shapes.length; i++) {
+        if (this.shapes[i].type == type) {
+            this.clearShape(i%this.width, Math.floor(i/this.width));
         }
     }
 };

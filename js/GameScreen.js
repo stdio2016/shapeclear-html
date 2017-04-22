@@ -154,6 +154,11 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var delSh = this.board.deletedShapes;
     for (var i = 0; i < delSh.length; i++) {
         var sh = delSh[i];
+        // some shapes have no sprites attached
+        if (!sh.sprite) {
+            console.log('jjj');
+            continue;
+        }
         sh.sprite.alpha -= 0.1;
         if (sh.sprite.alpha <= 0) {
             // QUESTION: how to remove items from array?
