@@ -71,7 +71,7 @@ Board.prototype.clearShape = function (x, y) {
     if (y >= this.height || y < 0) return RangeError('y out of bound');
     // TODO: handle special shapes such as striped or wrapped ones
     var i = x + y * this.width;
-    if (this.shapes[i].type > 0) {
+    if (this.shapes[i].type > 0 && !this.shapes[i].swapping) {
         this.deletedShapes.push(this.shapes[i]);
         this.shapes[i] = new Shape(0, x, y);
     }
@@ -139,18 +139,25 @@ Board.prototype.updateSwaps = function () {
                 this.swaps.length--;
                 --i;
             }
-            else reject: {
-                if (from.type == 7) {
-                    this.clearShape(from.x, from.y);
-                    this.elcShape(to.type); break reject;
+            else {
+                if (from.type == 7 || to.type == 7) {
+                    if (from.type == 7) {
+                        this.clearShape(from.x, from.y);
+                        this.elcShape(to.type);
+                    }
+                    if (to.type == 7) {
+                        this.clearShape(to.x, to.y);
+                        this.elcShape(from.type);
+                    }
+                    this.swaps[i] = this.swaps[this.swaps.length - 1];
+                    this.swaps.length--;
+                    --i;
                 }
-                if (to.type == 7) {
-                    this.clearShape(to.x, to.y);
-                    this.elcShape(from.type); break reject;
+                else {
+                    this.swaps[i].reject();
+                    this.swapShape(from, to);
+                    from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
                 }
-                this.swaps[i].reject();
-                this.swapShape(from, to);
-                from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
             }
         }
     }
@@ -300,7 +307,6 @@ Board.prototype.clearMatch = function () {
         var mx = m.vx, my = m.hy, type = m.shapeType;
         if (m.type & Match.HORIZONTAL) {
             for (var j = 0; j < m.hlength; j++) {
-                var sh = this.getShape(m.hx + j, m.hy);
                 this.clearShape(m.hx + j, m.hy);
             }
             if (m.hlength == 4) {
@@ -311,7 +317,6 @@ Board.prototype.clearMatch = function () {
         }
         if (m.type & Match.VERTICAL) {
             for (var j = 0; j < m.vlength; j++) {
-                var sh = this.getShape(m.vx, m.vy + j);
                 this.clearShape(m.vx, m.vy + j);
             }
             if (m.vlength == 4) {

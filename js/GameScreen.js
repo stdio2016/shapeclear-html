@@ -155,17 +155,17 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     for (var i = 0; i < delSh.length; i++) {
         var sh = delSh[i];
         // some shapes have no sprites attached
-        if (!sh.sprite) {
-            console.log('jjj');
-            continue;
+        if (sh.sprite) {
+            sh.sprite.alpha -= 0.1;
         }
-        sh.sprite.alpha -= 0.1;
-        if (sh.sprite.alpha <= 0) {
+        if (!sh.sprite || sh.sprite.alpha <= 0) {
             // QUESTION: how to remove items from array?
             delSh[i] = delSh[delSh.length - 1];
             delSh.length--;
             i--;
-            sh.sprite.kill();
+            if (sh.sprite) {
+                sh.sprite.kill();
+            }
         }
     }
     var scores = this.board.gainScores, aliveScoreTexts = [];
