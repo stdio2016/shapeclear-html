@@ -25,7 +25,7 @@ ScoreText.charAspectRatio = 36.0 / 48.0; // width/height
 ScoreText.prototype.setScore = function (newScore) {
     var dec = newScore.toString();
     for (var i = this.digits.length; i < dec.length; i++) {
-        var d = this.charPool.add.sprite(0, 0, 'number', dec.charAt(i));
+        var d = this.charPool.getFirstDead(true, 0, 0, 'number', dec.charAt(i));
         d.anchor.x = 0.5;
         d.anchor.y = 0.5;
         d.tint = ScoreText.colorPalette[this.color];
@@ -58,7 +58,7 @@ ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
         }
         d.width = charWidth;
         d.height = charHeight;
-        d.tint = ScoreText.colorPalette[this.color];
+        //d.tint = ScoreText.colorPalette[this.color];
         d.alpha = this.lifetime / 100;
     }
 };

@@ -9,6 +9,7 @@ function GameScreen() {
     this.shapeGroup = null;
     this.scoreText = null;
     this.scorePopups = [];
+    this.digitGroup = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -30,7 +31,8 @@ GameScreen.prototype.create = function () {
     this.music = this.game.add.sound('music2');
     this.music.loop = true;
     this.music.play();
-    this.scoreText = new ScoreText(0, 0, 0, 0, this.game);
+    this.digitGroup = this.add.group();
+    this.scoreText = new ScoreText(0, 0, 0, 0, this.digitGroup);
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -171,7 +173,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var scores = this.board.gainScores, aliveScoreTexts = [];
     for (var i = 0; i < scores.length; i++) {
         var s = scores[i];
-        var st = new ScoreText(s.score, s.type, s.x, s.y, this.game);
+        var st = new ScoreText(s.score, s.type, s.x, s.y, this.digitGroup);
         st.popup(board.x, board.y, board.gridSize);
         aliveScoreTexts.push(st);
     }
