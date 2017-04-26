@@ -53,13 +53,13 @@ loadScript('lib/phaser.js', function (e) {
     }
     loadingInfo.innerText = 'Loading my program';
     var srcs = [
-      'js/Load.js',
       'js/model/Board.js',
       'js/model/Shape.js',
       'js/model/Swap.js',
       'js/model/Match.js',
       'js/model/Debug.js',
-      'js/GameScreen.js',
+      'js/states/Load.js',
+      'js/states/GameScreen.js',
       'js/Ball.js',
       'js/TouchDetector.js',
       'js/ScoreText.js',
