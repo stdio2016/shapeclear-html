@@ -39,15 +39,15 @@ Load.prototype.loadUpdate = function () {
 
 Load.prototype.create = function() {
     this.background = this.add.sprite(0, 0, 'background');
-    this.background.width = this.game.width * this.game.resolution;
-    this.background.height = this.game.height * this.game.resolution;
+    this.background.width = this.game.width;
+    this.background.height = this.game.height;
     this.background.moveDown();
     this.loadBar.text = 'Start!';
     this.playButton = this.add.button(this.game.width / 2 - 100, this.game.height / 2 - 35,
       'ball', this.playGame, this);
     this.loadBar.moveUp();
-    this.playButton.width = 200 * this.game.resolution;
-    this.playButton.height = 70 * this.game.resolution;
+    this.playButton.width = 200;
+    this.playButton.height = 70;
 };
 
 Load.prototype.update = function () {
@@ -58,8 +58,8 @@ Load.prototype.update = function () {
     this.loadBar.y = h / 2 - this.loadBar.height / 2;
     this.playButton.x = w / 2 - 200 / 2;
     this.playButton.y = h / 2 - 70 / 2;
-    this.background.width = w * this.game.resolution;
-    this.background.height = h * this.game.resolution;
+    this.background.width = w;
+    this.background.height = h;
 };
 
 Load.prototype.playGame = function () {

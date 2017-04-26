@@ -1,3 +1,18 @@
+// patch to fix Phaser
+(function () {
+    // resolution problem
+    function removeResolutionFromCode (obj, methodName) {
+        var code = obj[methodName].toString();
+        code = code.replace('this.game.resolution', '1');
+        obj[methodName] = window.eval('(' + code + ')');
+    }
+    removeResolutionFromCode(Phaser.Cache.prototype, "addCompressedTextureMetaData");
+    removeResolutionFromCode(Phaser.Cache.prototype, "addImage");
+    removeResolutionFromCode(Phaser.Cache.prototype, "addBitmapFont");
+    removeResolutionFromCode(Phaser.Cache.prototype, "addSpriteSheet");
+    removeResolutionFromCode(Phaser.Cache.prototype, "addTextureAtlas");
+})();
+
 // Finished loading phaser.js
 var loading = document.getElementById('loading');
 if (window.Phaser) {

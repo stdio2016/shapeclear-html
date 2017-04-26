@@ -61,8 +61,8 @@ GameScreen.prototype.update = function () {
     this.board.update();
     this.debug.fontSize = Math.min(game.width, game.height) * 0.05 + 'pt';
     this.debug.text = this.board.debug.getDebugMessage();
-    this.background.width = game.width * this.game.resolution;
-    this.background.height = game.height * this.game.resolution;
+    this.background.width = game.width;
+    this.background.height = game.height;
     if (this.board.combo > this.scoreText.value) {
         this.scoreText.setScore(this.board.combo);
     }
@@ -80,8 +80,8 @@ GameScreen.prototype.updateSelectSprite = function () {
         spr.visible = ptrs[i].isDown && ptrs[i].tracking;
         spr.x = this.board.x + this.board.gridSize * ptrs[i].x;
         spr.y = this.board.y + this.board.gridSize * ptrs[i].y;
-        spr.width = this.board.gridSize * this.game.resolution;
-        spr.height = this.board.gridSize * this.game.resolution;
+        spr.width = this.board.gridSize;
+        spr.height = this.board.gridSize;
     }
 };
 
@@ -126,7 +126,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var board = this.board;
     var boardSize = 9;
     var gridSize = size / boardSize;
-    var scale = gridSize / 36 * this.game.resolution;
+    var scale = gridSize / 36;
     var startX = leftX + (boardSize - board.width) / 2 * gridSize;
     var startY = topY + (boardSize - board.height) / 2 * gridSize;
     for (var y = 0; y < board.height; y++){
