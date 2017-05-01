@@ -15,7 +15,7 @@ AppleFools.safeGetStorage = function (key) {
 };
 
 (function () {
-    if (AppleFools.safeGetStorage('ShapeClear_AppleFools17')) {
+    if (AppleFools.safeGetStorage('ShapeClear_AppleFools18')) {
         AppleFools.appleFoolsReady = true;
     }
     if (!AppleFools.appleFoolsReady) return;

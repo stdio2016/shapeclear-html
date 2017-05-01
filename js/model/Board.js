@@ -140,24 +140,9 @@ Board.prototype.updateSwaps = function () {
                 --i;
             }
             else {
-                if (from.type == 7 || to.type == 7) {
-                    if (from.type == 7) {
-                        this.clearShape(from.x, from.y);
-                        this.elcShape(to.type);
-                    }
-                    if (to.type == 7) {
-                        this.clearShape(to.x, to.y);
-                        this.elcShape(from.type);
-                    }
-                    this.swaps[i] = this.swaps[this.swaps.length - 1];
-                    this.swaps.length--;
-                    --i;
-                }
-                else {
-                    this.swaps[i].reject();
-                    this.swapShape(from, to);
-                    from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
-                }
+                this.swaps[i].reject();
+                this.swapShape(from, to);
+                from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
             }
         }
     }
@@ -309,19 +294,11 @@ Board.prototype.clearMatch = function () {
             for (var j = 0; j < m.hlength; j++) {
                 this.clearShape(m.hx + j, m.hy);
             }
-            if (m.hlength == 4) {
-                var r = this.game.rnd.between(1,2)+m.hx;
-                this.shapes[r + m.hy*this.width] = new Shape(7, r, m.hy);
-            }
             mx = m.hx + (m.hlength - 1) / 2;
         }
         if (m.type & Match.VERTICAL) {
             for (var j = 0; j < m.vlength; j++) {
                 this.clearShape(m.vx, m.vy + j);
-            }
-            if (m.vlength == 4) {
-                var r = this.game.rnd.between(1,2)+m.vy;
-                this.shapes[m.vx + r*this.width] = new Shape(7, m.vx, r);
             }
             my = m.vy + (m.vlength - 1) / 2;
         }
