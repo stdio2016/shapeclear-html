@@ -29,6 +29,15 @@ Load.prototype.preload = function () {
 
     // create texture for showing match-3
     this.game.create.texture('whiteSquare', ['2']);
+
+    // debugger
+    this.input.onTap.add(function (pointer, dblClick) {
+        if (dblClick) {
+            promptBox('eval what?', '', function (cmd) {
+                if (cmd) alertBox(window.eval(cmd) + "");
+            });
+        }
+    });
 };
 
 Load.prototype.loadUpdate = function () {

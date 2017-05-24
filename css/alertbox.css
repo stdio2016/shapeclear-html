@@ -55,6 +55,11 @@
         margin-top: 0;
     }
 }
+@media only screen and (max-height: 360px) {
+    .prompt-box {
+        margin-top: 0;
+    }
+}
 .prompt-box * {
     margin: 5px;
 }
