@@ -60,10 +60,11 @@
         margin-top: 0;
     }
 }
-.prompt-box * {
+.prompt-box input, .prompt-box .yesno {
     margin: 5px;
 }
 .prompt-box .description {
+    margin: 5px;
     text-align: center;
     overflow-y: auto;
 }
