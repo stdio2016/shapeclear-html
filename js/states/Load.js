@@ -5,6 +5,9 @@ function Load () {
 }
 
 Load.prototype.preload = function () {
+    if (/Android 2\./.test(navigator.userAgent)) {
+        this.game.device.m4a = false;
+    }
     this.loadBar = this.add.text(this.game.width / 2, this.game.height / 2, 'Loading assets...');
     this.loadBar.x -= this.loadBar.width / 2;
     this.loadBar.y -= this.loadBar.height / 2;
@@ -34,7 +37,11 @@ Load.prototype.preload = function () {
     this.input.onTap.add(function (pointer, dblClick) {
         if (dblClick) {
             promptBox('eval what?', '', function (cmd) {
-                if (cmd) alertBox(window.eval(cmd) + "");
+                try {
+                    if (cmd) alertBox(window.eval(cmd) + "");
+                } catch (e) {
+                    alertBox(e.message + "");
+                }
             });
         }
     });
