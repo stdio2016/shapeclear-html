@@ -4,7 +4,6 @@ function Board(game) {
     this.height = 9;
     this.width = 9;
     this.game = game;
-    this.boardGroup = null;
     this.swaps = [];
     this.matches = [];
     this.deletedShapes = [];
@@ -24,10 +23,6 @@ Board.prototype.generateSimple = function () {
     var arr = this.shapes;
     var height = this.height;
     var width = this.width;
-    var gameWidth = this.game.width;
-    var gameHeight = this.game.height;
-    var gridSize = Math.min(gameWidth, gameHeight) / 10;
-    this.boardGroup = this.game.add.group();
     for (var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
             var r1, r2;
@@ -47,15 +42,12 @@ Board.prototype.generateSimple = function () {
             do {
                 r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
             } while (r1 == r || r2 == r) ;
-            var board = this.boardGroup.create(i * gridSize, (j + 1) * gridSize, 'shapes', 'board');
-            board.width = board.height = gridSize;
             var sh = new Shape(r, j, i);
             arr[i * width + j] = sh;
             // TODO: Add Tile class
-            this.tiles.push({sprite: board});
+            this.tiles.push({sprite: null});
         }
     }
-    this.boardGroup.alpha = 0.8;
 };
 
 Board.prototype.getShape = function (x, y) {

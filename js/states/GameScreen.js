@@ -7,6 +7,7 @@ function GameScreen() {
     this.music = null;
     this.showMatches = [];
     this.shapeGroup = null;
+    this.boardGroup = null;
     this.scoreText = null;
     this.scorePopups = [];
     this.digitGroup = null;
@@ -25,6 +26,8 @@ GameScreen.prototype.create = function () {
     game.input.addMoveCallback(this.move, this);
     this.board = new Board(this.game);
     this.board.generateSimple();
+    this.boardGroup = this.add.group();
+    this.boardGroup.alpha = 0.8;
     this.shapeGroup = this.add.group();
     this.touchDetector = new TouchDetector(this.game, this.board);
     this.addSelectSprite();
@@ -143,7 +146,11 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                 spr.scale.x = scale;
                 spr.scale.y = scale;
             }
-            var tile = board.tiles[y * board.width + x].sprite;
+            var tile = board.tiles[y * board.width + x];
+            if (!tile.sprite) {
+                tile.sprite = this.boardGroup.create(0, 0, 'shapes', 'board');
+            }
+            tile = tile.sprite;
             tile.x = startX + x * gridSize;
             tile.y = startY + y * gridSize;
             tile.scale.x = scale;
