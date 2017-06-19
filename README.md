@@ -1,7 +1,7 @@
 # 形狀消消樂網頁版 Shape Clear - HTML
 形狀消消樂網頁版是一個消消樂遊戲，使用Phaser遊戲引擎和HTML5規格
 
-**愚人節特別版！！！** 快到 <https://stdio2016.github.io/shapeclear-html>
+目前還沒有完成，但是可以來玩一下： <https://stdio2016.github.io/shapeclear-html>
 
 如果想要正常的版本，可以玩Scratch版(註：這個版本的原始碼不在這個代碼庫，而且需要Flash)。
 網址： https://scratch.mit.edu/projects/17206808/

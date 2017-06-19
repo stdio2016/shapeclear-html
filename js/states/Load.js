@@ -29,6 +29,8 @@ Load.prototype.preload = function () {
     game.load.image('background', 'assets/background.png');
     game.load.audio('music', ['assets/music.ogg', 'assets/music.m4a', 'assets/music.wav']);
     game.load.audio('music2', ['assets/music2.ogg', 'assets/music2.m4a']);
+    game.load.audio('match', ['assets/match.wav']);
+    game.load.audio('nomatch', ['assets/nomatch.wav']);
 
     // create texture for showing match-3
     this.game.create.texture('whiteSquare', ['2']);

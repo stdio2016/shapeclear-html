@@ -132,6 +132,7 @@ Board.prototype.updateSwaps = function () {
                 --i;
             }
             else {
+                this.game.add.sound('nomatch').play();
                 this.swaps[i].reject();
                 this.swapShape(from, to);
                 from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
@@ -296,6 +297,14 @@ Board.prototype.clearMatch = function () {
         }
         this.combo++;
         this.gainScores.push({x: mx, y: my, type: m.shapeType, score: this.combo});
+    }
+    if (this.matches.length > 0) {
+        var s = game.add.sound('match');
+        var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][Math.min(this.combo - 1, 14)];
+        s.play();
+        if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
+          s._sound.playbackRate.value = Math.pow(2, cn / 12);
+        }
     }
 };
 

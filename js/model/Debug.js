@@ -27,6 +27,8 @@ Debug.prototype.runCommand = function (cmd) {
         alertBox("Can't help you"); return ;
       case 'auto swipe':
         this.autoSwipe = !this.autoSwipe; return;
+      case 'mute':
+        game.sound.mute = !game.sound.mute; return;
     }
     if (/^get /.test(cmd)) {
         return this.runGetCommand(cmd.substr(4));
