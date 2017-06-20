@@ -11,6 +11,8 @@ function Board(game) {
     this.debug = new Debug(this);
     this.combo = 0;
     this.gainScores = [];
+    this.remainingTime = 3600;
+    this.score = 0;
 
     // position of board in the game
     this.x = 0;
@@ -70,6 +72,8 @@ Board.prototype.clearShape = function (x, y) {
 };
 
 Board.prototype.addSwap = function(from, to) {
+    // NOTE: uncomment this to prevent multi swipe at the same time
+    //if (this.falling || this.combo > 0 || this.swaps.length > 0) return;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
     if ((!sh1.canSwap() || !sh2.canSwap()) && !this.debug.allowIllegalMove) {
@@ -112,6 +116,8 @@ Board.prototype.update = function () {
     }
     this.falling = false;
     this.fall();
+    if (this.remainingTime > 0)
+        this.remainingTime--;
 };
 
 Board.prototype.updateSwaps = function () {
@@ -296,7 +302,11 @@ Board.prototype.clearMatch = function () {
             my = m.vy + (m.vlength - 1) / 2;
         }
         this.combo++;
-        this.gainScores.push({x: mx, y: my, type: m.shapeType, score: this.combo});
+        var len = m.hlength + m.vlength - (m.type == Match.HORIZONTAL + Match.VERTICAL ? 1 : 0);
+        var score = len >= 5 ? len * 40 : (len == 4 ? 120 : 60);
+        score *= this.combo;
+        this.gainScores.push({x: mx, y: my, type: m.shapeType, score: score});
+        this.score += score;
     }
     if (this.matches.length > 0) {
         var s = game.add.sound('match');

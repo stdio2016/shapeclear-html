@@ -11,6 +11,7 @@ function GameScreen() {
     this.scoreText = null;
     this.scorePopups = [];
     this.digitGroup = null;
+    this.timeText = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -36,6 +37,7 @@ GameScreen.prototype.create = function () {
     this.music.play();
     this.digitGroup = this.add.group();
     this.scoreText = new ScoreText(0, 0, 0, 0, this.digitGroup);
+    this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -66,8 +68,13 @@ GameScreen.prototype.update = function () {
     this.debug.text = this.board.debug.getDebugMessage();
     this.background.width = game.width;
     this.background.height = game.height;
-    if (this.board.combo > this.scoreText.value) {
-        this.scoreText.setScore(this.board.combo);
+    this.scoreText.setScore(this.board.score);
+    this.timeText.setScore(Math.ceil(this.board.remainingTime / 60));
+    if (this.board.remainingTime == 0) {
+        var me = this;
+        alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
+            me.state.start('GameScreen');
+        });
     }
     // Uncomment this to test layout
     //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
@@ -96,6 +103,7 @@ GameScreen.prototype.resizeUI = function(){
         var right = gw - left;
         var tall = gh;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
+        this.timeText.showWithBounds(left * 2/5, gh * 3/10, left * 2/3, gh * 1/10);
         this.scoreText.showWithBounds(left * 2/5, gh * 1/2, left * 2/3, gh * 1/10);
     }
     else if (gw > gh) { // narrow landscape
@@ -103,6 +111,7 @@ GameScreen.prototype.resizeUI = function(){
         var right = gw * 5/7;
         var tall = gw * 5/7;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
+        this.timeText.showWithBounds(left * 2/5, tall * 3/10, left * 2/3, tall * 1/10);
         this.scoreText.showWithBounds(left * 2/5, tall * 1/2, left * 2/3, tall * 1/10);
     }
     else if (gw > gh * 8/11){ // short portrait
@@ -112,6 +121,7 @@ GameScreen.prototype.resizeUI = function(){
         var tall = middle;
         var wide = gh * 8/11;
         this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
+        this.timeText.showWithBounds(gw * 1/4, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
         this.scoreText.showWithBounds(gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
     }
     else { // long portrait
@@ -121,6 +131,7 @@ GameScreen.prototype.resizeUI = function(){
         var tall = gw;
         var wide = gw;
         this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
+        this.timeText.showWithBounds(gw * 1/4, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
         this.scoreText.showWithBounds(gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
     }
 };
