@@ -5,6 +5,9 @@ function Load () {
 }
 
 Load.prototype.preload = function () {
+    game.canvas.oncontextmenu = function (e) {
+        e.preventDefault();
+    };
     if (/Android 2\./.test(navigator.userAgent)) {
         this.game.device.m4a = false;
     }
