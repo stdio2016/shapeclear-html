@@ -25,7 +25,7 @@ GameScreen.prototype.create = function () {
     this.ball = new Ball(this.game, /*speed: */5);
     this.add.existing(this.ball);
     game.input.addMoveCallback(this.move, this);
-    this.board = new Board(this.game);
+    window.board = this.board = new Board(this.game);
     this.board.generateSimple();
     this.boardGroup = this.add.group();
     this.boardGroup.alpha = 0.8;
@@ -46,7 +46,9 @@ GameScreen.prototype.addDebugText = function () {
     this.debug.inputEnabled = true;
     this.debug.events.onInputUp.add(function () {
         var debugging = this.board.debug;
+        this.game.paused = true;
         promptBox('Input debug command:', '', function (result) {
+            this.game.paused = false;
             debugging.runCommand(result);
         });
     }, this);
@@ -261,4 +263,7 @@ GameScreen.prototype.render = function (game) {
 GameScreen.prototype.shutdown = function () {
     this.music.destroy();
     this.music = null;
+    this.showMatches = [];
+    this.scorePopups = [];
+    window.board = null;
 };
