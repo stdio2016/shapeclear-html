@@ -1,4 +1,4 @@
-function Shape(type, x, y) {
+function Shape(type, x, y, board) {
     this.type = type;
     this.x = x;
     this.y = y;
@@ -8,20 +8,25 @@ function Shape(type, x, y) {
     this.speed = 0;
     this.bouncing = false;
     this.swapping = false;
+    this.cleared = false;
+    this.tick = 0;
 
     // is it part of a matching?
     this.match = null;
+
+    // a Shape belongs to exactly one Board
+    this.board = board || null;
 }
 
 Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
  'downTriangle', 'rhombus', 'apple'];
 
 Shape.prototype.canSwap = function () {
-    return !this.swapping && !this.isMoving() && this.type > 0;
+    return !this.swapping && !this.isMoving() && this.type > 0 && !this.cleared;
 };
 
 Shape.prototype.canMatch = function () {
-    return !this.swapping && (!this.isMoving() || this.bouncing) && this.type > 0;
+    return !this.swapping && (!this.isMoving() || this.bouncing) && this.type > 0 && !this.cleared;
 };
 
 Shape.prototype.isMoving = function () {
@@ -37,7 +42,7 @@ Shape.prototype.isEmpty = function () {
 };
 
 Shape.prototype.canFall = function () {
-    return !this.swapping && this.type > 0;
+    return !this.swapping && this.type > 0 && !this.cleared;
 };
 
 Shape.prototype.stopSwapping = function () {
@@ -57,4 +62,13 @@ Shape.prototype.stopFalling = function () {
         this.bouncing = false;
         this.pos = 0;
     }
+};
+
+Shape.prototype.deleteUpdate = function () {
+    this.tick++;
+    if (this.tick >= 15) {
+        this.board.setShape(this.x, this.y, new Shape(0, this.x, this.y, this.board));
+        return false;
+    }
+    return true;
 };

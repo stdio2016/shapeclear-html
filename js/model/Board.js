@@ -44,7 +44,7 @@ Board.prototype.generateSimple = function () {
             do {
                 r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
             } while (r1 == r || r2 == r) ;
-            var sh = new Shape(r, j, i);
+            var sh = new Shape(r, j, i, this);
             arr[i * width + j] = sh;
             // TODO: Add Tile class
             this.tiles.push({sprite: null});
@@ -59,15 +59,32 @@ Board.prototype.getShape = function (x, y) {
     return this.shapes[x + y * this.width];
 };
 
+Board.prototype.setShape = function (x, y, sh) {
+    // bound check
+    if (x >= this.width || x < 0) throw RangeError('x out of bound');
+    if (y >= this.height || y < 0) return RangeError('y out of bound');
+    if (sh instanceof Shape) {
+        if (sh.board !== this) throw TypeError("this Shape comes from different Board");
+        this.shapes[x + y * this.width] = sh;
+    }
+    else if (typeof sh === "number") {
+        var sp = this.shapes[x + y * this.width];
+        if (sp.sprite) sp.sprite.kill();
+        sp.type = sh;
+        sp.sprite = null;
+    }
+};
+
 Board.prototype.clearShape = function (x, y) {
     // bound check
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
     if (y >= this.height || y < 0) return RangeError('y out of bound');
     // TODO: handle special shapes such as striped or wrapped ones
     var i = x + y * this.width;
-    if (this.shapes[i].type > 0 && !this.shapes[i].swapping) {
+    if (this.shapes[i].type > 0 && !this.shapes[i].cleared && !this.shapes[i].swapping) {
         this.deletedShapes.push(this.shapes[i]);
-        this.shapes[i] = new Shape(0, x, y);
+        this.shapes[i].cleared = true;
+        //this.shapes[i] = new Shape(0, x, y);
     }
 };
 
@@ -110,9 +127,17 @@ Board.prototype.update = function () {
         // TODO: sort chains by their type
         // first match-5, then cross, match-4, and finally match-3.
         this.clearMatch();
-        if (!this.falling && this.matches.length == 0) {
-            this.combo = 0;
+    }
+    var newDelShapes = [];
+    for (var i = 0; i < this.deletedShapes.length; i++) {
+        if (this.deletedShapes[i].deleteUpdate()) {
+            newDelShapes.push(this.deletedShapes[i]);
         }
+        this.falling = true;
+    }
+    this.deletedShapes = newDelShapes;
+    if (!this.falling && this.matches.length == 0) {
+      this.combo = 0;
     }
     this.falling = false;
     this.fall();
@@ -385,7 +410,7 @@ Board.prototype.tryFallAt = function (i, wd) {
                 sh.bouncing = false;
                 sh.pos += 10;
             }
-            this.shapes[i] = new Shape(0, i % 9, Math.floor(i / 9));
+            this.shapes[i] = new Shape(0, i % 9, Math.floor(i / 9), this);
             // TODO: add support for other gravity directions
             this.shapes[i + 9] = sh;
             sh.y++;
@@ -429,7 +454,7 @@ Board.prototype.fall = function () {
         if (this.shapes[i].isEmpty()) {
             this.falling = true;
             var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
-            var sh = new Shape(r + 1, i, 0);
+            var sh = new Shape(r + 1, i, 0, this);
             this.shapes[i] = sh;
             sh.dir = {x: 0, y: 1};
             if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {

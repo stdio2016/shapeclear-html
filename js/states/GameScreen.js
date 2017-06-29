@@ -80,7 +80,6 @@ GameScreen.prototype.update = function () {
     }
     // Uncomment this to test layout
     //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
-    if (this.scoreText.value > 1e9) this.scoreText.setScore(1);
     this.resizeUI();
     this.updateSelectSprite();
 };
@@ -154,6 +153,9 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             }
             var spr = shape.sprite;
             if (spr !== null) {
+                var frameName = Shape.typeNames[shape.type - 1];
+                if (spr.frameName !== frameName)
+                    spr.frameName = frameName;
                 spr.x = startX + (x - shape.dir.x * shape.pos/10) * gridSize;
                 spr.y = startY + (y - shape.dir.y * shape.pos/10) * gridSize;
                 spr.scale.x = scale;
@@ -180,11 +182,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         if (sh.sprite) {
             sh.sprite.alpha -= 0.1;
         }
-        if (!sh.sprite || sh.sprite.alpha <= 0) {
-            // QUESTION: how to remove items from array?
-            delSh[i] = delSh[delSh.length - 1];
-            delSh.length--;
-            i--;
+        if (sh.tick == 15-1) {
             if (sh.sprite) {
                 sh.sprite.kill();
             }
