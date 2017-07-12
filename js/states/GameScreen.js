@@ -72,11 +72,13 @@ GameScreen.prototype.update = function () {
     this.background.height = game.height;
     this.scoreText.setScore(this.board.score);
     this.timeText.setScore(Math.ceil(this.board.remainingTime / 60));
-    if (this.board.remainingTime == 0 && this.board.combo == 0) {
+    if (this.board.remainingTime == 0 && this.board.combo == 0 && this.board.swaps.length == 0) {
         var me = this;
-        alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
-            me.state.start('GameScreen');
-        });
+        if (promptCallback === doesNothing) {
+            alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
+                me.state.start('GameScreen');
+            });
+        }
     }
     // Uncomment this to test layout
     //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
