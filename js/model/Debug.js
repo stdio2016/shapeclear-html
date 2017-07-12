@@ -33,6 +33,9 @@ Debug.prototype.runCommand = function (cmd) {
     if (/^get /.test(cmd)) {
         return this.runGetCommand(cmd.substr(4));
     }
+    if (/^set /.test(cmd)) {
+        return this.runSetCommand(cmd.substr(4));
+    }
     if (cmd == 'april fools') {
         try {
             localStorage.ShapeClear_AppleFools17 = +new Date();
@@ -51,6 +54,13 @@ Debug.prototype.runGetCommand = function (cmd) {
     else if (cmd == 'body client height') {
         var rect = document.body.getClientRects()[0];
         alertBox(rect.height);
+    }
+};
+
+Debug.prototype.runSetCommand = function (cmd) {
+    var name = cmd.split(' ');
+    if (name[0] == 'time') {
+        this.board.remainingTime = Math.max(Math.floor(name[1] * 60 || 0), 0);
     }
 };
 

@@ -23,7 +23,7 @@ ScoreText.colorPalette = [
 ScoreText.charAspectRatio = 36.0 / 48.0; // width/height
 
 ScoreText.prototype.setScore = function (newScore) {
-    var dec = newScore.toString();
+    var dec = ScoreText.numToString(newScore);
     for (var i = this.digits.length; i < dec.length; i++) {
         var d = this.charPool.getFirstDead(true, 0, 0, 'number', dec.charAt(i));
         d.bringToTop();
@@ -39,7 +39,7 @@ ScoreText.prototype.setScore = function (newScore) {
 };
 
 ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
-    var dec = this.value.toString();
+    var dec = ScoreText.numToString(this.value);
     var charWidth = charHeight * ScoreText.charAspectRatio;
     for (var i = 0; i < this.digits.length; i++) {
         var d = this.digits[i];
@@ -52,6 +52,13 @@ ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
             }
             else {
                 digit = dec.charAt(dec.length - this.digits.length + i);
+            }
+            if (digit === "∞") {
+                digit = "8";
+                d.angle = 90;
+            }
+            else {
+                d.angle = 0;
             }
         }
         if (d.frameName !== digit) {
@@ -82,7 +89,7 @@ ScoreText.prototype.popup = function (boardx, boardy, boardsize) {
 };
 
 ScoreText.prototype.showWithBounds = function (x, y, width, height) {
-    var w = height * ScoreText.charAspectRatio * this.value.toString().length;
+    var w = height * ScoreText.charAspectRatio * ScoreText.numToString(this.value).length;
     if (w > width) {
         this.showAtPosition(x, y, height * width / w);
     }
@@ -95,4 +102,30 @@ ScoreText.prototype.kill = function () {
     for (var i = 0; i < this.digits.length; i++) {
         this.digits[i].kill();
     }
+};
+
+ScoreText.numToString = function (num) {
+    var str = num.toString();
+    if (str.indexOf('e') !== -1) {
+        if (Math.abs(num) > 1) { // number is too big
+            var sign = "", digits = "";
+            if (num < 0) {
+                sign = "-";
+                num = -num;
+            }
+            while (num >= 1) {
+                var d = num%10;
+                digits = (num%10) + digits;
+                num = (num - d) / 10;
+            }
+            return sign + digits;
+        }
+        else { // number is too small
+            return "0";
+        }
+    }
+    if (num === Infinity) {
+        return "∞";
+    }
+    return str;
 };

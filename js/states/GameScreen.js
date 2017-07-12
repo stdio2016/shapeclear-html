@@ -72,7 +72,7 @@ GameScreen.prototype.update = function () {
     this.background.height = game.height;
     this.scoreText.setScore(this.board.score);
     this.timeText.setScore(Math.ceil(this.board.remainingTime / 60));
-    if (this.board.remainingTime == 0) {
+    if (this.board.remainingTime == 0 && this.board.combo == 0) {
         var me = this;
         alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
             me.state.start('GameScreen');
@@ -150,16 +150,17 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             if (shape.sprite === null && shape.type > 0) {
                 shape.sprite = this.shapeGroup.getFirstDead(true, 100, 100, 'shapes', Shape.typeNames[shape.type - 1]);
                 shape.sprite.alpha = 1;
+                shape.sprite.anchor = new Phaser.Point(0.5, 0.5);
             }
             var spr = shape.sprite;
             if (spr !== null) {
                 var frameName = Shape.typeNames[shape.type - 1];
                 if (spr.frameName !== frameName)
                     spr.frameName = frameName;
-                spr.x = startX + (x - shape.dir.x * shape.pos/10) * gridSize;
-                spr.y = startY + (y - shape.dir.y * shape.pos/10) * gridSize;
-                spr.scale.x = scale;
-                spr.scale.y = scale;
+                spr.x = startX + (x - shape.dir.x * shape.pos/10 + 0.5) * gridSize;
+                spr.y = startY + (y - shape.dir.y * shape.pos/10 + 0.5) * gridSize;
+                spr.scale.x = scale * spr.alpha;
+                spr.scale.y = scale * spr.alpha;
             }
             var tile = board.tiles[y * board.width + x];
             if (!tile.sprite) {

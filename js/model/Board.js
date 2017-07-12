@@ -91,6 +91,7 @@ Board.prototype.clearShape = function (x, y) {
 Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
     //if (this.falling || this.combo > 0 || this.swaps.length > 0) return;
+    if (this.remainingTime <= 0) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
     if ((!sh1.canSwap() || !sh2.canSwap()) && !this.debug.allowIllegalMove) {
