@@ -119,6 +119,8 @@ Board.prototype.swapShape = function (sh1, sh2) {
 Board.prototype.update = function () {
     this.debug.autoSwipeTest();
     this.gainScores = [];
+    this.falling = false;
+    this.fall();
     this.updateSwaps();
     this.initMatch();
     if (!this.falling) {
@@ -139,8 +141,6 @@ Board.prototype.update = function () {
     if (!this.falling && this.matches.length == 0) {
       this.combo = 0;
     }
-    this.falling = false;
-    this.fall();
     if (this.remainingTime > 0)
         this.remainingTime--;
 };
@@ -422,10 +422,10 @@ Board.prototype.tryFallAt = function (i, wd) {
 
 Board.prototype.fall = function () {
     var wd = []; // "shape will fall down or pass through" mark
-    for (var i = 0; i < this.shapes.length; i++) {
-        var sh = this.shapes[i];
+    for (var i = this.shapes.length - 1; i >= 0; i--) {
+        var sh = this.shapes[i], dsh = this.shapes[i + this.width];
         if (sh.isMoving()) {
-            sh.speed += 0.1; // gravity acceleration
+            sh.speed += 0.07; // gravity acceleration
             if(sh.speed > 10) { // maximum speed
                 sh.speed = 10;
             }
@@ -433,11 +433,35 @@ Board.prototype.fall = function () {
             if (!sh.bouncing) {
                 this.falling = true;
             }
+            if (dsh != null && !dsh.isEmpty() && dsh.pos > sh.pos && !dsh.swapping) {
+                sh.pos = dsh.pos;
+                if (dsh.isMoving()) {
+                    sh.speed = dsh.speed;
+                }
+            }
         }
         wd.push(false);
     }
-    for (var i = 0; i < this.shapes.length; i++) {
-        this.tryFallAt(i, wd);
+    for (var x = 0; x < this.width; x++) {
+        for (var y = this.height - 2; y >= 0; y--) {
+            var pos = y * this.width + x;
+            var sh = this.shapes[pos], dsh = this.shapes[pos + this.width];
+            if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
+                if (sh.isStopped()) {
+                    sh.speed = 0.07; // initial falling speed
+                    sh.pos = 10 - sh.speed;
+                    sh.dir = {x: 0, y: 1}; // assign direction
+                }
+                else {
+                    sh.bouncing = false;
+                    sh.pos += 10;
+                }
+                this.shapes[pos] = new Shape(0, x, y, this);
+                this.shapes[pos + this.width] = sh;
+                sh.y++;
+                this.falling = true;
+            }
+        }
     }
     for (var i = 0; i < this.shapes.length; i++) {
         var sh = this.shapes[i];
@@ -467,7 +491,7 @@ Board.prototype.fall = function () {
             }
         }
     }
-   for (var i = 0; i < this.shapes.length; i++) {
+    for (var i = 0; i < this.shapes.length; i++) {
         var j = i;
         var sh = this.shapes[i];
         if (sh.isMoving() || sh.swapping) {

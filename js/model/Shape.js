@@ -51,9 +51,9 @@ Shape.prototype.stopSwapping = function () {
 };
 
 Shape.prototype.stopFalling = function () {
-    if (this.speed > 0.5) {
+    if (this.speed > 1) {
         this.pos += this.speed;
-        this.speed /= -5;
+        this.speed = -0.2;
         this.bouncing = true;
     }
     else {
@@ -66,7 +66,7 @@ Shape.prototype.stopFalling = function () {
 
 Shape.prototype.deleteUpdate = function () {
     this.tick++;
-    if (this.tick >= 15) {
+    if (this.tick >= 10) {
         this.board.setShape(this.x, this.y, new Shape(0, this.x, this.y, this.board));
         return false;
     }

@@ -182,7 +182,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         if (sh.sprite) {
             sh.sprite.alpha -= 0.1;
         }
-        if (sh.tick == 15-1) {
+        if (sh.tick == 10-1) {
             if (sh.sprite) {
                 sh.sprite.kill();
             }

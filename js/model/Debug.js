@@ -82,5 +82,5 @@ Debug.prototype.autoSwipeTest = function () {
 };
 
 Debug.prototype.getDebugMessage = function () {
-    return +this.board.game.time.fps;
+    return +this.board.game.time.fps + "" + this.board.falling;
 };
