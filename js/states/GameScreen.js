@@ -12,6 +12,7 @@ function GameScreen() {
     this.scorePopups = [];
     this.digitGroup = null;
     this.timeText = null;
+    this.lblScore = this.lblTime = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -37,7 +38,9 @@ GameScreen.prototype.create = function () {
     this.music.play();
     this.digitGroup = this.add.group();
     this.scoreText = new ScoreText(0, 0, 0, 0, this.digitGroup);
+    this.lblScore = this.createText("Score");
     this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
+    this.lblTime = this.createText("Time");
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -54,6 +57,12 @@ GameScreen.prototype.addDebugText = function () {
     }, this);
 };
 
+GameScreen.prototype.createText = function (txt) {
+    var style = { font: "32px", fill: "black" };
+    var txt = this.add.text(0, 0, txt, style);
+    return txt;
+};
+
 GameScreen.prototype.addSelectSprite = function(){
     var ptrs = this.touchDetector.pointers;
     for (var i=0; i<ptrs.length; i++) {
@@ -66,7 +75,10 @@ GameScreen.prototype.addSelectSprite = function(){
 GameScreen.prototype.update = function () {
     this.touchDetector.update();
     this.board.update();
-    this.debug.fontSize = Math.min(game.width, game.height) * 0.05 + 'pt';
+    var fontSize = Math.round(Math.min(game.width, game.height) * 0.05) + 'pt';
+    this.lblTime.fontSize = fontSize;
+    this.lblScore.fontSize = fontSize;
+    this.debug.fontSize = fontSize;
     this.debug.text = this.board.debug.getDebugMessage();
     this.background.width = game.width;
     this.background.height = game.height;
@@ -106,16 +118,16 @@ GameScreen.prototype.resizeUI = function(){
         var right = gw - left;
         var tall = gh;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
-        this.timeText.showWithBounds(left * 2/5, gh * 3/10, left * 2/3, gh * 1/10);
-        this.scoreText.showWithBounds(left * 2/5, gh * 1/2, left * 2/3, gh * 1/10);
+        this.showWithBounds(this.lblTime, this.timeText, left * 2/5, gh * 3/10, left * 2/3, gh * 1/10);
+        this.showWithBounds(this.lblScore, this.scoreText, left * 2/5, gh * 1/2, left * 2/3, gh * 1/10);
     }
     else if (gw > gh) { // narrow landscape
         var left = gw * 2/7;
         var right = gw * 5/7;
         var tall = gw * 5/7;
         this.resizeBoard(left + (right - tall) / 2 + tall * 1/11, (gh - tall * 9/11) / 2, tall * 9/11);
-        this.timeText.showWithBounds(left * 2/5, tall * 3/10, left * 2/3, tall * 1/10);
-        this.scoreText.showWithBounds(left * 2/5, tall * 1/2, left * 2/3, tall * 1/10);
+        this.showWithBounds(this.lblTime, this.timeText, left * 2/5, tall * 3/10, left * 2/3, tall * 1/10);
+        this.showWithBounds(this.lblScore, this.scoreText, left * 2/5, tall * 1/2, left * 2/3, tall * 1/10);
     }
     else if (gw > gh * 8/11){ // short portrait
         var up = gh * 1/11;
@@ -124,8 +136,8 @@ GameScreen.prototype.resizeUI = function(){
         var tall = middle;
         var wide = gh * 8/11;
         this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
-        this.timeText.showWithBounds(gw * 1/4, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
-        this.scoreText.showWithBounds(gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
+        this.showWithBounds(this.lblTime, this.timeText, gw * 1/4, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
+        this.showWithBounds(this.lblScore, this.scoreText, gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
     }
     else { // long portrait
         var up = gw * 1/8;
@@ -134,9 +146,15 @@ GameScreen.prototype.resizeUI = function(){
         var tall = gw;
         var wide = gw;
         this.resizeBoard((gw - tall * 9/11) / 2, up + (middle - tall) / 2 + tall * 1/11, tall * 9/11);
-        this.timeText.showWithBounds(gw * 1/4, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
-        this.scoreText.showWithBounds(gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
+        this.showWithBounds(this.lblTime, this.timeText, gw * 1/4, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
+        this.showWithBounds(this.lblScore, this.scoreText, gw * 1/2, (up + middle) + down * 2/5, wide * 1/5, down * 1/3);
     }
+};
+
+GameScreen.prototype.showWithBounds = function (lbl, txt, x, y, width, height) {
+    txt.showWithBounds(x, y, width, height);
+    lbl.x = x - lbl.width / 2;
+    lbl.y = y - lbl.height / 2 - height;
 };
 
 GameScreen.prototype.resizeBoard = function(leftX, topY, size){
