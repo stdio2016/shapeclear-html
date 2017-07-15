@@ -83,7 +83,14 @@ GameScreen.prototype.update = function () {
     this.background.width = game.width;
     this.background.height = game.height;
     this.scoreText.setScore(this.board.score);
-    this.timeText.setScore(Math.ceil(this.board.remainingTime / 60));
+    var remainingTime = this.board.remainingTime;
+    if (Math.ceil(remainingTime / 60) <= 10 && (remainingTime-1)%60 >= 30 || remainingTime == 0) {
+        this.timeText.setColor(1);
+    }
+    else {
+        this.timeText.setColor(0);
+    }
+    this.timeText.setScore(Math.ceil(remainingTime / 60));
     if (this.board.remainingTime == 0 && this.board.combo == 0 && this.board.swaps.length == 0) {
         var me = this;
         if (promptCallback === doesNothing) {

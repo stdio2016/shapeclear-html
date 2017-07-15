@@ -38,6 +38,13 @@ ScoreText.prototype.setScore = function (newScore) {
     this.value = newScore;
 };
 
+ScoreText.prototype.setColor = function (newColor) {
+    this.color = newColor;
+    for (var i = 0; i < this.digits.length; i++) {
+        this.digits[i].tint = ScoreText.colorPalette[newColor];
+    }
+}
+
 ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
     var dec = ScoreText.numToString(this.value);
     var charWidth = charHeight * ScoreText.charAspectRatio;
