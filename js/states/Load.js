@@ -30,11 +30,10 @@ Load.prototype.preload = function () {
     game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
     game.load.atlasJSONArray('number', 'img/number_small.png', 'img/number_small.json');
     game.load.image('background', 'assets/background.png');
-    game.load.audio('music', ['assets/sound/music.ogg', 'assets/sound/music.m4a', 'assets/sound/music.wav']);
-    game.load.audio('music2', ['assets/sound/music2.ogg', 'assets/sound/music2.m4a']);
-    game.load.audio('match', ['assets/sound/match.wav']);
-    game.load.audio('match2', ['assets/sound/match2.wav']);
-    game.load.audio('nomatch', ['assets/sound/nomatch.wav']);
+    game.load.audio('music', ['assets/sound/music.ogg', 'assets/sound/music.m4a', 'assets/sound/music.mp3']);
+    game.load.audio('music2', ['assets/sound/music2.ogg', 'assets/sound/music2.m4a', 'assets/sound/music2.mp3']);
+    game.load.audio('match', ['assets/sound/match.wav', 'assets/sound/match.mp3']);
+    game.load.audio('nomatch', ['assets/sound/nomatch.wav', 'assets/sound/nomatch.mp3']);
 
     // create texture for showing match-3
     this.game.create.texture('whiteSquare', ['2']);
