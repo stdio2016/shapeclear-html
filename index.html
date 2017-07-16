@@ -7,35 +7,43 @@
 <style>
 .playcontainer {
   padding-left: 2em;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .playcontainer a {
   text-decoration: none;
 }
 .play {
-  background-color: #dddd00;
+  background: #dddd00;
+  background: linear-gradient(#ee0 0%, #bb0 100%);
   padding: 10px;
   border: gray solid 3px;
   border-radius: 10px;
   font-size: 1.5em;
 }
 .play:hover {
-  background-color: #eeee00;
+  background: #eeee00;
+  background: linear-gradient(#ff0 0%, #cc0 100%);
 }
 .play:active {
-  background-color: #aaaa00;
+  background: #bbbb00;
+  background: linear-gradient(#cc0 0%, #aa0 100%);
 }
 body {
   background: url(assets/background.png) fixed no-repeat;
-  background-blend-mode: lighten;
+  background: linear-gradient(#0080ff 0%,#79e1ff 70%,#009e00 71%,#00ff00 100%) fixed no-repeat;
   background-color: #777;
-  background-size: 100% 130%;
+  background-size: 100% 100%;
 }
 </style>
 </head>
 <body>
   <header>
-    <h1>形狀消消樂網頁版 Shape Clear - HTML</h1>
+    <h1 style='margin-right: 100px;'>形狀消消樂網頁版 Shape Clear - HTML</h1>
   </header>
+  <a href="https://github.com/stdio2016/shapeclear-html">
+    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">
+  </a>
   <p>形狀消消樂網頁版是一個消消樂遊戲，使用Phaser遊戲引擎和HTML5規格</p>
   <p>目前還沒有完成，但是可以玩😆~~</p>
   <h2 id=howToPlay>玩法</h2>
@@ -53,7 +61,7 @@ body {
   <h2 id=gameHasBugs>遊戲有bug！</h2>
   <p>還是一樣，你可以到我的程式庫上面回報問題，就在<a href='https://github.com/stdio2016/shapeclear-html/issues'>github.com/stdio2016/shapeclear-html/issues</a>。
     或者你比較喜歡facebook，就私訊我的<a href="https://facebook.com/shape.clear">粉絲專頁</a>吧</p>
-  <p>本遊戲是個自由開源的軟體，歡迎到<a href='https://github.com/stdio2016/shapeclear-html'>github.com/stdio2016/shapeclear-html</a>查看原始碼</p>
+  <p>本遊戲是個自由開源的軟體，歡迎到<a href='https://github.com/stdio2016/shapeclear-html'>github.com/stdio2016/shapeclear-html</a>查看原始碼，或者fork！</p>
   <hr>
   <footer id=di>&copy; 2016~2017 stdio2016 版權ㄙㄨㄛˇ有</footer>
 </body>
