@@ -1,55 +1,60 @@
 ﻿<!DOCTYPE html>
-<html style='background: #0080ff' class='fullscreen'>
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Shape Clear</title>
-<link rel="stylesheet" type="text/css" href="css/fullscreen.css">
-<link rel="stylesheet" type="text/css" href="css/alertbox.css">
+<title>形狀消消樂 Shape Clear</title>
+<style>
+.playcontainer {
+  padding-left: 2em;
+}
+.playcontainer a {
+  text-decoration: none;
+}
+.play {
+  background-color: #dddd00;
+  padding: 10px;
+  border: gray solid 3px;
+  border-radius: 10px;
+  font-size: 1.5em;
+}
+.play:hover {
+  background-color: #eeee00;
+}
+.play:active {
+  background-color: #aaaa00;
+}
+body {
+  background: url(assets/background.png) fixed no-repeat;
+  background-blend-mode: lighten;
+  background-color: #777;
+  background-size: 100% 130%;
+}
+</style>
 </head>
 <body>
-  <div id='loading' class='center-of-screen' style='flex-direction:column;'>
-    <div id='loadingInfo'>Loading phaser.js</div>
-    <progress id='loadProgress' value="0" max="1"></progress>
-  </div>
-  <script src='js/GameLoader.js'></script>
-
-  <!-- alert box -->
-  <div class="center-of-screen grayed-out" id='prompt' style='visibility: hidden; align-items: baseline;'>
-    <form class='prompt-box' action="javascript:void 3">
-      <div class='description' id='promptMessage'></div>
-      <input id='promptInput'>
-      <div class='yesno'>
-        <button onclick="promptCallback(true)">OK</button>
-        <button onclick="promptCallback(false)" id='promptCancel'>Cancel</button>
-      </div>
-    </form>
-  </div>
-  <!--[if IE]>
-  <div id='alert' class='alert-box alert-box-ie'>
-  <![endif]-->
-  <!--[if !IE]> -->
-  <div id='alert' class='alert-box' style='visibility: hidden;'>
-  <!-- <![endif]-->
-    <div class='title'>
-      <span>Error</span>
-      <input id='close' class='x' value='X' type='button'>
-    </div>
-    <!--[if IE]>
-    <pre class='description' id='description'>
-本遊戲不支援IE。請改用Firefox或Chrome
-This game does not support IE. Please use Firefox or Chrome.
-    </pre>
-    <![endif]-->
-    <!--[if !IE]> -->
-    <pre class='description' id='description'>
-錯誤訊息會顯示在這裡
-    </pre>
-    <!-- <![endif]-->
-  </div>
-  <!-- end of alert box -->
-
-  <script src='js/alertbox.js'></script>
-  <div id='gameDiv' class='game-div'></div>
+  <header>
+    <h1>形狀消消樂網頁版 Shape Clear - HTML</h1>
+  </header>
+  <p>形狀消消樂網頁版是一個消消樂遊戲，使用Phaser遊戲引擎和HTML5規格</p>
+  <p>目前還沒有完成，但是可以玩😆~~</p>
+  <h2 id=howToPlay>玩法</h2>
+  <p>用滑鼠或手指交換2個形狀，讓3個一樣的形狀，連成一條線，就可以消除</p>
+  <p class=playcontainer><a href='game.html'><span class=play>馬上玩！</span></a></p>
+  <h2 id=cannotPlayGame>無法玩遊戲？</h2>
+  <p>如果遊戲畫面一直閃，導致你的眼睛很不舒服，或者畫面一片空白，這可能是因為您的裝置不支援硬體加速</p>
+  <p>你可以</p>
+  <ol>
+    <li>進入<a href='config.html'>設定</a>，將renderer改成CANVAS</li>
+    <li>如果這招沒效，請到我的程式庫上面回報問題，就在<a href='https://github.com/stdio2016/shapeclear-html/issues'>github.com/stdio2016/shapeclear-html/issues</a><br>
+      記得要說你的手機型號(如果你是用手機玩)、瀏覽器名稱、還有作業系統</li>
+    <li>英文好可怕？沒關係，你可以到我的粉絲專頁「<a href="https://facebook.com/shape.clear">形狀消消樂</a>」回報問題</li>
+  </ol>
+  <h2 id=gameHasBugs>遊戲有bug！</h2>
+  <p>還是一樣，你可以到我的程式庫上面回報問題，就在<a href='https://github.com/stdio2016/shapeclear-html/issues'>github.com/stdio2016/shapeclear-html/issues</a>。
+    或者你比較喜歡facebook，就私訊我的<a href="https://facebook.com/shape.clear">粉絲專頁</a>吧</p>
+  <p>本遊戲是個自由開源的軟體，歡迎到<a href='https://github.com/stdio2016/shapeclear-html'>github.com/stdio2016/shapeclear-html</a>查看原始碼</p>
+  <hr>
+  <footer id=di>&copy; 2016~2017 stdio2016 版權ㄙㄨㄛˇ有</footer>
 </body>
 </html>
