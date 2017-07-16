@@ -12,6 +12,7 @@
 }
 .playcontainer a {
   text-decoration: none;
+  color: inherit;
 }
 .play {
   background: #dddd00;
@@ -31,13 +32,22 @@
 }
 body {
   background: url(assets/background.png) fixed no-repeat;
-  background: linear-gradient(#0080ff 0%,#79e1ff 70%,#009e00 71%,#00ff00 100%) fixed no-repeat;
-  background-color: #777;
-  background-size: 100% 100%;
+}
+#background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>
 </head>
 <body>
+  <img src='assets/background.png' id=background unselectable=on>
   <header>
     <h1 style='margin-right: 100px;'>形狀消消樂網頁版 Shape Clear - HTML</h1>
   </header>
