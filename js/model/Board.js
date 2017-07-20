@@ -8,6 +8,7 @@ function Board(game) {
     this.matches = [];
     this.deletedShapes = [];
     this.falling = false;
+    this.changed = false;
     this.debug = new Debug(this);
     this.combo = 0;
     this.gainScores = [];
@@ -90,7 +91,7 @@ Board.prototype.clearShape = function (x, y) {
 
 Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
-    //if (this.falling || this.combo > 0 || this.swaps.length > 0) return;
+    //if (this.changed || this.swaps.length > 0) return;
     if (this.remainingTime <= 0) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
@@ -121,6 +122,7 @@ Board.prototype.update = function () {
     this.debug.autoSwipeTest();
     this.gainScores = [];
     this.falling = false;
+    this.changed = false;
     this.fall();
     this.updateSwaps();
     this.initMatch();
@@ -136,10 +138,10 @@ Board.prototype.update = function () {
         if (this.deletedShapes[i].deleteUpdate()) {
             newDelShapes.push(this.deletedShapes[i]);
         }
-        this.falling = true;
+        this.changed = true;
     }
     this.deletedShapes = newDelShapes;
-    if (!this.falling && this.matches.length == 0) {
+    if (!this.changed && this.matches.length == 0) {
       this.combo = 0;
     }
     if (this.remainingTime > 0)
@@ -434,6 +436,7 @@ Board.prototype.fall = function () {
             if (!sh.bouncing) {
                 this.falling = true;
             }
+            this.changed = true;
             if (dsh != null && !dsh.isEmpty() && dsh.pos > sh.pos && !dsh.swapping) {
                 sh.pos = dsh.pos;
                 if (dsh.isMoving()) {
@@ -508,6 +511,7 @@ Board.prototype.fall = function () {
             } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
         }
     }
+    this.changed = this.changed || this.falling;
 };
 
 Board.prototype.elcShape = function (type) {
