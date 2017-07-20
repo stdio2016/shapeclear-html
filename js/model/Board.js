@@ -45,6 +45,7 @@ Board.prototype.generateSimple = function () {
             do {
                 r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
             } while (r1 == r || r2 == r) ;
+            if (this.game.rnd.between(1, 10)  == 1) r = -1;
             var sh = new Shape(r, j, i, this);
             arr[i * width + j] = sh;
             // TODO: Add Tile class
@@ -423,6 +424,21 @@ Board.prototype.tryFallAt = function (i, wd) {
     return d;
 };
 
+Board.prototype.moveShape = function (shape, dx, dy) {
+    if (shape.isStopped()) {
+        shape.pos = 10 - shape.speed;
+    }
+    else {
+        shape.bouncing = false;
+        shape.pos += 10;
+    }
+    shape.dir = {x: dx, y: dy}; // assign direction
+    var pos = shape.x + shape.y * this.width;
+    this.shapes[pos] = new Shape(0, shape.x + dx, shape.y + dy, this);
+    this.shapes[pos + this.width * dy + dx] = shape;
+    shape.x += dx; shape.y += dy;
+};
+
 Board.prototype.fall = function () {
     var wd = []; // "shape will fall down or pass through" mark
     for (var i = this.shapes.length - 1; i >= 0; i--) {
@@ -437,7 +453,7 @@ Board.prototype.fall = function () {
                 this.falling = true;
             }
             this.changed = true;
-            if (dsh != null && !dsh.isEmpty() && dsh.pos > sh.pos && !dsh.swapping) {
+            if (dsh != null && !dsh.isEmpty() && dsh.pos > sh.pos && !dsh.swapping && dsh.dir.x === 0) {
                 sh.pos = dsh.pos;
                 if (dsh.isMoving()) {
                     sh.speed = dsh.speed;
@@ -451,29 +467,8 @@ Board.prototype.fall = function () {
             var pos = y * this.width + x;
             var sh = this.shapes[pos], dsh = this.shapes[pos + this.width];
             if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
-                if (sh.isStopped()) {
-                    sh.speed = 0.07; // initial falling speed
-                    sh.pos = 10 - sh.speed;
-                    sh.dir = {x: 0, y: 1}; // assign direction
-                }
-                else {
-                    sh.bouncing = false;
-                    sh.pos += 10;
-                }
-                this.shapes[pos] = new Shape(0, x, y, this);
-                this.shapes[pos + this.width] = sh;
-                sh.y++;
+                this.moveShape(sh, 0, +1);
                 this.falling = true;
-            }
-        }
-    }
-    for (var i = 0; i < this.shapes.length; i++) {
-        var sh = this.shapes[i];
-        // TODO: add support for other gravity direction
-        if (sh.isMoving() && sh.pos <= 0) {
-            if (i >= 72 || !this.shapes[i + 9].isEmpty()) {
-                // stop the shape from falling
-                sh.stopFalling();
             }
         }
     }
@@ -509,6 +504,65 @@ Board.prototype.fall = function () {
                 }
                 sh = this.shapes[j];
             } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
+        }
+    }
+    //for (var y = this.height-2; y >= 0; y--) {
+    for (var y = 0; y < this.height - 1; y++) {
+        for (var x = 0; x < this.width; x++) {
+            var pos = y * this.width + x;
+            var sh = this.shapes[pos];
+            var diagonal = false;
+            var dpos = pos + this.width + 1;
+            if (x < this.width-1 && !wd[dpos]) {
+                var dsh = this.shapes[dpos];
+                if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
+                    sh.speed = sh.pos = 0;
+                    this.moveShape(sh, +1, +1);
+                    diagonal = true;
+                }
+            }
+            if (!diagonal) {
+                dpos = pos + this.width - 1;
+                if (x > 0 && !wd[dpos]) {
+                    var dsh = this.shapes[dpos];
+                    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
+                        sh.speed = 0;
+                        this.moveShape(sh, -1, +1);
+                        diagonal = true;
+                    }
+                }
+            }
+            if (diagonal) {
+                this.falling = true;
+                pos -= this.width;
+                sh = this.shapes[pos];
+                while (pos >= 0 && sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing)) {
+                    this.moveShape(this.shapes[pos], 0, +1);
+                    pos -= this.width;
+                    sh = this.shapes[pos];
+                }
+                var j = dpos;
+                do {
+                    wd[j] = true;
+                    if (j < (this.height - 1) * this.width) {
+                        j = j + 9;
+                    }
+                    else {
+                        break;
+                    }
+                    sh = this.shapes[j];
+                } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
+            }
+        }
+    }
+    for (var i = 0; i < this.shapes.length; i++) {
+        var sh = this.shapes[i];
+        // TODO: add support for other gravity direction
+        if (sh.isMoving() && sh.pos <= 0) {
+            if (i >= 72 || !this.shapes[i + 9].isEmpty()) {
+                // stop the shape from falling
+                sh.stopFalling();
+            }
         }
     }
     this.changed = this.changed || this.falling;

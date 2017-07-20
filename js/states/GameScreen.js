@@ -198,6 +198,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             tile.y = startY + y * gridSize;
             tile.scale.x = scale;
             tile.scale.y = scale;
+            tile.visible = shape.type >= 0;
         }
     }
     board.x = leftX;
