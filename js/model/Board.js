@@ -45,7 +45,7 @@ Board.prototype.generateSimple = function () {
             do {
                 r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
             } while (r1 == r || r2 == r) ;
-            if (this.game.rnd.between(1, 10)  == 1) r = -1;
+            if (Debug.testDiagonalFall && this.game.rnd.between(1, 10)  == 1) r = -1;
             var sh = new Shape(r, j, i, this);
             arr[i * width + j] = sh;
             // TODO: Add Tile class
