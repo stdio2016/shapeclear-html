@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+  width="160"
+  height="90"
+  id="svg2"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  version="1.1">
+  <defs>
+    <linearGradient
+       id="linearGradient1">
+      <stop
+         style="stop-color:#eeeeee;stop-opacity:1"
+         offset="0"
+         id="stop4142" />
+      <stop
+         style="stop-color:#dddddd;stop-opacity:1"
+         offset="1"
+         id="stop4144" />
+    </linearGradient>
+    <radialGradient
+       xlink:href="#linearGradient1"
+       id="radialGradient2"
+       r="4"
+       cx="5" cy="5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(16,0,0,9,0,0)" />
+  </defs>
+  <rect
+     style="fill:url(#radialGradient2);stroke:#bbbbbb;stroke-width:6;stroke-miterlimit:4;"
+     x="3"
+     y="3"
+     width="154"
+     height="84"
+     ry="20" />
+</svg>
