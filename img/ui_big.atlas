@@ -1,0 +1,27 @@
+
+ui_big.png
+size: 1024,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button
+  rotate: false
+  xy: 1, 1
+  size: 250, 90
+  orig: 250, 90
+  offset: 0, 0
+  index: -1
+buttonHover
+  rotate: false
+  xy: 253, 1
+  size: 250, 90
+  orig: 250, 90
+  offset: 0, 0
+  index: -1
+buttonPressed
+  rotate: false
+  xy: 505, 1
+  size: 250, 90
+  orig: 250, 90
+  offset: 0, 0
+  index: -1

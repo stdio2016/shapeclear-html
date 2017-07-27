@@ -1,0 +1,31 @@
+{"frames": [
+{
+	"filename": "button",
+	"frame": {"x":1,"y":1,"w":125,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":45},
+	"sourceSize": {"w":125,"h":45}
+}
+,{
+	"filename": "buttonHover",
+	"frame": {"x":128,"y":1,"w":125,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":45},
+	"sourceSize": {"w":125,"h":45}
+}
+,{
+	"filename": "buttonPressed",
+	"frame": {"x":255,"y":1,"w":125,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":45},
+	"sourceSize": {"w":125,"h":45}
+}
+],
+	"meta": {
+		"app": "atlasConvert.py and LibGDX texture packer",
+		"version": "0.1"
+	}
+}

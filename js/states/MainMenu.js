@@ -1,7 +1,17 @@
 function MainMenu() {
     this.background = null;
     this.music = null;
+    /* Main Menu looks like this:
+    |     Shape Clear   |
+    |       [Play!]     |
+    |       [Help ]     |
+    |[*]                |
+    */
     this.title = null;
+    this.btnPlay = null;
+    this.lblPlay = null;
+    this.btnHelp = null;
+    this.lblHelp = null;
 }
 
 MainMenu.prototype.create = function () {
@@ -10,23 +20,58 @@ MainMenu.prototype.create = function () {
     this.music.loop = true;
     this.music.play();
     this.title = this.add.text(-1000, -1000, 'Shape Clear');
+    this.title.anchor.set(0.5, 0.5);
     this.title.inputEnabled = true;
     this.title.events.onInputUp.add(function () {
         this.game.state.start("GameScreen");
     }, this);
+    this.btnPlay = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
+    this.btnPlay.anchor.set(0.5, 0.5);
+    this.btnPlay.tint = 0xffff00;
+    this.lblPlay = this.add.text(-1000, -1000, 'Play!');
+    this.lblPlay.anchor.set(0.5, 0.5);
+    this.btnHelp = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
+    this.btnHelp.anchor.set(0.5, 0.5);
+    this.btnHelp.tint = 0xffff00;
+    this.lblHelp = this.add.text(-1000, -1000, 'Board with holes');
+    this.lblHelp.anchor.set(0.5, 0.5);
 };
 
 MainMenu.prototype.update = function () {
-    var gw = this.game.width, gh = this.game.height;
+    var gw = this.game.width, gh = this.game.height, dim = Math.min(gw, gh);
     this.background.width = gw;
     this.background.height = gh;
-    this.title.fontSize = Math.min(gw, gh) / 10;
-    var tw = this.title.width, th = this.title.height;
+    this.title.fontSize = dim / 10;
+    this.lblPlay.fontSize = dim / 18;
     if (gw > gh) {
-        this.title.position.set((gw - tw) / 2, gh * 0.1 + th / 2);
+        this.title.position.set(gw / 2, gh * 0.2);
+        this.btnPlay.position.set(gw / 2, gh * 0.5);
+        this.btnHelp.position.set(gw / 2, gh * 0.7);
     }
     else {
-        this.title.position.set((gw - tw) / 2, gh * 0.5 - gw * 0.4 + th / 2);
+        this.title.position.set(gw / 2, gh * 0.5 - gw * 0.3);
+        this.btnPlay.position.set(gw / 2, gh * 0.5);
+        this.btnHelp.position.set(gw / 2, gh * 0.5 + gw * 0.2);
+    }
+    this.lblPlay.position.copyFrom(this.btnPlay.position);
+    this.lblPlay.y += devicePixelRatio;
+    this.btnPlay.scale.setTo(dim / 360);
+    this.lblHelp.position.copyFrom(this.btnHelp.position);
+    this.lblHelp.y += devicePixelRatio;
+    this.btnHelp.scale.setTo(dim / 360);
+};
+
+MainMenu.prototype.playGame = function (btn) {
+    if (/Pressed/.test(btn.frameName)) {
+        if (btn === this.btnPlay) {
+            Debug.testDiagonalFall = false;
+            this.state.start("GameScreen");
+        }
+        else if (btn === this.btnHelp) {
+          this.state.start("GameScreen");
+            Debug.testDiagonalFall = true;
+            this.state.start("GameScreen");
+        }
     }
 };
 

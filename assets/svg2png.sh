@@ -22,3 +22,8 @@ cd number
 echo 2. Convert number
 svg2png
 cd ..
+
+cd ui
+echo 3. Convert ui
+svg2png
+cd ..

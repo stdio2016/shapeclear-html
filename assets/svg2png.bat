@@ -14,6 +14,12 @@ cd number
 echo 2. Convert number
 call :svg2png
 cd ..
+
+cd ui
+echo 3. Convert ui
+call :svg2png
+cd ..
+
 goto :eof
 
 :svg2png
