@@ -26,7 +26,7 @@ MainMenu.prototype.create = function () {
         alertBox(
           "Copyright (c) 2016~2017 Yi-Feng Chen(陳羿豐)\n" +
           "Licensed under MIT expat license\n" +
-          "Shape Clear uses Phaser game framework, created by Richard Davey http://www.photonstorm.com @photonstorm"
+          "Shape Clear uses Phaser game framework, created by Richard Davey"
         );
     }, this);
     this.btnPlay = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
