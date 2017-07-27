@@ -80,5 +80,6 @@ var game = new Phaser.Game({
 var gameScreen = new GameScreen();
 game.state.add("GameScreen", gameScreen);
 game.state.add("Load", new Load());
-game.state.add("MainMenu", new AppleFools.MainMenu());
+var mainMenu = new MainMenu();
+game.state.add("MainMenu", mainMenu);
 game.state.start("Load");

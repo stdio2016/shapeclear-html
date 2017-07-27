@@ -84,7 +84,7 @@ Load.prototype.update = function () {
 };
 
 Load.prototype.playGame = function () {
-    this.state.start('GameScreen');
+    this.state.start('MainMenu');
 };
 
 Load.prototype.testRenderer = function () {
