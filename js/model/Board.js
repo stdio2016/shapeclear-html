@@ -186,12 +186,12 @@ Board.prototype.initMatch = function () {
 };
 
 Board.prototype.findVeritcalMatch = function () {
-    var w = this.width;
+    var w = this.width, h = this.height;
     var i;
     var shapes = this.shapes;
-    for (var x = 0; x < this.height; x++) {
+    for (var x = 0; x < w; x++) {
         i = x;
-        for (var y = 0; y < w - 2; y++) {
+        for (var y = 0; y < h - 2; y++) {
             if (shapes[i].canMatch()) {
                 var sh = shapes[i].type;
                 if (shapes[i + w].canMatch() && shapes[i + w].type === sh
@@ -202,7 +202,7 @@ Board.prototype.findVeritcalMatch = function () {
                         match.vlength++;
                         y++;
                         i += w;
-                    } while (y < w && shapes[i].canMatch() && shapes[i].type === sh) ;
+                    } while (y < h && shapes[i].canMatch() && shapes[i].type === sh) ;
                     y--; i -= w;
                     this.matches.push(match);
                 }
@@ -235,7 +235,7 @@ Board.prototype.findHorizontalMatch = function () {
                         }
                         x++;
                         i += 1;
-                    } while (x < h && shapes[i].canMatch() && shapes[i].type === sh) ;
+                    } while (x < w && shapes[i].canMatch() && shapes[i].type === sh) ;
                     x--; i -= 1;
                     if (cross !== null) { // l/T shaped match
                         cross.type = Match.CROSS;
@@ -274,11 +274,11 @@ Board.prototype.isValidSwapAt = function (x, y) {
             }
         }
     }
-    if (x < 9 - 1) {
+    if (x < this.width - 1) {
         sh = this.getShape(x + 1, y);
         if (sh.canMatch() && sh.type === type) {
             rightMatch = 1;
-            if (x < 9 - 2) {
+            if (x < this.width - 2) {
                 sh = this.getShape(x + 2, y);
                 if (sh.canMatch() && sh.type === type) {
                     return true;
@@ -298,11 +298,11 @@ Board.prototype.isValidSwapAt = function (x, y) {
             }
         }
     }
-    if (y < 9 - 1) {
+    if (y < this.height - 1) {
         sh = this.getShape(x, y + 1);
         if (sh.canMatch() && sh.type === type) {
             downMatch = 1;
-            if (y < 9 - 2) {
+            if (y < this.height - 2) {
                 sh = this.getShape(x, y + 2);
                 if (sh.canMatch() && sh.type === type) {
                     return true;
@@ -472,8 +472,8 @@ Board.prototype.fall = function () {
             }
         }
     }
-    for (var i = 0; i < 9; i++) {
-        var dsh = this.shapes[i + 9];
+    for (var i = 0; i < this.width; i++) {
+        var dsh = this.shapes[i + this.width];
         if (this.shapes[i].isEmpty()) {
             this.falling = true;
             var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
@@ -485,8 +485,8 @@ Board.prototype.fall = function () {
                 sh.speed = 0;
             }
             else {
-                sh.pos = this.shapes[i + 9].pos;
-                sh.speed = this.shapes[i + 9].speed;
+                sh.pos = this.shapes[i + this.width].pos;
+                sh.speed = this.shapes[i + this.width].speed;
             }
         }
     }
@@ -497,7 +497,7 @@ Board.prototype.fall = function () {
             do {
                 wd[j] = true;
                 if (j < (this.height - 1) * this.width) {
-                    j = j + 9;
+                    j = j + this.width;
                 }
                 else {
                     break;
@@ -545,7 +545,7 @@ Board.prototype.fall = function () {
                 do {
                     wd[j] = true;
                     if (j < (this.height - 1) * this.width) {
-                        j = j + 9;
+                        j = j + this.width;
                     }
                     else {
                         break;
@@ -559,7 +559,7 @@ Board.prototype.fall = function () {
         var sh = this.shapes[i];
         // TODO: add support for other gravity direction
         if (sh.isMoving() && sh.pos <= 0) {
-            if (i >= 72 || !this.shapes[i + 9].isEmpty()) {
+            if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty()) {
                 // stop the shape from falling
                 sh.stopFalling();
             }

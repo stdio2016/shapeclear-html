@@ -64,7 +64,7 @@ TouchDetector.prototype.convertPointToGrid = function (point) {
     var board = this.board;
     var x = Math.floor((point.x - board.x) / board.gridSize);
     var y = Math.floor((point.y - board.y) / board.gridSize);
-    if (x >= 0 && x < 9 && y >= 0 && y < 9){
+    if (x >= 0 && x < board.width && y >= 0 && y < board.height){
         return [x, y];
     }
     return null;
@@ -92,7 +92,7 @@ TouchDetector.prototype.calcDirection = function (from, to) {
             out = [from.x-1, from.y];
         }
     }
-    if (out[0] < 9 && out[0] >= 0 && out[1] < 9 && out[1] >= 0) {
+    if (out[0] < board.width && out[0] >= 0 && out[1] < board.height && out[1] >= 0) {
         return out;
     }
     return null;

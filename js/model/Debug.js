@@ -8,6 +8,8 @@ function Debug(board) {
     this.autoSwipeLoop = 0;
 }
 
+Debug.testDiagonalFall = false;
+
 Debug.prototype.runCommand = function (cmd) {
     if (!cmd) return;
     switch (cmd) {
@@ -72,7 +74,7 @@ Debug.prototype.autoSwipeTest = function () {
     this.autoSwipeLoop = 0;
     var swipes = [];
     var board = this.board;
-    Board.forEachPossibleMatch(0, 0, 9, 9, function (x1, y1, x2, y2, x3, y3, x4, y4) {
+    Board.forEachPossibleMatch(0, 0, this.board.width, this.board.height, function (x1, y1, x2, y2, x3, y3, x4, y4) {
         var s1 = board.getShape(x1, y1);
         var s2 = board.getShape(x2, y2);
         var s3 = board.getShape(x3, y3);
