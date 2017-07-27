@@ -23,7 +23,11 @@ MainMenu.prototype.create = function () {
     this.title.anchor.set(0.5, 0.5);
     this.title.inputEnabled = true;
     this.title.events.onInputUp.add(function () {
-        this.game.state.start("GameScreen");
+        alertBox(
+          "Copyright (c) 2016~2017 Yi-Feng Chen(陳羿豐)\n" +
+          "Licensed under MIT expat license\n" +
+          "Shape Clear uses Phaser game framework, created by Richard Davey http://www.photonstorm.com @photonstorm"
+        );
     }, this);
     this.btnPlay = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
     this.btnPlay.anchor.set(0.5, 0.5);
@@ -43,6 +47,7 @@ MainMenu.prototype.update = function () {
     this.background.height = gh;
     this.title.fontSize = dim / 10;
     this.lblPlay.fontSize = dim / 18;
+    this.lblHelp.fontSize = dim / 25;
     if (gw > gh) {
         this.title.position.set(gw / 2, gh * 0.2);
         this.btnPlay.position.set(gw / 2, gh * 0.5);

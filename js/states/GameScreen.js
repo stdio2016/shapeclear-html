@@ -95,7 +95,7 @@ GameScreen.prototype.update = function () {
         var me = this;
         if (promptCallback === doesNothing) {
             alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
-                me.state.start('GameScreen');
+                me.state.start('MainMenu');
             });
         }
     }
