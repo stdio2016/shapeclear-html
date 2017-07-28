@@ -1,0 +1,21 @@
+<svg width='72' height='72'
+  xmlns="http://www.w3.org/2000/svg">
+  <path
+    style='fill:#cc0000;'
+    d='M 36,6 51,21 21,21 Z' />
+  <path
+    style='fill:#cccc00;'
+    d='M 66,36 51,51 51,21 Z' />
+  <path
+    style='fill:#00dd00;'
+    d='M 36,66 21,51 51,51 Z' />
+  <path
+    style='fill:#2244cc;'
+    d='M 6,36 21,21 21,51 Z' />
+  <rect
+    style='fill:black;'
+    x='21'
+    y='21'
+    width='30'
+    height='30' />
+</svg>

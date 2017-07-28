@@ -1,0 +1,10 @@
+<svg width='72' height='72'
+  xmlns="http://www.w3.org/2000/svg">
+  <path
+    style='fill:#cc0000;'
+    d='M 36,9 5,63 67,63 Z' />
+  <path
+    style='fill:#fff; fill-opacity:0.75;'
+    transform='matrix(0.6,0,0,0.6,14.4,18)'
+    d='M 36,9 5,63 67,63 Z' />
+</svg>
