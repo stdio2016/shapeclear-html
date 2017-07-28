@@ -1,0 +1,23 @@
+<svg width='72' height='72'
+  xmlns="http://www.w3.org/2000/svg">
+  <clipPath id='stripe1'>
+    <rect x='0' y='14' height='8' width='72'/>
+    <rect x='0' y='30' height='8' width='72'/>
+    <rect x='0' y='46' height='8' width='72'/>
+  </clipPath>
+  <clipPath id='stripe2'>
+    <rect x='0' y='6' height='8' width='72'/>
+    <rect x='0' y='22' height='8' width='72'/>
+    <rect x='0' y='38' height='8' width='72'/>
+    <rect x='0' y='54' height='8' width='72'/>
+  </clipPath>
+  <path
+    style='fill:#dd00dd; clip-path:url(#stripe1);'
+    d='M 36,63 5,9 67,9 Z' />
+  <path
+    style='fill:white; clip-path:url(#stripe2);'
+    d='M 36,63 5,9 67,9 Z' />
+  <path
+    style='stroke:#dd00dd;  stroke-width:1px; fill:none;'
+    d='M 36,63 5,9 67,9 Z' />
+</svg>

@@ -7,7 +7,6 @@ cd %~dp0
 cd shapes
 echo 1. Convert shapes
 call :svg2png
-for %%f in (*Stripe.png) do del %%f
 cd ..
 
 cd number
