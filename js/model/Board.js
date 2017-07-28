@@ -493,7 +493,7 @@ Board.prototype.fall = function () {
     for (var i = 0; i < this.shapes.length; i++) {
         var j = i;
         var sh = this.shapes[i];
-        if (sh.isMoving() || sh.swapping) {
+        if (sh.isMoving() || sh.swapping || sh.cleared) {
             do {
                 wd[j] = true;
                 if (j < (this.height - 1) * this.width) {
