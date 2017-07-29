@@ -9,7 +9,7 @@ function Shape(type, x, y, board) {
     this.bouncing = false;
     this.swapping = false;
     this.cleared = false;
-    this.tick = 0;
+    this.tick = 10;
 
     // is it part of a matching?
     this.match = null;
@@ -45,6 +45,10 @@ Shape.prototype.canFall = function () {
     return !this.swapping && this.type > 0 && !this.cleared;
 };
 
+Shape.prototype.isDeleted = function () {
+    return this.tick <= 0 || this.type == 0;
+};
+
 Shape.prototype.stopSwapping = function () {
     this.swapping = false;
     this.dir = {x: 0, y: 0};
@@ -65,8 +69,8 @@ Shape.prototype.stopFalling = function () {
 };
 
 Shape.prototype.deleteUpdate = function () {
-    this.tick++;
-    if (this.tick >= 10) {
+    this.tick--;
+    if (this.tick <= 0) {
         this.board.setShape(this.x, this.y, new Shape(0, this.x, this.y, this.board));
         return false;
     }

@@ -13,6 +13,7 @@ function GameScreen() {
     this.digitGroup = null;
     this.timeText = null;
     this.lblScore = this.lblTime = null;
+    this.boardRenderer = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -28,9 +29,10 @@ GameScreen.prototype.create = function () {
     game.input.addMoveCallback(this.move, this);
     window.board = this.board = new Board(this.game);
     this.board.generateSimple();
-    this.boardGroup = this.add.group();
+    this.boardRenderer = new BoardRenderer(this.board);
+    this.boardRenderer.boardGroup = this.boardGroup = this.add.group();
     this.boardGroup.alpha = 0.8;
-    this.shapeGroup = this.add.group();
+    this.boardRenderer.shapeGroup = this.shapeGroup = this.add.group();
     this.touchDetector = new TouchDetector(this.game, this.board);
     this.addSelectSprite();
     this.music = this.game.add.sound('music2');
@@ -165,6 +167,8 @@ GameScreen.prototype.showWithBounds = function (lbl, txt, x, y, width, height) {
 };
 
 GameScreen.prototype.resizeBoard = function(leftX, topY, size){
+    // TODO: change Renderer
+    // return this.boardRenderer.renderAt(leftX, topY, size);
     var board = this.board;
     var boardSize = 9;
     var gridSize = size / boardSize;
@@ -211,7 +215,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         if (sh.sprite) {
             sh.sprite.alpha -= 0.1;
         }
-        if (sh.tick == 10-1) {
+        if (sh.tick == 1) {
             if (sh.sprite) {
                 sh.sprite.kill();
             }

@@ -63,6 +63,7 @@ loadScript('lib/phaser.js', function (e) {
       'js/states/MainMenu.js',
       'js/view/Ball.js',
       'js/view/ScoreText.js',
+      'js/view/BoardRenderer.js',
       'js/TouchDetector.js',
       'js/applefools/AppleFools.js',
       'js/applefools/MainMenu.js'
