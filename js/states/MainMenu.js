@@ -5,13 +5,14 @@
     |     Shape Clear   |
     |       [Play!]     |
     |       [Help ]     |
-    |[*]                |
+    |[*]            v0.5|
     */
     this.title = null;
     this.btnPlay = null;
     this.lblPlay = null;
     this.btnHelp = null;
     this.lblHelp = null;
+    this.lblVersion = null;
 }
 
 MainMenu.prototype.create = function () {
@@ -40,6 +41,8 @@ MainMenu.prototype.create = function () {
     this.btnHelp.tint = 0xffff00;
     this.lblHelp = this.add.text(-1000, -1000, 'Board with holes');
     this.lblHelp.anchor.set(0.5, 0.5);
+    this.lblVersion = this.add.text(-1000, -1000, 'v0.5');
+    this.lblVersion.anchor.set(1, 1);
 };
 
 MainMenu.prototype.update = function () {
@@ -49,6 +52,7 @@ MainMenu.prototype.update = function () {
     this.title.fontSize = dim / 10;
     this.lblPlay.fontSize = dim / 18;
     this.lblHelp.fontSize = dim / 25;
+    this.lblVersion.fontSize = dim / 25;
     if (gw > gh) {
         this.title.position.set(gw / 2, gh * 0.2);
         this.btnPlay.position.set(gw / 2, gh * 0.5);
@@ -65,6 +69,7 @@ MainMenu.prototype.update = function () {
     this.lblHelp.position.copyFrom(this.btnHelp.position);
     this.lblHelp.y += devicePixelRatio;
     this.btnHelp.scale.setTo(dim / 360);
+    this.lblVersion.position.set(gw, gh);
 };
 
 MainMenu.prototype.playGame = function (btn) {
