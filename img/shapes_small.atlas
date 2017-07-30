@@ -1,6 +1,6 @@
 
 shapes_small.png
-size: 256,64
+size: 1024,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -20,7 +20,28 @@ board
   index: -1
 circle
   rotate: false
-  xy: 200, 35
+  xy: 488, 35
+  size: 28, 28
+  orig: 36, 36
+  offset: 4, 4
+  index: -1
+circleHStripe
+  rotate: false
+  xy: 236, 33
+  size: 30, 30
+  orig: 36, 36
+  offset: 3, 3
+  index: -1
+circleVStripe
+  rotate: false
+  xy: 236, 1
+  size: 30, 30
+  orig: 36, 36
+  offset: 3, 3
+  index: -1
+circleWrapped
+  rotate: false
+  xy: 518, 35
   size: 28, 28
   orig: 36, 36
   offset: 4, 4
@@ -32,16 +53,58 @@ downTriangle
   orig: 36, 36
   offset: 2, 4
   index: -1
-hexagon
+downTriangleHStripe
+  rotate: false
+  xy: 134, 1
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1
+downTriangleVStripe
   rotate: false
   xy: 168, 1
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1
+downTriangleWrapped
+  rotate: false
+  xy: 202, 1
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1
+hexagon
+  rotate: false
+  xy: 368, 1
+  size: 26, 30
+  orig: 36, 36
+  offset: 5, 3
+  index: -1
+hexagonHStripe
+  rotate: false
+  xy: 268, 31
+  size: 28, 32
+  orig: 36, 36
+  offset: 4, 2
+  index: -1
+hexagonVStripe
+  rotate: false
+  xy: 298, 31
+  size: 28, 32
+  orig: 36, 36
+  offset: 4, 2
+  index: -1
+hexagonWrapped
+  rotate: false
+  xy: 392, 33
   size: 26, 30
   orig: 36, 36
   offset: 5, 3
   index: -1
 pen
   rotate: false
-  xy: 196, 3
+  xy: 548, 35
   size: 28, 28
   orig: 36, 36
   offset: 5, 4
@@ -55,35 +118,105 @@ pineapple
   index: -1
 rhombus
   rotate: false
-  xy: 168, 33
+  xy: 328, 33
+  size: 30, 30
+  orig: 36, 36
+  offset: 3, 3
+  index: -1
+rhombusHStripe
+  rotate: false
+  xy: 70, 31
+  size: 32, 32
+  orig: 36, 36
+  offset: 2, 2
+  index: -1
+rhombusVStripe
+  rotate: false
+  xy: 134, 31
+  size: 32, 32
+  orig: 36, 36
+  offset: 2, 2
+  index: -1
+rhombusWrapped
+  rotate: false
+  xy: 336, 1
   size: 30, 30
   orig: 36, 36
   offset: 3, 3
   index: -1
 selected
   rotate: false
-  xy: 70, 31
+  xy: 168, 31
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 134, 31
+  xy: 202, 31
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 square
   rotate: false
-  xy: 226, 7
+  xy: 578, 37
   size: 26, 26
   orig: 36, 36
   offset: 5, 5
   index: -1
+squareHStripe
+  rotate: false
+  xy: 606, 37
+  size: 26, 26
+  orig: 36, 36
+  offset: 5, 5
+  index: -1
+squareVStripe
+  rotate: false
+  xy: 634, 37
+  size: 26, 26
+  orig: 36, 36
+  offset: 5, 5
+  index: -1
+squareWrapped
+  rotate: false
+  xy: 662, 37
+  size: 26, 26
+  orig: 36, 36
+  offset: 5, 5
+  index: -1
+taser
+  rotate: false
+  xy: 360, 33
+  size: 30, 30
+  orig: 36, 36
+  offset: 3, 3
+  index: -1
 triangle
   rotate: false
-  xy: 134, 1
+  xy: 268, 1
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1
+triangleHStripe
+  rotate: false
+  xy: 302, 1
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1
+triangleVStripe
+  rotate: false
+  xy: 420, 35
+  size: 32, 28
+  orig: 36, 36
+  offset: 2, 4
+  index: -1
+triangleWrapped
+  rotate: false
+  xy: 454, 35
   size: 32, 28
   orig: 36, 36
   offset: 2, 4

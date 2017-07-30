@@ -1,7 +1,7 @@
 {"frames": [
 {
 	"filename": "apple",
-	"frame": {"x":207,"y":58,"w":56,"h":69},
+	"frame": {"x":649,"y":2,"w":56,"h":69},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":9,"y":2,"w":56,"h":69},
@@ -17,7 +17,31 @@
 }
 ,{
 	"filename": "circle",
-	"frame": {"x":387,"y":71,"w":56,"h":56},
+	"frame": {"x":847,"y":71,"w":56,"h":56},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":8,"w":56,"h":56},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "circleHStripe",
+	"frame": {"x":707,"y":13,"w":58,"h":58},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":7,"w":58,"h":58},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "circleVStripe",
+	"frame": {"x":767,"y":13,"w":58,"h":58},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":7,"w":58,"h":58},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "circleWrapped",
+	"frame": {"x":905,"y":71,"w":56,"h":56},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":8,"y":8,"w":56,"h":56},
@@ -25,7 +49,31 @@
 }
 ,{
 	"filename": "downTriangle",
-	"frame": {"x":323,"y":73,"w":62,"h":54},
+	"frame": {"x":591,"y":73,"w":62,"h":54},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "downTriangleHStripe",
+	"frame": {"x":327,"y":71,"w":64,"h":56},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":8,"w":64,"h":56},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "downTriangleVStripe",
+	"frame": {"x":393,"y":71,"w":64,"h":56},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":8,"w":64,"h":56},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "downTriangleWrapped",
+	"frame": {"x":655,"y":73,"w":62,"h":54},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},
@@ -33,7 +81,31 @@
 }
 ,{
 	"filename": "hexagon",
-	"frame": {"x":137,"y":1,"w":52,"h":60},
+	"frame": {"x":381,"y":9,"w":52,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":6,"w":52,"h":60},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "hexagonHStripe",
+	"frame": {"x":271,"y":65,"w":54,"h":62},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":5,"w":54,"h":62},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "hexagonVStripe",
+	"frame": {"x":325,"y":1,"w":54,"h":62},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":5,"w":54,"h":62},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "hexagonWrapped",
+	"frame": {"x":435,"y":9,"w":52,"h":60},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":10,"y":6,"w":52,"h":60},
@@ -41,7 +113,7 @@
 }
 ,{
 	"filename": "pen",
-	"frame": {"x":255,"y":1,"w":55,"h":54},
+	"frame": {"x":963,"y":73,"w":55,"h":54},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":10,"y":9,"w":55,"h":54},
@@ -49,7 +121,7 @@
 }
 ,{
 	"filename": "pineapple",
-	"frame": {"x":265,"y":57,"w":56,"h":70},
+	"frame": {"x":591,"y":1,"w":56,"h":70},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":8,"y":1,"w":56,"h":70},
@@ -58,6 +130,30 @@
 ,{
 	"filename": "rhombus",
 	"frame": {"x":75,"y":1,"w":60,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "rhombusHStripe",
+	"frame": {"x":207,"y":65,"w":62,"h":62},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":5,"w":62,"h":62},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "rhombusVStripe",
+	"frame": {"x":261,"y":1,"w":62,"h":62},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":5,"w":62,"h":62},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "rhombusWrapped",
+	"frame": {"x":137,"y":1,"w":60,"h":60},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
@@ -81,15 +177,71 @@
 }
 ,{
 	"filename": "square",
-	"frame": {"x":1,"y":3,"w":50,"h":50},
+	"frame": {"x":827,"y":19,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":11,"y":11,"w":50,"h":50},
 	"sourceSize": {"w":72,"h":72}
 }
 ,{
+	"filename": "squareHStripe",
+	"frame": {"x":1,"y":1,"w":52,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":10,"w":52,"h":52},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "squareVStripe",
+	"frame": {"x":489,"y":17,"w":52,"h":52},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":10,"w":52,"h":52},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "squareWrapped",
+	"frame": {"x":879,"y":19,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":11,"w":50,"h":50},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "taser",
+	"frame": {"x":199,"y":1,"w":60,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
 	"filename": "triangle",
-	"frame": {"x":191,"y":1,"w":62,"h":54},
+	"frame": {"x":719,"y":73,"w":62,"h":54},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "triangleHStripe",
+	"frame": {"x":459,"y":71,"w":64,"h":56},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":8,"w":64,"h":56},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "triangleVStripe",
+	"frame": {"x":525,"y":71,"w":64,"h":56},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":8,"w":64,"h":56},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
+	"filename": "triangleWrapped",
+	"frame": {"x":783,"y":73,"w":62,"h":54},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":9,"w":62,"h":54},
