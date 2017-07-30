@@ -60,6 +60,7 @@ Load.prototype.loadUpdate = function () {
 };
 
 Load.prototype.create = function() {
+    this.game.clearBeforeRender = false;
     this.background = this.add.sprite(0, 0, 'background');
     this.background.width = this.game.width;
     this.background.height = this.game.height;

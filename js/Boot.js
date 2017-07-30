@@ -75,6 +75,7 @@ var game = new Phaser.Game({
     "height": windowSize[1],
     "renderer": getRendererConfig(),
     "parent": "gameDiv",
+    "enableDebug": false,
     "resolution": getResolutionConfig()
 });
 var gameScreen = new GameScreen();
