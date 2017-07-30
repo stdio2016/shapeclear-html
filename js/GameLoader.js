@@ -37,6 +37,7 @@ function addScriptTag(src, onload, onerror) {
 
 var loadProgress = document.getElementById('loadProgress');
 var loadingInfo = document.getElementById('loadingInfo');
+loadingInfo.innerText = 'Loading phaser.js';
 loadScript('lib/phaser.js', function (e) {
     if (e.lengthComputable) {
         loadProgress.value = e.loaded;
