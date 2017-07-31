@@ -91,7 +91,7 @@ GameScreen.prototype.update = function () {
         this.timeText.setColor(0);
     }
     this.timeText.setScore(Math.ceil(remainingTime / 60));
-    if (this.board.remainingTime == 0 && this.board.combo == 0 && this.board.swaps.length == 0) {
+    if (this.board.remainingTime == 0 && !this.board.changed && this.board.swaps.length == 0) {
         var me = this;
         if (promptCallback === doesNothing) {
             alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {

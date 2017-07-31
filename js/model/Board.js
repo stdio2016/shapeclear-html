@@ -77,7 +77,7 @@ Board.prototype.setShape = function (x, y, sh) {
     }
 };
 
-Board.prototype.clearShape = function (x, y) {
+Board.prototype.clearShape = function (x, y, dir) {
     // bound check
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
     if (y >= this.height || y < 0) return RangeError('y out of bound');
@@ -87,6 +87,30 @@ Board.prototype.clearShape = function (x, y) {
         this.deletedShapes.push(this.shapes[i]);
         this.shapes[i].cleared = true;
         //this.shapes[i] = new Shape(0, x, y);
+        switch (this.shapes[i].type) {
+          case 7:
+            var r = dir || this.game.rnd.between(1, 2);
+            if (r == 1) {
+                for (var i = 0; i < this.width; i++) {
+                    this.clearShape(i, y);
+                }
+            }
+            else {
+                for (var i = 0; i < this.height; i++) {
+                    this.clearShape(x, i);
+                }
+            }
+            break;
+          case 8:
+            for (var i = Math.max(x-1, 0); i < Math.min(x+2, this.width); i++) {
+                for (var j = Math.max(y-1, 0); j < Math.min(y+2, this.height); j++) {
+                    this.clearShape(i, j);
+                }
+            }
+            break;
+          case 9:
+            this.elcShape(dir || this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT));
+        }
     }
 };
 
@@ -162,6 +186,29 @@ Board.prototype.updateSwaps = function () {
               || this.isValidSwapAt(to.x, to.y)
               || this.swaps[i].status === 'reject'
             ) {
+                this.swaps[i] = this.swaps[this.swaps.length - 1];
+                this.swaps.length--;
+                --i;
+            }
+            else if (from.type >= 7 || to.type >= 7) {
+                if (from.type == 7) {
+                    this.clearShape(from.x, from.y, from.x === to.x ? 2 : 1);
+                }
+                if (to.type == 7) {
+                    this.clearShape(to.x, to.y, from.x === to.x ? 2 : 1);
+                }
+                if (from.type == 8) {
+                    this.clearShape(from.x, from.y);
+                }
+                if (to.type == 8) {
+                    this.clearShape(to.x, to.y);
+                }
+                if (from.type == 9) {
+                    this.clearShape(from.x, from.y, to.type);
+                }
+                if (to.type == 9) {
+                    this.clearShape(to.x, to.y, from.type);
+                }
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;
@@ -329,6 +376,25 @@ Board.prototype.clearMatch = function () {
                 this.clearShape(m.vx, m.vy + j);
             }
             my = m.vy + (m.vlength - 1) / 2;
+        }
+        if (Debug.createSpecial) {
+            if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
+                var r = this.game.rnd.between(1,2)+m.hx;
+                this.setShape(r, m.hy, new Shape(7, r, m.hy, this));
+            }
+            if (m.vlength == 4 && m.type === Match.VERTICAL) {
+                var r = this.game.rnd.between(1,2)+m.vy;
+                this.setShape(m.vx, r, new Shape(7, m.vx, r, this));
+            }
+            if (m.type === Match.CROSS && m.hlength < 5 && m.vlength < 5) {
+                this.setShape(m.vx, m.hy, new Shape(8, m.vx, m.hy, this));
+            }
+            if (m.hlength >= 5) {
+                this.setShape(m.hx+2, m.hy, new Shape(9, m.hx+2, m.hy, this));
+            }
+            if (m.vlength >= 5) {
+                this.setShape(m.vx, m.vy+2, new Shape(9, m.vx, m.vy+2, this));
+            }
         }
         this.combo++;
         var len = m.hlength + m.vlength - (m.type == Match.HORIZONTAL + Match.VERTICAL ? 1 : 0);
@@ -569,9 +635,16 @@ Board.prototype.fall = function () {
 };
 
 Board.prototype.elcShape = function (type) {
+    var count = 0, all = [];
     for (var i = 0; i < this.shapes.length; i++) {
         if (this.shapes[i].type == type) {
+            count++;
+            all.push(i);
             this.clearShape(i%this.width, Math.floor(i/this.width));
         }
+    }
+    for (var i = 0; i < count; i++) {
+        this.gainScores.push({x: all[i]%this.width, y: Math.floor(all[i]/this.width), type: type, score: 60 * count});
+        this.score += 60 * count;
     }
 };

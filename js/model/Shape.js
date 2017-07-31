@@ -19,7 +19,7 @@ function Shape(type, x, y, board) {
 }
 
 Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
- 'downTriangle', 'rhombus', 'apple'];
+ 'downTriangle', 'rhombus', 'apple', 'pineapple', 'pen'];
 
 Shape.prototype.canSwap = function () {
     return !this.swapping && !this.isMoving() && this.type > 0 && !this.cleared;
@@ -71,7 +71,9 @@ Shape.prototype.stopFalling = function () {
 Shape.prototype.deleteUpdate = function () {
     this.tick--;
     if (this.tick <= 0) {
-        this.board.setShape(this.x, this.y, new Shape(0, this.x, this.y, this.board));
+        if (this.board.getShape(this.x, this.y) === this) {
+            this.board.setShape(this.x, this.y, new Shape(0, this.x, this.y, this.board));
+        }
         return false;
     }
     return true;
