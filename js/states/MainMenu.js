@@ -30,6 +30,7 @@ MainMenu.prototype.create = function () {
           "~~~ Credits ~~~\n" +
           "Shape Clear uses Phaser game framework"
         );
+        Debug.createSpecial ^= 1;
     }, this);
     this.btnPlay = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
     this.btnPlay.anchor.set(0.5, 0.5);
