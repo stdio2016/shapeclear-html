@@ -78,8 +78,8 @@ AppleFools.getLife = function (callback) {
     }
 };
 
-AppleFools.COLOR_COUNT = 6;
-AppleFools.DROP_COLOR_COUNT = 6;
+AppleFools.COLOR_COUNT = 4;
+AppleFools.DROP_COLOR_COUNT = 4;
 
 AppleFools.chooseMode = function (mode) {
     AppleFools.preparePatch();

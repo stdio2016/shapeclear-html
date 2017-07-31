@@ -87,28 +87,26 @@ Board.prototype.clearShape = function (x, y, dir) {
         this.deletedShapes.push(this.shapes[i]);
         this.shapes[i].cleared = true;
         //this.shapes[i] = new Shape(0, x, y);
-        switch (this.shapes[i].type) {
-          case 7:
-            var r = dir || this.game.rnd.between(1, 2);
-            if (r == 1) {
-                for (var i = 0; i < this.width; i++) {
-                    this.clearShape(i, y);
-                }
-            }
-            else {
-                for (var i = 0; i < this.height; i++) {
-                    this.clearShape(x, i);
-                }
+        switch (this.shapes[i].special) {
+          case 1:
+            for (var i = 0; i < this.width; i++) {
+                this.clearShape(i, y);
             }
             break;
-          case 8:
+          case 2:
+            for (var i = 0; i < this.height; i++) {
+                this.clearShape(x, i);
+            }
+            break;
+          case 3:
             for (var i = Math.max(x-1, 0); i < Math.min(x+2, this.width); i++) {
                 for (var j = Math.max(y-1, 0); j < Math.min(y+2, this.height); j++) {
                     this.clearShape(i, j);
                 }
             }
             break;
-          case 9:
+        }
+        if (this.shapes[i].type === 9) {
             this.elcShape(dir || this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT));
         }
     }
@@ -190,19 +188,7 @@ Board.prototype.updateSwaps = function () {
                 this.swaps.length--;
                 --i;
             }
-            else if (from.type >= 7 || to.type >= 7) {
-                if (from.type == 7) {
-                    this.clearShape(from.x, from.y, from.x === to.x ? 2 : 1);
-                }
-                if (to.type == 7) {
-                    this.clearShape(to.x, to.y, from.x === to.x ? 2 : 1);
-                }
-                if (from.type == 8) {
-                    this.clearShape(from.x, from.y);
-                }
-                if (to.type == 8) {
-                    this.clearShape(to.x, to.y);
-                }
+            else if (from.type == 9 || to.type == 9) {
                 if (from.type == 9) {
                     this.clearShape(from.x, from.y, to.type);
                 }
@@ -379,15 +365,18 @@ Board.prototype.clearMatch = function () {
         }
         if (Debug.createSpecial) {
             if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
-                var r = this.game.rnd.between(1,2)+m.hx;
-                this.setShape(r, m.hy, new Shape(7, r, m.hy, this));
+                var r = this.game.rnd.between(1,2)+m.hx, sh;
+                this.setShape(r, m.hy, sh = new Shape(type, r, m.hy, this));
+                sh.special = 2;
             }
             if (m.vlength == 4 && m.type === Match.VERTICAL) {
                 var r = this.game.rnd.between(1,2)+m.vy;
-                this.setShape(m.vx, r, new Shape(7, m.vx, r, this));
+                this.setShape(m.vx, r, sh = new Shape(type, m.vx, r, this));
+                sh.special = 1;
             }
             if (m.type === Match.CROSS && m.hlength < 5 && m.vlength < 5) {
-                this.setShape(m.vx, m.hy, new Shape(8, m.vx, m.hy, this));
+                this.setShape(m.vx, m.hy, sh = new Shape(type, m.vx, m.hy, this));
+                sh.special = 3;
             }
             if (m.hlength >= 5) {
                 this.setShape(m.hx+2, m.hy, new Shape(9, m.hx+2, m.hy, this));

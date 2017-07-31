@@ -182,6 +182,9 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             var spr = shape.sprite;
             if (spr !== null) {
                 var frameName = Shape.typeNames[shape.type - 1];
+                if (shape.special == 1) frameName += "HStripe";
+                if (shape.special == 2) frameName += "VStripe";
+                if (shape.special == 3) frameName += "Wrapped";
                 if (spr.frameName !== frameName)
                     spr.frameName = frameName;
                 spr.x = startX + (x - shape.dir.x * shape.pos/10 + 0.5) * gridSize;
