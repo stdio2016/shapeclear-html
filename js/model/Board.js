@@ -121,6 +121,9 @@ Board.prototype.addSwap = function(from, to) {
     if ((!sh1.canSwap() || !sh2.canSwap()) && !this.debug.allowIllegalMove) {
         return ;
     }
+    // NOTE: to fix empty tile position
+    if (sh1.type === 0) sh1 = new Shape(0, from.x, from.y, this);
+    if (sh2.type === 0) sh2 = new Shape(0, to.x, to.y, this);
     this.swaps.push(new Swap(sh1, sh2, 10));
     this.swapShape(sh1, sh2);
 };

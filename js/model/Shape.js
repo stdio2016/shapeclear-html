@@ -38,7 +38,7 @@ Shape.prototype.isStopped = function () {
 };
 
 Shape.prototype.isEmpty = function () {
-    return this.type === 0;
+    return this.type === 0 && !this.swapping;
 };
 
 Shape.prototype.canFall = function () {
