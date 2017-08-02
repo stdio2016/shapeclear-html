@@ -584,7 +584,7 @@ Board.prototype.fall = function () {
                 if (x > 0 && !wd[dpos]) {
                     var dsh = this.shapes[dpos];
                     if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
-                        sh.speed = 0;
+                        sh.speed = sh.pos = 0;
                         this.moveShape(sh, -1, +1);
                         diagonal = true;
                     }
