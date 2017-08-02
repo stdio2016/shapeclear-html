@@ -115,6 +115,14 @@ GameScreen.prototype.updateSelectSprite = function () {
         spr.width = this.board.gridSize;
         spr.height = this.board.gridSize;
     }
+    if (this.touchDetector.lastPointed !== null) {
+        var spr = ptrs[0].selectSprite, pos = this.touchDetector.lastPointed;
+        spr.visible = true;
+        spr.x = this.board.x + this.board.gridSize * pos.x;
+        spr.y = this.board.y + this.board.gridSize * pos.y;
+        spr.width = this.board.gridSize;
+        spr.height = this.board.gridSize;
+    }
 };
 
 GameScreen.prototype.resizeUI = function(){

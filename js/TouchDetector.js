@@ -2,6 +2,7 @@ function TouchDetector(game, board) {
     this.game = game;
     this.board = board;
     this.pointers = [];
+    this.lastPointed = null; // last click position, a Phaser.Point(int, int)
     for (var i=0; i<10; i++){
         this.pointers.push(new TouchDetector.Pointer());
     }
@@ -23,6 +24,11 @@ TouchDetector.prototype.update = function () {
         this.process(i+1, touches[i]);
     }
     this.process(0, mouse);
+    for (var i=0; i<this.pointers.length; i++){
+        if (this.pointers[i].isDown && this.pointers[i].tracking) {
+            this.lastPointed = null;
+        }
+    }
 };
 
 TouchDetector.prototype.process = function (index, pointer) {
@@ -51,11 +57,18 @@ TouchDetector.prototype.process = function (index, pointer) {
                 myPoint.x = p[0];
                 myPoint.y = p[1];
                 myPoint.tracking = true;
+                if (this.lastPointed !== null) {
+                    if (Phaser.Point.distance(this.lastPointed, myPoint) === 1) {
+                        myPoint.tracking = false;
+                        this.board.addSwap(this.lastPointed, myPoint);
+                        this.lastPointed = null;
+                    }
+                }
             }
         }
     }
     else if(myPoint.isDown && myPoint.tracking){ // pointer is up
-        ;
+        this.lastPointed = Phaser.Point.parse(myPoint);
     }
     myPoint.isDown = pointer.isDown;
 };
