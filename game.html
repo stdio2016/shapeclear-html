@@ -18,9 +18,14 @@
 
   <!-- alert box -->
   <div class="center-of-screen grayed-out" id='prompt' style='visibility: hidden; align-items: baseline;'>
+    <!--[if IE]>
+    <form class='prompt-box prompt-box-ie' action="javascript:void 3">
+    <![endif]-->
+    <!--[if !IE]> -->
     <form class='prompt-box' action="javascript:void 3">
+    <!-- <![endif]-->
       <div class='description' id='promptMessage'></div>
-      <input id='promptInput'>
+      <div class='input'><input id='promptInput'></div>
       <div class='yesno'>
         <button onclick="promptCallback(true)">OK</button>
         <button onclick="promptCallback(false)" id='promptCancel'>Cancel</button>

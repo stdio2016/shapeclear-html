@@ -60,7 +60,7 @@
         margin-top: 0;
     }
 }
-.prompt-box input, .prompt-box .yesno {
+.prompt-box .yesno, .prompt-box input {
     margin: 5px;
 }
 .prompt-box .description {
@@ -71,4 +71,20 @@
 .prompt-box .yesno {
     display: flex;
     justify-content: space-around;
+}
+.prompt-box .input {
+    display: flex;
+}
+.prompt-box .input input {
+    width: 100%;
+}
+.prompt-box-ie {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+.prompt-box-ie * {
+    text-align: center;
+}
+.prompt-box-ie .input input {
+    width: auto;
 }

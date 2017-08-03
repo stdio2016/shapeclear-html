@@ -12,6 +12,13 @@ Debug.testDiagonalFall = false;
 
 Debug.prototype.runCommand = function (cmd) {
     if (!cmd) return;
+    if (/;/.test(cmd)) {
+        var r = cmd.split(';');
+        for (var i = 0; i < r.length; i++) {
+            this.runCommand(r[i]);
+        }
+        return ;
+    }
     switch (cmd) {
       case 'allow illegal move':
         this.allowIllegalMove = true; return ;

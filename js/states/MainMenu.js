@@ -65,10 +65,10 @@ MainMenu.prototype.update = function () {
         this.btnHelp.position.set(gw / 2, gh * 0.5 + gw * 0.2);
     }
     this.lblPlay.position.copyFrom(this.btnPlay.position);
-    this.lblPlay.y += devicePixelRatio;
+    this.lblPlay.y += window.devicePixelRatio || 1;
     this.btnPlay.scale.setTo(dim / 360);
     this.lblHelp.position.copyFrom(this.btnHelp.position);
-    this.lblHelp.y += devicePixelRatio;
+    this.lblHelp.y += window.devicePixelRatio || 1;
     this.btnHelp.scale.setTo(dim / 360);
     this.lblVersion.position.set(gw, gh);
 };
