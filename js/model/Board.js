@@ -7,6 +7,7 @@ function Board(game) {
     this.swaps = [];
     this.matches = [];
     this.deletedShapes = [];
+    this.runningItems = [];
     this.falling = false;
     this.changed = false;
     this.debug = new Debug(this);
@@ -144,6 +145,10 @@ Board.prototype.swapShape = function (sh1, sh2) {
     sh2.y = tmp;
 };
 
+Board.prototype.addItemToClear = function (specialItem) {
+    this.runningItems.push(specialItem);
+};
+
 Board.prototype.update = function () {
     this.debug.autoSwipeTest();
     this.gainScores = [];
@@ -159,6 +164,27 @@ Board.prototype.update = function () {
         // first match-5, then cross, match-4, and finally match-3.
         this.clearMatch();
     }
+    this.itemClearUpdate();
+    this.shapeClearUpdate();
+    if (!this.changed && this.matches.length == 0) {
+      this.combo = 0;
+    }
+    if (this.remainingTime > 0)
+        this.remainingTime--;
+};
+
+Board.prototype.itemClearUpdate = function () {
+    var itemsToUpdate = this.runningItems;
+    this.runningItems = [];
+    for (var i = 0; i < itemsToUpdate.length; i++) {
+        var alive = itemsToUpdate[i].update();
+        if (alive) {
+            this.runningItems.push(itemsToUpdate[i]);
+        }
+    }
+};
+
+Board.prototype.shapeClearUpdate = function () {
     var newDelShapes = [];
     for (var i = 0; i < this.deletedShapes.length; i++) {
         if (this.deletedShapes[i].deleteUpdate()) {
@@ -167,11 +193,6 @@ Board.prototype.update = function () {
         this.changed = true;
     }
     this.deletedShapes = newDelShapes;
-    if (!this.changed && this.matches.length == 0) {
-      this.combo = 0;
-    }
-    if (this.remainingTime > 0)
-        this.remainingTime--;
 };
 
 Board.prototype.updateSwaps = function () {
