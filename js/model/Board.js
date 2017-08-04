@@ -90,14 +90,10 @@ Board.prototype.clearShape = function (x, y, dir) {
         //this.shapes[i] = new Shape(0, x, y);
         switch (this.shapes[i].special) {
           case 1:
-            for (var i = 0; i < this.width; i++) {
-                this.clearShape(i, y);
-            }
+            this.addItemToClear(new StripeEffect(this, x, y, 1));
             break;
           case 2:
-            for (var i = 0; i < this.height; i++) {
-                this.clearShape(x, i);
-            }
+            this.addItemToClear(new StripeEffect(this, x, y, 2));
             break;
           case 3:
             for (var i = Math.max(x-1, 0); i < Math.min(x+2, this.width); i++) {
