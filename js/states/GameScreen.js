@@ -13,6 +13,7 @@ function GameScreen() {
     this.digitGroup = null;
     this.timeText = null;
     this.lblScore = this.lblTime = null;
+    this.effectSprites = [];
 }
 
 GameScreen.prototype.preload = function () {
@@ -246,6 +247,30 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         }
     }
     this.scorePopups = aliveScoreTexts;
+    var sc = 0;
+    for (var i = 0; i < this.board.runningItems.length; i++) {
+        var it = this.board.runningItems[i];
+        var pos = it.getSpritePositions();
+        for (var j = 0; j < pos.length; j++) {
+            var sp = this.effectSprites[sc++];
+            var frameName = pos[j][4];
+            if (!sp) {
+                sp = this.shapeGroup.getFirstDead(true, 100, 100, 'shapes', frameName);
+                sp.alpha = 1;
+                sp.anchor = new Phaser.Point(0.5, 0.5);
+                this.effectSprites.push(sp);
+            }
+            if (sp.frameName !== frameName)
+                sp.frameName = frameName;
+            sp.x = startX + (pos[j][0] + 0.5) * gridSize;
+            sp.y = startY + (pos[j][1] + 0.5) * gridSize;
+            sp.scale.x = pos[j][2] * scale;
+            sp.scale.y = pos[j][3] * scale;
+        }
+    }
+    while (sc < this.effectSprites.length) {
+        this.effectSprites.pop().kill();
+    }
 };
 
 GameScreen.prototype.move = function(pointer, x, y){
@@ -304,4 +329,5 @@ GameScreen.prototype.shutdown = function () {
     this.showMatches = [];
     this.scorePopups = [];
     window.board = null;
+    this.effectSprites = [];
 };

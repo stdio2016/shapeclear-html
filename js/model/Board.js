@@ -8,6 +8,7 @@ function Board(game) {
     this.matches = [];
     this.deletedShapes = [];
     this.runningItems = [];
+    this.stoppedItems = [];
     this.falling = false;
     this.changed = false;
     this.debug = new Debug(this);
@@ -172,10 +173,14 @@ Board.prototype.update = function () {
 Board.prototype.itemClearUpdate = function () {
     var itemsToUpdate = this.runningItems;
     this.runningItems = [];
+    this.stoppedItems = [];
     for (var i = 0; i < itemsToUpdate.length; i++) {
         var alive = itemsToUpdate[i].update();
         if (alive) {
             this.runningItems.push(itemsToUpdate[i]);
+        }
+        else {
+            this.stoppedItems.push(itemsToUpdate[i]);
         }
     }
 };
