@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 apple
   rotate: false
-  xy: 39, 28
+  xy: 115, 28
   size: 29, 35
   orig: 36, 36
   offset: 4, 1
@@ -20,203 +20,203 @@ board
   index: -1
 circle
   rotate: false
-  xy: 488, 35
+  xy: 432, 5
   size: 28, 28
   orig: 36, 36
   offset: 4, 4
   index: -1
 circleHStripe
   rotate: false
-  xy: 236, 33
+  xy: 244, 33
   size: 30, 30
   orig: 36, 36
   offset: 3, 3
   index: -1
 circleVStripe
   rotate: false
-  xy: 236, 1
+  xy: 244, 1
   size: 30, 30
   orig: 36, 36
   offset: 3, 3
   index: -1
 circleWrapped
   rotate: false
-  xy: 518, 35
+  xy: 480, 35
   size: 28, 28
   orig: 36, 36
   offset: 4, 4
   index: -1
 downTriangle
   rotate: false
-  xy: 70, 1
+  xy: 146, 1
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
   index: -1
 downTriangleHStripe
   rotate: false
-  xy: 134, 1
+  xy: 210, 1
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
   index: -1
 downTriangleVStripe
   rotate: false
-  xy: 168, 1
+  xy: 276, 35
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
   index: -1
 downTriangleWrapped
   rotate: false
-  xy: 202, 1
+  xy: 310, 35
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
   index: -1
 hexagon
   rotate: false
-  xy: 368, 1
+  xy: 510, 33
   size: 26, 30
   orig: 36, 36
   offset: 5, 3
   index: -1
 hexagonHStripe
   rotate: false
-  xy: 268, 31
+  xy: 276, 1
   size: 28, 32
   orig: 36, 36
   offset: 4, 2
   index: -1
 hexagonVStripe
   rotate: false
-  xy: 298, 31
+  xy: 306, 1
   size: 28, 32
   orig: 36, 36
   offset: 4, 2
   index: -1
 hexagonWrapped
   rotate: false
-  xy: 392, 33
+  xy: 492, 1
   size: 26, 30
   orig: 36, 36
   offset: 5, 3
   index: -1
 pen
   rotate: false
-  xy: 548, 35
+  xy: 462, 5
   size: 28, 28
   orig: 36, 36
   offset: 5, 4
   index: -1
 pineapple
   rotate: false
-  xy: 104, 27
+  xy: 180, 27
   size: 28, 36
   orig: 36, 36
   offset: 4, 0
   index: -1
 rhombus
   rotate: false
-  xy: 328, 33
+  xy: 336, 3
   size: 30, 30
   orig: 36, 36
   offset: 3, 3
   index: -1
 rhombusHStripe
   rotate: false
-  xy: 70, 31
+  xy: 146, 31
   size: 32, 32
   orig: 36, 36
   offset: 2, 2
   index: -1
 rhombusVStripe
   rotate: false
-  xy: 134, 31
+  xy: 210, 31
   size: 32, 32
   orig: 36, 36
   offset: 2, 2
   index: -1
 rhombusWrapped
   rotate: false
-  xy: 336, 1
+  xy: 368, 3
   size: 30, 30
   orig: 36, 36
   offset: 3, 3
   index: -1
 selected
   rotate: false
-  xy: 168, 31
-  size: 32, 32
-  orig: 32, 32
+  xy: 39, 27
+  size: 36, 36
+  orig: 36, 36
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 202, 31
-  size: 32, 32
-  orig: 32, 32
+  xy: 77, 27
+  size: 36, 36
+  orig: 36, 36
   offset: 0, 0
   index: -1
 square
   rotate: false
-  xy: 578, 37
+  xy: 538, 37
   size: 26, 26
   orig: 36, 36
   offset: 5, 5
   index: -1
 squareHStripe
   rotate: false
-  xy: 606, 37
+  xy: 566, 37
   size: 26, 26
   orig: 36, 36
   offset: 5, 5
   index: -1
 squareVStripe
   rotate: false
-  xy: 634, 37
+  xy: 594, 37
   size: 26, 26
   orig: 36, 36
   offset: 5, 5
   index: -1
 squareWrapped
   rotate: false
-  xy: 662, 37
+  xy: 622, 37
   size: 26, 26
   orig: 36, 36
   offset: 5, 5
   index: -1
 taser
   rotate: false
-  xy: 360, 33
+  xy: 400, 3
   size: 30, 30
   orig: 36, 36
   offset: 3, 3
   index: -1
 triangle
   rotate: false
-  xy: 268, 1
+  xy: 344, 35
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
   index: -1
 triangleHStripe
   rotate: false
-  xy: 302, 1
+  xy: 378, 35
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
   index: -1
 triangleVStripe
   rotate: false
-  xy: 420, 35
+  xy: 412, 35
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
   index: -1
 triangleWrapped
   rotate: false
-  xy: 454, 35
+  xy: 446, 35
   size: 32, 28
   orig: 36, 36
   offset: 2, 4
