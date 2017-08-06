@@ -84,13 +84,13 @@ ScoreText.prototype.popup = function (boardx, boardy, boardsize) {
         this.showAtPosition(
           boardx + boardsize * (this.x + 0.5),
           boardy + boardsize * (this.y + 0.5),
-          boardsize * (2/3) * (100 - this.lifetime) / 10);
+          boardsize * (1/2) * (100 - this.lifetime) / 10);
     }
     else {
         this.showAtPosition(
           boardx + boardsize * (this.x + 0.5),
           boardy + boardsize * (this.y + 0.5 + (this.lifetime - 90) / 100 * 0.4),
-          boardsize * (2/3));
+          boardsize * (1/2));
     }
     return this.lifetime <= 0;
 };
