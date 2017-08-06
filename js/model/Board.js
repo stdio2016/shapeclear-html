@@ -16,6 +16,7 @@ function Board(game) {
     this.gainScores = [];
     this.remainingTime = 3600;
     this.score = 0;
+    this.tileLocks = [];
 
     // position of board in the game
     this.x = 0;
@@ -52,6 +53,7 @@ Board.prototype.generateSimple = function () {
             arr[i * width + j] = sh;
             // TODO: Add Tile class
             this.tiles.push({sprite: null});
+            this.tileLocks.push([]);
         }
     }
 };
@@ -144,6 +146,35 @@ Board.prototype.swapShape = function (sh1, sh2) {
 
 Board.prototype.addItemToClear = function (specialItem) {
     this.runningItems.push(specialItem);
+};
+
+Board.prototype.lockPosition = function (x, y, key) {
+    var lock = this.tileLocks[x + y * this.width];
+    for (var i = 0; i < lock.length; i++) {
+        if (lock[i] === key) {
+            break;
+        }
+    }
+    if (i === lock.length) {
+        lock.push(key);
+    }
+};
+
+Board.prototype.unlockPosition = function (x, y, key) {
+    var lock = this.tileLocks[x + y * this.width];
+    for (var i = 0; i < lock.length; i++) {
+        if (lock[i] === key) {
+            break;
+        }
+    }
+    if (i < lock.length) {
+        lock[i] = lock[lock.length - 1];
+        lock.length--;
+    }
+};
+
+Board.prototype.tileLocked = function (index) {
+    return this.tileLocks[index].length > 0;
 };
 
 Board.prototype.update = function () {
@@ -546,7 +577,7 @@ Board.prototype.fall = function () {
         for (var y = this.height - 2; y >= 0; y--) {
             var pos = y * this.width + x;
             var sh = this.shapes[pos], dsh = this.shapes[pos + this.width];
-            if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
+            if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(pos + this.width)) {
                 this.moveShape(sh, 0, +1);
                 this.falling = true;
             }
@@ -554,7 +585,7 @@ Board.prototype.fall = function () {
     }
     for (var i = 0; i < this.width; i++) {
         var dsh = this.shapes[i + this.width];
-        if (this.shapes[i].isEmpty()) {
+        if (this.shapes[i].isEmpty() && !this.tileLocked(i)) {
             this.falling = true;
             var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
             var sh = new Shape(r + 1, i, 0, this);
@@ -573,7 +604,7 @@ Board.prototype.fall = function () {
     for (var i = 0; i < this.shapes.length; i++) {
         var j = i;
         var sh = this.shapes[i];
-        if (sh.isMoving() || sh.swapping || sh.cleared) {
+        if (sh.type > 0 || i < this.width && sh.isEmpty()) {
             do {
                 wd[j] = true;
                 if (j < (this.height - 1) * this.width) {
@@ -595,7 +626,7 @@ Board.prototype.fall = function () {
             var dpos = pos + this.width + 1;
             if (x < this.width-1 && !wd[dpos]) {
                 var dsh = this.shapes[dpos];
-                if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
+                if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(dpos)) {
                     sh.speed = sh.pos = 0;
                     this.moveShape(sh, +1, +1);
                     diagonal = true;
@@ -605,7 +636,7 @@ Board.prototype.fall = function () {
                 dpos = pos + this.width - 1;
                 if (x > 0 && !wd[dpos]) {
                     var dsh = this.shapes[dpos];
-                    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty()) {
+                    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(dpos)) {
                         sh.speed = sh.pos = 0;
                         this.moveShape(sh, -1, +1);
                         diagonal = true;
@@ -639,7 +670,7 @@ Board.prototype.fall = function () {
         var sh = this.shapes[i];
         // TODO: add support for other gravity direction
         if (sh.isMoving() && sh.pos <= 0) {
-            if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty()) {
+            if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty() || this.tileLocked(i + this.width)) {
                 // stop the shape from falling
                 sh.stopFalling();
             }

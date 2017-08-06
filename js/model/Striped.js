@@ -21,6 +21,7 @@ StripeEffect.HORIZONTAL = 1;
 StripeEffect.VERTICAL = 2;
 
 StripeEffect.prototype.update = function () {
+    'use strict';
     this.tick--;
     var work = true;
     if (this.tick <= 0) {
@@ -29,29 +30,35 @@ StripeEffect.prototype.update = function () {
         this.progress++;
         if (this.direction === StripeEffect.VERTICAL) {
             if (this.y - this.progress >= 0) {
-                this.board.clearShape(this.x, this.y - this.progress, true);
+                this.board.clearShape(this.x, this.y - this.progress);
+                this.board.lockPosition(this.x, this.y - this.progress, this);
                 work = true;
             }
             if (this.y + this.progress < this.board.height) {
-                this.board.clearShape(this.x, this.y + this.progress, true);
+                this.board.clearShape(this.x, this.y + this.progress);
                 work = true;
+            }
+            if (this.y - this.progress + 1 > 0) {
+                this.board.unlockPosition(this.x, this.y - this.progress + 1, this);
+            }
+            if (!work) {
+                this.board.unlockPosition(this.x, 0, this);
             }
         }
         else {
             if (this.x - this.progress >= 0) {
-                this.board.clearShape(this.x - this.progress, this.y, true);
+                this.board.clearShape(this.x - this.progress, this.y);
                 work = true;
             }
             if (this.x + this.progress < this.board.width) {
-                this.board.clearShape(this.x + this.progress, this.y, true);
+                this.board.clearShape(this.x + this.progress, this.y);
                 work = true;
             }
         }
     }
     if (this.direction === StripeEffect.VERTICAL) {
-        var ush = this.board.getShape(this.x, this.y - this.progress - 1, true);
-        if (ush) {
-            ush.speed = 0;
+        if (this.y - this.progress >= 0) {
+            this.board.lockPosition(this.x, this.y - this.progress, this);
         }
     }
     return work;
