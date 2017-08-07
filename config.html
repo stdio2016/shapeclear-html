@@ -23,6 +23,10 @@
 </p>
 <p><input value="OK" type="submit" onclick='setRenderer()'></p>
 </form>
+<audio controls=controls loop=loop>
+  <source src="assets/sound/music.ogg" type="audio/ogg">
+  <source src="assets/sound/music.mp3" type="audio/mpeg">
+</audio>
 <script>
 localStorage.removeItem('ShapeClear.renderer');
 var detectRenderer = document.getElementById('detectRenderer');
