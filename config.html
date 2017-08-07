@@ -21,12 +21,14 @@
   <input type="range" min='0.5' max='4' step='0.25' id='resolution'>
   <span id='res'>0</span>
 </p>
+<input type="checkbox" id='disableAudio'><label for="disableAudio">Disable audio</label>
 <p><input value="OK" type="submit" onclick='setRenderer()'></p>
 </form>
+<p>Test HTML5 audio tag<br>
 <audio controls=controls loop=loop>
   <source src="assets/sound/music.ogg" type="audio/ogg">
   <source src="assets/sound/music.mp3" type="audio/mpeg">
-</audio>
+</audio></p>
 <script>
 localStorage.removeItem('ShapeClear.renderer');
 var detectRenderer = document.getElementById('detectRenderer');
@@ -64,6 +66,7 @@ resIn.addEventListener('change', function() {
 function setRenderer() {
     localStorage.setItem('ShapeClear_renderer', choiceBox.value);
     localStorage.setItem('ShapeClear_resolution', resIn.value);
+    localStorage.setItem('ShapeClear_disableAudio', disableAudio.checked);
 }
 </script>
 </body>
