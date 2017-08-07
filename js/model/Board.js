@@ -106,7 +106,7 @@ Board.prototype.clearShape = function (x, y, dir) {
             }
             break;
         }
-        if (this.shapes[i].type === 9) {
+        if (this.shapes[i].type === 10) {
             this.elcShape(dir || this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT));
         }
     }
@@ -244,11 +244,11 @@ Board.prototype.updateSwaps = function () {
                 this.swaps.length--;
                 --i;
             }
-            else if (from.type == 9 || to.type == 9) {
-                if (from.type == 9) {
+            else if (from.type === 10 || to.type === 10) {
+                if (from.type === 10) {
                     this.clearShape(from.x, from.y, to.type);
                 }
-                if (to.type == 9) {
+                if (to.type === 10) {
                     this.clearShape(to.x, to.y, from.type);
                 }
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
@@ -435,10 +435,10 @@ Board.prototype.clearMatch = function () {
                 sh.special = 3;
             }
             if (m.hlength >= 5) {
-                this.setShape(m.hx+2, m.hy, new Shape(9, m.hx+2, m.hy, this));
+                this.setShape(m.hx+2, m.hy, new Shape(10, m.hx+2, m.hy, this));
             }
             if (m.vlength >= 5) {
-                this.setShape(m.vx, m.vy+2, new Shape(9, m.vx, m.vy+2, this));
+                this.setShape(m.vx, m.vy+2, new Shape(10, m.vx, m.vy+2, this));
             }
         }
         this.combo++;

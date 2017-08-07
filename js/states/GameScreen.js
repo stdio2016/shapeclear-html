@@ -215,7 +215,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     }
     board.x = startX;
     board.y = startY;
-    board.gridSize = size / 9;
+    board.gridSize = size / boardSize;
     var delSh = this.board.deletedShapes;
     for (var i = 0; i < delSh.length; i++) {
         var sh = delSh[i];

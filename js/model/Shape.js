@@ -19,7 +19,7 @@ function Shape(type, x, y, board) {
 }
 
 Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
- 'downTriangle', 'rhombus', 'apple', 'pineapple', 'taser'];
+ 'downTriangle', 'rhombus', 'apple', 'pineapple', 'pen', 'taser'];
 
 Shape.prototype.canSwap = function () {
     return !this.swapping && !this.isMoving() && this.type > 0 && !this.cleared;
