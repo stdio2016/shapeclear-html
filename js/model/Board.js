@@ -93,10 +93,10 @@ Board.prototype.clearShape = function (x, y, dir) {
         //this.shapes[i] = new Shape(0, x, y);
         switch (this.shapes[i].special) {
           case 1:
-            this.addItemToClear(new StripeEffect(this, x, y, 1));
+            this.addItemToClear(new StripeEffect(this, x, y, 1, this.shapes[i].type));
             break;
           case 2:
-            this.addItemToClear(new StripeEffect(this, x, y, 2));
+            this.addItemToClear(new StripeEffect(this, x, y, 2, this.shapes[i].type));
             break;
           case 3:
             for (var i = Math.max(x-1, 0); i < Math.min(x+2, this.width); i++) {
@@ -419,17 +419,17 @@ Board.prototype.clearMatch = function () {
             }
             my = m.vy + (m.vlength - 1) / 2;
         }
+        if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
+            var r = this.game.rnd.between(1,2)+m.hx, sh;
+            this.setShape(r, m.hy, sh = new Shape(type, r, m.hy, this));
+            sh.special = 2;
+        }
+        if (m.vlength == 4 && m.type === Match.VERTICAL) {
+            var r = this.game.rnd.between(1,2)+m.vy;
+            this.setShape(m.vx, r, sh = new Shape(type, m.vx, r, this));
+            sh.special = 1;
+        }
         if (Debug.createSpecial) {
-            if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
-                var r = this.game.rnd.between(1,2)+m.hx, sh;
-                this.setShape(r, m.hy, sh = new Shape(type, r, m.hy, this));
-                sh.special = 2;
-            }
-            if (m.vlength == 4 && m.type === Match.VERTICAL) {
-                var r = this.game.rnd.between(1,2)+m.vy;
-                this.setShape(m.vx, r, sh = new Shape(type, m.vx, r, this));
-                sh.special = 1;
-            }
             if (m.type === Match.CROSS && m.hlength < 5 && m.vlength < 5) {
                 this.setShape(m.vx, m.hy, sh = new Shape(type, m.vx, m.hy, this));
                 sh.special = 3;

@@ -6,7 +6,7 @@ function StripedShape(type, x, y, dir, board) {
 StripedShape.prototype = new Shape();
 StripedShape.prototype.constructor = StripedShape;
 
-function StripeEffect(board, x, y, direction) {
+function StripeEffect(board, x, y, direction, color) {
     this.board = board;
     this.x = x;
     this.y = y;
@@ -14,7 +14,7 @@ function StripeEffect(board, x, y, direction) {
     this.totalTicks = 2;
     this.tick = this.totalTicks;
     this.progress = 0;
-    this.sprites = [];
+    this.type = color;
 }
 
 StripeEffect.HORIZONTAL = 1;
@@ -44,6 +44,7 @@ StripeEffect.prototype.update = function () {
             if (!work) {
                 this.board.unlockPosition(this.x, 0, this);
             }
+            work = this.y - this.progress >= -4 || this.y + this.progress < this.board.height + 4;
         }
         else {
             if (this.x - this.progress >= 0) {
@@ -54,6 +55,7 @@ StripeEffect.prototype.update = function () {
                 this.board.clearShape(this.x + this.progress, this.y);
                 work = true;
             }
+            work = this.x - this.progress >= -4 || this.x + this.progress < this.board.width + 4;
         }
     }
     if (this.direction === StripeEffect.VERTICAL) {
@@ -67,22 +69,25 @@ StripeEffect.prototype.update = function () {
 // returns array of [x, y, width, height, frameName]'s
 StripeEffect.prototype.getSpritePositions = function () {
     var t = this.progress + 1 - this.tick / this.totalTicks;
-    var sw = 0.4, sh = 0.4, frm = 'triangle';
+    var sw = 0.6, sh = 0.6, frm = Shape.typeNames[this.type-1];
+    frm += this.direction === StripeEffect.VERTICAL ? "VStripe" : "HStripe";
     var arr = [];
-    if (this.direction === StripeEffect.VERTICAL) {
-        if (this.y - t > -1) {
-            arr.push([this.x, this.y - t, sw, sh, frm]);
+    for (var i = 0; t >= 0 && i < 3; t-=1, i++) {
+        if (this.direction === StripeEffect.VERTICAL) {
+            if (this.y - t > -1) {
+                arr.push([this.x, this.y - t, sw, sh, frm]);
+            }
+            if (this.y + t < this.board.height) {
+                arr.push([this.x, this.y + t, sw, sh, frm]);
+            }
         }
-        if (this.y + t < this.board.height) {
-            arr.push([this.x, this.y + t, sw, sh, frm]);
-        }
-    }
-    else {
-        if (this.x - t > -1) {
-            arr.push([this.x - t, this.y, sw, sh, frm]);
-        }
-        if (this.x + t < this.board.width) {
-            arr.push([this.x + t, this.y, sw, sh, frm]);
+        else {
+            if (this.x - t > -1) {
+                arr.push([this.x - t, this.y, sw, sh, frm]);
+            }
+            if (this.x + t < this.board.width) {
+                arr.push([this.x + t, this.y, sw, sh, frm]);
+            }
         }
     }
     return arr;
