@@ -26,7 +26,7 @@ MainMenu.prototype.create = function () {
     this.title.events.onInputUp.add(function () {
         alertBox(
           "Copyright (c) 2016~2017 Yi-Feng Chen(陳羿豐)\n" +
-          "Licensed under MIT expat license\n" +
+          "Licensed under MIT license\n" +
           "~~~ Credits ~~~\n" +
           "Shape Clear uses Phaser game framework"
         );
