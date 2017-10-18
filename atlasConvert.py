@@ -22,18 +22,18 @@ def readFrame(file, isFirst):
     if index != -1:
         frameName = frameName + '_' + str(index)
     if isFirst:
-        print '{'
+        print ('{')
     else:
-        print ',{'
-    print '\t"filename": "%s",' % escape(frameName)
-    print '\t"frame": {"x":%d,"y":%d,"w":%d,"h":%d},' % (
-        xy[0], xy[1], size[0], size[1])
-    print '\t"rotated": %s,' % rotate
-    print '\t"trimmed": %s,' % ('false' if size == orig else 'true')
-    print '\t"spriteSourceSize": {"x":%d,"y":%d,"w":%d,"h":%d},' % (
-        offset[0], offset[1], size[0], size[1])
-    print '\t"sourceSize": {"w":%d,"h":%d}' % orig
-    print '}'
+        print (',{')
+    print ('\t"filename": "%s",' % escape(frameName))
+    print ('\t"frame": {"x":%d,"y":%d,"w":%d,"h":%d},' % (
+        xy[0], xy[1], size[0], size[1]))
+    print ('\t"rotated": %s,' % rotate)
+    print ('\t"trimmed": %s,' % ('false' if size == orig else 'true'))
+    print ('\t"spriteSourceSize": {"x":%d,"y":%d,"w":%d,"h":%d},' % (
+        offset[0], offset[1], size[0], size[1]))
+    print ('\t"sourceSize": {"w":%d,"h":%d}' % orig)
+    print ('}')
     return True
 
 def escape(str):
@@ -58,25 +58,25 @@ def getCoord(str):
 
 def main():
     if len(sys.argv) < 2:
-        print "usage: python atlasConvert.py <libgdx atlas file>"
+        print ("usage: python atlasConvert.py <libgdx atlas file>")
         sys.exit()
     inName = sys.argv[1]
     f = open(inName)
     checkHead(f)
     notEnd = True
     isFirst = True
-    print '{"frames": ['
+    print ('{"frames": [')
     while notEnd:
         data = readFrame(f, isFirst)
         if data is None:
             notEnd = False
         isFirst = False
     f.close()
-    print '''],
+    print ('''],
 \t"meta": {
 \t\t"app": "atlasConvert.py and LibGDX texture packer",
 \t\t"version": "0.1"
 \t}
-}'''
+}''')
 
 main()
