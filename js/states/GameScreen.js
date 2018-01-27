@@ -93,11 +93,16 @@ GameScreen.prototype.update = function () {
     }
     this.timeText.setScore(Math.ceil(remainingTime / 60));
     if (this.board.remainingTime == 0 && !this.board.changed && this.board.swaps.length == 0) {
+        if (this.board.state == Board.ENDED) {
         var me = this;
         if (promptCallback === doesNothing) {
             alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
                 me.state.start('MainMenu');
             });
+        }
+        }
+        else {
+            this.board.state = Board.BONUS_TIME;
         }
     }
     // Uncomment this to test layout
