@@ -344,62 +344,47 @@ Board.prototype.findHorizontalMatch = function () {
 };
 
 Board.prototype.isValidSwapAt = function (x, y) {
-    if (this.debug.allowIllegalMove) return true;
     var leftMatch = 0, rightMatch = 0, upMatch = 0, downMatch = 0;
     var sh = this.getShape(x, y);
-    if (!sh.canMatch()) {
+    if (!this.debug.allowIllegalMove && !sh.canMatch()) {
         return false;
     }
     var type = sh.type;
-    if (x >= 1) {
-        sh = this.getShape(x - 1, y);
+    while (x - leftMatch > 0) {
+        sh = this.getShape(x - (leftMatch + 1), y);
         if (sh.canMatch() && sh.type === type) {
-            leftMatch = 1;
-            if (x >= 2) {
-                sh = this.getShape(x - 2, y);
-                if (sh.canMatch() && sh.type === type) {
-                    return true;
-                }
-            }
+            leftMatch++;
         }
+        else break;
     }
-    if (x < this.width - 1) {
-        sh = this.getShape(x + 1, y);
+    while (x + rightMatch < this.width - 1) {
+        sh = this.getShape(x + (rightMatch + 1), y);
         if (sh.canMatch() && sh.type === type) {
-            rightMatch = 1;
-            if (x < this.width - 2) {
-                sh = this.getShape(x + 2, y);
-                if (sh.canMatch() && sh.type === type) {
-                    return true;
-                }
-            }
+            rightMatch++;
         }
+        else break;
     }
-    if (y >= 1) {
-        sh = this.getShape(x, y - 1);
+    while (y - upMatch > 0) {
+        sh = this.getShape(x, y - (upMatch + 1));
         if (sh.canMatch() && sh.type === type) {
-            upMatch = 1;
-            if (y >= 2) {
-                sh = this.getShape(x, y - 2);
-                if (sh.canMatch() && sh.type === type) {
-                    return true;
-                }
-            }
+            upMatch++;
         }
+        else break;
     }
-    if (y < this.height - 1) {
-        sh = this.getShape(x, y + 1);
+    while (y + downMatch < this.height - 1) {
+        sh = this.getShape(x, y + (downMatch + 1));
         if (sh.canMatch() && sh.type === type) {
-            downMatch = 1;
-            if (y < this.height - 2) {
-                sh = this.getShape(x, y + 2);
-                if (sh.canMatch() && sh.type === type) {
-                    return true;
-                }
-            }
+            downMatch++;
         }
+        else break;
     }
-    return upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
+    if (upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2) {
+        this.initMatch();
+        this.findVeritcalMatch();
+        this.findHorizontalMatch();
+        this.clearMatch();
+    }
+    return this.debug.allowIllegalMove || upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
 };
 
 Board.prototype.clearMatch = function () {

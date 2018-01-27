@@ -40,7 +40,7 @@ Load.prototype.preload = function () {
     game.load.atlasJSONArray('ui', 'img/ui_small.png', 'img/ui_small.json');
     game.load.image('background', 'assets/background.png');
     if (Load.shouldLoadAudio()) {
-        game.load.audio('music', ['assets/sound/music.ogg', 'assets/sound/music.m4a', 'assets/sound/music.mp3']);
+        game.load.audio('music', ['assets/special/music3.ogg', 'assets/sound/music3.mp3']);
         game.load.audio('music2', ['assets/sound/music2.ogg', 'assets/sound/music2.m4a', 'assets/sound/music2.mp3']);
         game.load.audio('match', ['assets/sound/match.wav', 'assets/sound/match.mp3']);
         game.load.audio('nomatch', ['assets/sound/nomatch.wav', 'assets/sound/nomatch.mp3']);

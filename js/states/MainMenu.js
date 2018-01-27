@@ -27,8 +27,7 @@ MainMenu.prototype.create = function () {
         alertBox(
           "Copyright (c) 2016~2017 Yi-Feng Chen(陳羿豐)\n" +
           "Licensed under MIT license\n" +
-          "~~~ Credits ~~~\n" +
-          "Shape Clear uses Phaser game framework"
+          "This game uses Phaser game engine"
         );
         Debug.createSpecial ^= 1;
     }, this);
@@ -42,7 +41,7 @@ MainMenu.prototype.create = function () {
     this.btnHelp.tint = 0xffff00;
     this.lblHelp = this.add.text(-1000, -1000, 'Board with holes');
     this.lblHelp.anchor.set(0.5, 0.5);
-    this.lblVersion = this.add.text(-1000, -1000, 'v0.5.1');
+    this.lblVersion = this.add.text(-1000, -1000, 'v0.5.1 Merry Xmas');
     this.lblVersion.anchor.set(1, 1);
 };
 
