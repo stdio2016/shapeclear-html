@@ -1,6 +1,5 @@
 function GameScreen() {
     this.debug = null; // To show debug message
-    this.ball = null; // Ball to test animation
     this.background = null;
     this.board = null;
     this.touchDetector = null;
@@ -24,9 +23,6 @@ GameScreen.prototype.create = function () {
     console.log("So don't expect me to make a game");
     this.background = game.add.sprite(0, 0, 'background');
     this.addDebugText();
-    this.ball = new Ball(this.game, /*speed: */5);
-    this.add.existing(this.ball);
-    game.input.addMoveCallback(this.move, this);
     window.board = this.board = new Board(this.game);
     this.board.generateSimple();
     this.boardGroup = this.add.group();
@@ -275,12 +271,6 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     }
     while (sc < this.effectSprites.length) {
         this.effectSprites.pop().kill();
-    }
-};
-
-GameScreen.prototype.move = function(pointer, x, y){
-    if (pointer.isDown) {
-        this.ball.pointTo(x, y);
     }
 };
 
