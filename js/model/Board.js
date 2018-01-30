@@ -17,6 +17,7 @@ function Board(game) {
     this.remainingTime = 3600;
     this.score = 0;
     this.tileLocks = [];
+    this.itemChanged = false;
 
     // position of board in the game
     this.x = 0;
@@ -161,6 +162,7 @@ Board.prototype.lockPosition = function (x, y, key) {
 };
 
 Board.prototype.unlockPosition = function (x, y, key) {
+    this.changed = true;
     var lock = this.tileLocks[x + y * this.width];
     for (var i = 0; i < lock.length; i++) {
         if (lock[i] === key) {
@@ -182,18 +184,20 @@ Board.prototype.update = function () {
     this.gainScores = [];
     this.falling = false;
     this.changed = false;
+    this.itemChanged = false;
     this.fall();
     this.updateSwaps();
     this.initMatch();
-    if (!this.falling) {
+    this.itemClearUpdate();
+    this.shapeClearUpdate();
+    if (!this.falling && !this.itemChanged) {
         this.findVeritcalMatch();
         this.findHorizontalMatch();
         // TODO: sort chains by their type
         // first match-5, then cross, match-4, and finally match-3.
         this.clearMatch();
     }
-    this.itemClearUpdate();
-    this.shapeClearUpdate();
+    this.changed = this.changed || this.itemChanged;
     if (!this.changed && this.matches.length == 0) {
       this.combo = 0;
     }

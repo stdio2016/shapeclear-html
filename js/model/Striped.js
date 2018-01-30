@@ -23,6 +23,16 @@ StripeEffect.VERTICAL = 2;
 StripeEffect.prototype.update = function () {
     'use strict';
     this.tick--;
+    if (this.direction === StripeEffect.VERTICAL) {
+        if (this.y - this.progress - 1 >= 0 || this.y + this.progress + 1 < this.board.height) {
+            this.board.itemChanged = true;
+        }
+    }
+    else {
+        if (this.x - this.progress - 1 >= 0 || this.x + this.progress + 1 < this.board.width) {
+            this.board.itemChanged = true;
+        }
+    }
     var work = true;
     if (this.tick <= 0) {
         this.tick += this.totalTicks;
@@ -38,7 +48,7 @@ StripeEffect.prototype.update = function () {
                 this.board.clearShape(this.x, this.y + this.progress);
                 work = true;
             }
-            if (this.y - this.progress + 1 > 0) {
+            if (this.y - this.progress + 1 >= 0) {
                 this.board.unlockPosition(this.x, this.y - this.progress + 1, this);
             }
             if (!work) {
