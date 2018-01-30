@@ -18,12 +18,18 @@ function Board(game) {
     this.score = 0;
     this.tileLocks = [];
     this.itemChanged = false;
+    this.state = Board.PLAYING;
 
     // position of board in the game
     this.x = 0;
     this.y = 0;
     this.gridSize = 0;
 }
+Board.STARTING = 0;
+Board.PLAYING = 1;
+Board.SHUFFLING = 2;
+Board.BONUS_TIME = 3;
+Board.ENDED = 4;
 
 Board.prototype.generateSimple = function () {
     this.shapes = new Array(this.height * this.width);
@@ -203,6 +209,16 @@ Board.prototype.update = function () {
     }
     if (this.remainingTime > 0)
         this.remainingTime--;
+    if (this.state === Board.BONUS_TIME && !this.changed) {
+        var hasSpecial = false;
+        for (var i = 0; i < this.shapes.length; i++) {
+            if (this.shapes[i].special > 0) {
+                this.clearShape(i%9, i/9|0);
+                hasSpecial = true; break;
+            }
+        }
+        if (!hasSpecial) this.state = Board.ENDED;
+    }
 };
 
 Board.prototype.itemClearUpdate = function () {

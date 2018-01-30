@@ -13,6 +13,7 @@
     this.btnHelp = null;
     this.lblHelp = null;
     this.lblVersion = null;
+    this.ball1 = this.ball2 = null; // Ball to test animation
 }
 
 MainMenu.prototype.create = function () {
@@ -20,6 +21,13 @@ MainMenu.prototype.create = function () {
     this.music = this.add.sound('music');
     this.music.loop = true;
     this.music.play();
+    this.ball1 = new Ball(this.game, /*speed: */5);
+    this.add.existing(this.ball1);
+    this.ball2 = new Ball(this.game, /*speed: */5, [this.ball1]);
+    this.add.existing(this.ball2);
+    this.ball3 = new Ball(this.game, /*speed: */5, [this.ball1, this.ball2]);
+    this.add.existing(this.ball3);
+    game.input.addMoveCallback(this.move, this);
     this.title = this.add.text(-1000, -1000, 'Shape Clear');
     this.title.anchor.set(0.5, 0.5);
     this.title.inputEnabled = true;
@@ -70,6 +78,14 @@ MainMenu.prototype.update = function () {
     this.lblHelp.y += window.devicePixelRatio || 1;
     this.btnHelp.scale.setTo(dim / 360);
     this.lblVersion.position.set(gw, gh);
+};
+
+MainMenu.prototype.move = function(pointer, x, y){
+    if (pointer.isDown) {
+        this.ball1.pointTo(x, y);
+        this.ball2.pointTo(x, y);
+        this.ball3.pointTo(x, y);
+    }
 };
 
 MainMenu.prototype.playGame = function (btn) {
