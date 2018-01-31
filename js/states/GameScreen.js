@@ -5,6 +5,7 @@ function GameScreen() {
     this.touchDetector = null;
     this.music = null;
     this.showMatches = [];
+    this.effectGroup = null;
     this.shapeGroup = null;
     this.boardGroup = null;
     this.scoreText = null;
@@ -28,6 +29,7 @@ GameScreen.prototype.create = function () {
     this.boardGroup = this.add.group();
     this.boardGroup.alpha = 0.8;
     this.shapeGroup = this.add.group();
+    this.effectGroup = this.add.group();
     this.touchDetector = new TouchDetector(this.game, this.board);
     this.addSelectSprite();
     this.music = this.game.add.sound('music2');
@@ -256,7 +258,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             var sp = this.effectSprites[sc++];
             var frameName = pos[j][4];
             if (!sp) {
-                sp = this.shapeGroup.getFirstDead(true, 100, 100, 'shapes', frameName);
+                sp = this.effectGroup.getFirstDead(true, 100, 100, 'shapes', frameName);
                 sp.alpha = 1;
                 sp.anchor = new Phaser.Point(0.5, 0.5);
                 this.effectSprites.push(sp);

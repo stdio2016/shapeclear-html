@@ -15,6 +15,7 @@ function StripeEffect(board, x, y, direction, color) {
     this.tick = this.totalTicks;
     this.progress = 0;
     this.type = color;
+    this.stillChanging = true;
 }
 
 StripeEffect.HORIZONTAL = 1;
@@ -23,15 +24,8 @@ StripeEffect.VERTICAL = 2;
 StripeEffect.prototype.update = function () {
     'use strict';
     this.tick--;
-    if (this.direction === StripeEffect.VERTICAL) {
-        if (this.y - this.progress - 1 >= 0 || this.y + this.progress + 1 < this.board.height) {
-            this.board.itemChanged = true;
-        }
-    }
-    else {
-        if (this.x - this.progress - 1 >= 0 || this.x + this.progress + 1 < this.board.width) {
-            this.board.itemChanged = true;
-        }
+    if (this.stillChanging) {
+        this.board.itemChanged = true;
     }
     var work = true;
     if (this.tick <= 0) {
@@ -53,6 +47,7 @@ StripeEffect.prototype.update = function () {
             }
             if (!work) {
                 this.board.unlockPosition(this.x, 0, this);
+                this.stillChanging = false;
             }
             work = this.y - this.progress >= -4 || this.y + this.progress < this.board.height + 4;
         }
@@ -64,6 +59,9 @@ StripeEffect.prototype.update = function () {
             if (this.x + this.progress < this.board.width) {
                 this.board.clearShape(this.x + this.progress, this.y);
                 work = true;
+            }
+            if (!work) {
+                this.stillChanging = false;
             }
             work = this.x - this.progress >= -4 || this.x + this.progress < this.board.width + 4;
         }
