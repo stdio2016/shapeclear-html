@@ -205,7 +205,7 @@ Board.prototype.update = function () {
     }
     this.changed = this.changed || this.itemChanged;
     if (!this.changed && this.matches.length == 0) {
-      this.combo = 0;
+        this.combo = 0;
     }
     if (this.remainingTime > 0)
         this.remainingTime--;
