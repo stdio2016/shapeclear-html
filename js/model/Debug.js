@@ -101,5 +101,5 @@ Debug.prototype.autoSwipeTest = function () {
 };
 
 Debug.prototype.getDebugMessage = function () {
-    return "Merry Xmas!";
+    return "Apple Fools!";
 };
