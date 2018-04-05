@@ -678,6 +678,7 @@ Board.prototype.fall = function () {
             if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty() || this.tileLocked(i + this.width)) {
                 // stop the shape from falling
                 sh.stopFalling();
+                this.changed = true;
             }
         }
     }
