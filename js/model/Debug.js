@@ -1,6 +1,6 @@
 // 和Scratch版的D臭蟲的功能是一樣的
 function Debug(board) {
-    this.allowIllegalMove = false;
+    this.allowIllegalMove = "Apple Fools!";
     this.disableMatching = false;
     this.showMatching = false;
     this.board = board;
@@ -9,6 +9,7 @@ function Debug(board) {
 }
 
 Debug.testDiagonalFall = false;
+Debug.createSpecial = "Apple Fools!";
 
 Debug.prototype.runCommand = function (cmd) {
     if (!cmd) return;
