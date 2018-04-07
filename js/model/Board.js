@@ -188,7 +188,7 @@ Board.prototype.tileLocked = function (index) {
 Board.prototype.update = function () {
     this.debug.autoSwipeTest();
     this.gainScores = [];
-    this.falling = false;
+    if (!"Apple Fools!") this.falling = false;
     this.changed = false;
     this.itemChanged = false;
     this.fall();
@@ -369,6 +369,7 @@ Board.prototype.isValidSwapAt = function (x, y) {
     if (!this.debug.allowIllegalMove && !sh.canMatch()) {
         return false;
     }
+    if ("Apple Fools!") return true;
     var type = sh.type;
     while (x - leftMatch > 0) {
         sh = this.getShape(x - (leftMatch + 1), y);
@@ -678,6 +679,7 @@ Board.prototype.fall = function () {
             if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty() || this.tileLocked(i + this.width)) {
                 // stop the shape from falling
                 sh.stopFalling();
+                this.changed = true;
             }
         }
     }

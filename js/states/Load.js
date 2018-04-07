@@ -35,7 +35,14 @@ Load.prototype.preload = function () {
 
     // load assets
     game.load.image('ball', 'assets/ball.png');
-    game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
+    if (screen.width * screen.height > 1024*768) {
+        this.gridPx = 72;
+        game.load.atlasJSONArray('shapes', 'img/shapes_big.png', 'img/shapes_big.json');
+    }
+    else {
+        this.gridPx = 36;
+        game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
+    }
     game.load.atlasJSONArray('number', 'img/number_small.png', 'img/number_small.json');
     game.load.atlasJSONArray('ui', 'img/ui_small.png', 'img/ui_small.json');
     game.load.image('background', 'assets/background.png');
