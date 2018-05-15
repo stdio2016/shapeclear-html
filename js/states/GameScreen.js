@@ -14,6 +14,7 @@ function GameScreen() {
     this.timeText = null;
     this.lblScore = this.lblTime = null;
     this.effectSprites = [];
+    this.runTime = [];
 }
 
 GameScreen.prototype.preload = function () {
@@ -40,6 +41,7 @@ GameScreen.prototype.create = function () {
     this.lblScore = this.createText("Score");
     this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
     this.lblTime = this.createText("Time");
+    this.runTime = [0, +new Date(), 1/6, 0];
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -71,7 +73,32 @@ GameScreen.prototype.addSelectSprite = function(){
     }
 };
 
+GameScreen.prototype.pauseUpdate = function () {
+    this.fixTime();
+};
+
 GameScreen.prototype.update = function () {
+    this.fixTime();
+    var runTime = this.runTime;
+    runTime[3] += Math.min(runTime[2]/10 * this.game.time.desiredFps, 5);
+    while (runTime[3] > 0) {
+        this.updateOnce();
+        runTime[3]--;
+    }
+};
+
+GameScreen.prototype.fixTime = function () {
+    var runTime = this.runTime;
+    runTime[0]++;
+    if (runTime[0] >= 10) {
+        runTime[0] = 0;
+        var now = +new Date();
+        runTime[2] = (now - runTime[1]) / 1000;
+        runTime[1] = now;
+    }
+};
+
+GameScreen.prototype.updateOnce = function () {
     this.touchDetector.update();
     this.board.update();
     var fontSize = Math.round(Math.min(game.width, game.height) * 0.05) + 'pt';
