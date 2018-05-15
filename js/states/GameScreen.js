@@ -14,7 +14,6 @@ function GameScreen() {
     this.timeText = null;
     this.lblScore = this.lblTime = null;
     this.effectSprites = [];
-    this.appleFools = false;
 }
 
 GameScreen.prototype.preload = function () {
@@ -41,11 +40,6 @@ GameScreen.prototype.create = function () {
     this.lblScore = this.createText("Score");
     this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
     this.lblTime = this.createText("Time");
-    this.appleFools = false;
-    var e = this;
-    alertBox("Apple Fools! You can drag shapes freely", function () {
-        e.appleFools = true;
-    });
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -79,9 +73,7 @@ GameScreen.prototype.addSelectSprite = function(){
 
 GameScreen.prototype.update = function () {
     this.touchDetector.update();
-    if (this.appleFools) {
-        this.board.update();
-    }
+    this.board.update();
     var fontSize = Math.round(Math.min(game.width, game.height) * 0.05) + 'pt';
     this.lblTime.fontSize = fontSize;
     this.lblScore.fontSize = fontSize;

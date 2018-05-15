@@ -20,7 +20,6 @@ TouchDetector.prototype.update = function () {
     var input = this.game.input;
     var touches = input.pointers;
     var mouse = input.mousePointer;
-    this.board.falling = false;
     for (var i=0; i<touches.length; i++){
         this.process(i+1, touches[i]);
     }
@@ -35,7 +34,6 @@ TouchDetector.prototype.update = function () {
 TouchDetector.prototype.process = function (index, pointer) {
     var myPoint = this.pointers[index];
     if (pointer.isDown) {
-        this.board.falling = true;
         if (myPoint.isDown) { // pointer is moving
             if (myPoint.tracking) {
                 var p = this.convertPointToGrid(pointer);
@@ -43,11 +41,9 @@ TouchDetector.prototype.process = function (index, pointer) {
                     // move out of the selection
                     // it means swap
                     var dir = this.calcDirection(myPoint, pointer);
-                    //myPoint.tracking = false;
+                    myPoint.tracking = false;
                     if(dir !== null){
                         this.board.addSwap(myPoint, {x: dir[0], y: dir[1]});
-                        myPoint.x = dir[0];
-                        myPoint.y = dir[1];
                     }
                 }
             }
@@ -72,7 +68,7 @@ TouchDetector.prototype.process = function (index, pointer) {
         }
     }
     else if(myPoint.isDown && myPoint.tracking){ // pointer is up
-        this.lastPointed = Phaser.Point.parse(myPoint) && !"Apple Fools!";
+        this.lastPointed = Phaser.Point.parse(myPoint);
     }
     myPoint.isDown = pointer.isDown;
 };
