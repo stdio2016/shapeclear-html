@@ -101,5 +101,5 @@ Debug.prototype.autoSwipeTest = function () {
 };
 
 Debug.prototype.getDebugMessage = function () {
-    return "Apple Fools!";
+    return this.board.game.time.fps;
 };
