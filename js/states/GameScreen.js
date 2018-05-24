@@ -41,7 +41,7 @@ GameScreen.prototype.create = function () {
     this.lblScore = this.createText("Score");
     this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
     this.lblTime = this.createText("Time");
-    this.runTime = [0, +new Date(), 1/6, 0];
+    this.runTime = [0, +new Date(), 0, 0, false, 1/6];
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -73,14 +73,19 @@ GameScreen.prototype.addSelectSprite = function(){
     }
 };
 
-GameScreen.prototype.pauseUpdate = function () {
-    this.fixTime();
+GameScreen.prototype.paused = function () {
+    console.log("paused");
+    this.runTime[4] = false;
 };
+
+GameScreen.prototype.resumed = function () {
+    console.log("resumed");
+}
 
 GameScreen.prototype.update = function () {
     this.fixTime();
     var runTime = this.runTime;
-    runTime[3] += Math.min(runTime[2]/10 * this.game.time.desiredFps, 5);
+    runTime[3] = Math.min(runTime[3] + runTime[5]/10 * this.game.time.desiredFps, 5);
     while (runTime[3] > 0) {
         this.updateOnce();
         runTime[3]--;
@@ -89,13 +94,18 @@ GameScreen.prototype.update = function () {
 
 GameScreen.prototype.fixTime = function () {
     var runTime = this.runTime;
-    runTime[0]++;
+    var now = +new Date();
+    if (runTime[4]) {
+        runTime[0]++;
+        runTime[2] += (now - runTime[1]) / 1000;
+    }
     if (runTime[0] >= 10) {
         runTime[0] = 0;
-        var now = +new Date();
-        runTime[2] = (now - runTime[1]) / 1000;
-        runTime[1] = now;
+        runTime[5] = runTime[2];
+        runTime[2] = 0;
     }
+    runTime[1] = now;
+    runTime[4] = true;
 };
 
 GameScreen.prototype.updateOnce = function () {
