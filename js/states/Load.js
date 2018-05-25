@@ -103,6 +103,12 @@ Load.prototype.update = function () {
 };
 
 Load.prototype.playGame = function () {
+    if (this.game.sound.usingWebAudio) {
+        var ctx = this.game.sound.context;
+        if (ctx.state === "suspended") {
+            ctx.resume();
+        }
+    }
     this.state.start('MainMenu');
 };
 
