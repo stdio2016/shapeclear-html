@@ -111,7 +111,7 @@ GameScreen.prototype.fixTime = function () {
 GameScreen.prototype.updateOnce = function () {
     this.touchDetector.update();
     this.board.update();
-    var fontSize = Math.round(Math.min(game.width, game.height) * 0.05) + 'pt';
+    var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
     this.lblTime.fontSize = fontSize;
     this.lblScore.fontSize = fontSize;
     this.debug.fontSize = fontSize;
@@ -208,9 +208,10 @@ GameScreen.prototype.resizeUI = function(){
 };
 
 GameScreen.prototype.showWithBounds = function (lbl, txt, x, y, width, height) {
+    var r = this.game.resolution;
     txt.showWithBounds(x, y, width, height);
-    lbl.x = x - lbl.width / 2;
-    lbl.y = y - lbl.height / 2 - height;
+    lbl.x = x - lbl.width / (2 * r);
+    lbl.y = y - lbl.height / (2 * r) - height;
 };
 
 GameScreen.prototype.resizeBoard = function(leftX, topY, size){

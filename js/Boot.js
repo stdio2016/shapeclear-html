@@ -12,6 +12,14 @@
     removeResolutionFromCode(Phaser.Cache.prototype, "addBitmapFont");
     removeResolutionFromCode(Phaser.Cache.prototype, "addSpriteSheet");
     removeResolutionFromCode(Phaser.Cache.prototype, "addTextureAtlas");
+    var code = Phaser.Loader.prototype.loadImageTag.toString();
+    // fix Firefox black texture issue
+    // More info here: https://github.com/photonstorm/phaser/issues/2534
+    code = code.replace(
+        "if (file.data.complete && file.data.width && file.data.height)",
+        "if (!this.game.device.firefox && file.data.complete && file.data.width && file.data.height)"
+    );
+    Phaser.Loader.prototype.loadImageTag = window.eval('(' + code + ')');
 })();
 
 // Finished loading phaser.js

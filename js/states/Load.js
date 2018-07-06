@@ -2,8 +2,6 @@ function Load () {
     this.loadBar = null;
     this.playButton = null;
     this.background = null;
-    // HACK
-    this.loadTicks = 0;
 }
 
 Load.shouldLoadAudio = function () {
@@ -15,6 +13,7 @@ Load.shouldLoadAudio = function () {
 };
 
 Load.prototype.preload = function () {
+    var r = this.game.resolution;
     game.canvas.oncontextmenu = function (e) {
         e.preventDefault();
     };
@@ -22,8 +21,8 @@ Load.prototype.preload = function () {
         this.game.device.m4a = false;
     }
     this.loadBar = this.add.text(this.game.width / 2, this.game.height / 2, 'Loading assets...');
-    this.loadBar.x -= this.loadBar.width / 2;
-    this.loadBar.y -= this.loadBar.height / 2;
+    this.loadBar.x -= this.loadBar.width / (2 * r);
+    this.loadBar.y -= this.loadBar.height / (2 * r);
     this.testRenderer();
 
     // some game settings
@@ -73,9 +72,10 @@ Load.prototype.preload = function () {
 };
 
 Load.prototype.loadUpdate = function () {
+    var r = this.game.resolution;
     // HACK to get the text size
-    this.loadBar.x = this.game.width / 2 - this.loadBar.width / 2;
-    this.loadBar.y = this.game.height / 2 - this.loadBar.height / 2;
+    this.loadBar.x = this.game.width / 2 - this.loadBar.width / (2 * r);
+    this.loadBar.y = this.game.height / 2 - this.loadBar.height / (2 * r);
 };
 
 Load.prototype.create = function() {
@@ -95,20 +95,14 @@ Load.prototype.create = function() {
 Load.prototype.update = function () {
     var w = this.game.width;
     var h = this.game.height;
+    var r = this.game.resolution;
     // HACK to get the text size
-    this.loadBar.x = w / 2 - this.loadBar.width / 2;
-    this.loadBar.y = h / 2 - this.loadBar.height / 2;
+    this.loadBar.x = w / 2 - this.loadBar.width / (2 * r);
+    this.loadBar.y = h / 2 - this.loadBar.height / (2 * r);
     this.playButton.x = w / 2 - 200 / 2;
     this.playButton.y = h / 2 - 70 / 2;
     this.background.width = w;
     this.background.height = h;
-
-    // HACK workaround for Firefox running under file://
-    this.loadTicks++;
-    if (this.loadTicks == 10 && this.game.device.firefox) {
-        this.game.cache.destroy();
-        this.state.start('Load');
-    }
 };
 
 Load.prototype.playGame = function () {
