@@ -2,6 +2,7 @@
 (function () {
     // resolution problem
     function removeResolutionFromCode (obj, methodName) {
+        if (!obj[methodName]) return;
         var code = obj[methodName].toString();
         code = code.replace('this.game.resolution', '1');
         obj[methodName] = window.eval('(' + code + ')');

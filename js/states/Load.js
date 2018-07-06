@@ -2,6 +2,8 @@ function Load () {
     this.loadBar = null;
     this.playButton = null;
     this.background = null;
+    // HACK
+    this.loadTicks = 0;
 }
 
 Load.shouldLoadAudio = function () {
@@ -100,6 +102,13 @@ Load.prototype.update = function () {
     this.playButton.y = h / 2 - 70 / 2;
     this.background.width = w;
     this.background.height = h;
+
+    // HACK workaround for Firefox running under file://
+    this.loadTicks++;
+    if (this.loadTicks == 10 && this.game.device.firefox) {
+        this.game.cache.destroy();
+        this.state.start('Load');
+    }
 };
 
 Load.prototype.playGame = function () {
