@@ -4,7 +4,8 @@
 目前還沒有完成，但是可以來玩一下： <https://stdio2016.github.io/shapeclear-html>
 
 如果想要正常的版本，可以玩 Scratch 版(註：這個版本的原始碼不在這個代碼庫，而且需要 Flash)。
-網址： https://scratch.mit.edu/projects/17206808/
+網址： <https://scratch.mit.edu/projects/17206808/>。
+手機、平板請用 <https://phosphorus.github.io/#17206808>
 
 ## 玩法
 
@@ -58,6 +59,6 @@
 * 高分榜
 
 ## 作者
-* 程式：陳羿豐(就是[stdio2016](https://www.github.com/stdio2016)啦)
+* 程式：陳羿豐(就是 [stdio2016](https://www.github.com/stdio2016) 啦)
 * 圖片：陳羿豐(不，我畫的圖連小學生都會畫，而且超像用「小畫家」畫的)
 * 音樂：還是陳羿豐。也許你覺得音樂是 8bit 的，~~但其實，我是做 16bit 的音樂。~~ 好啦，我承認我做的就是 8bit 音樂，因為隨便寫個程式就能生了。XD
