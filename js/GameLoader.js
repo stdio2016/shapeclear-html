@@ -26,6 +26,9 @@ function loadScript(src, progressCallback, callback) {
 }
 
 function addScriptTag(src, onload, onerror) {
+    if (location.hostname.indexOf('nctu') !== -1) {
+        src += '?v=' + gameInternalVersion;
+    }
     var script = document.createElement('script');
     script.src = src;
     script.async = false;
