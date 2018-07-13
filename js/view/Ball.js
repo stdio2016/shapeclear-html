@@ -16,27 +16,35 @@ Ball.prototype.update = function(){
     this.y += this.velocity.y;
     if (this.velocity.x > 0 && this.x > game.width-100) {
         this.velocity.x *= -1;
+        this.game.bounceTime++;
     }
     if (this.x > game.width-100) {
         this.x = game.width-100;
+        this.game.bounceTime++;
     }
     if (this.velocity.x < 0 && this.x < 0) {
         this.velocity.x *= -1;
+        this.game.bounceTime++;
     }
     if (this.x < 0) {
         this.x = 0;
+        this.game.bounceTime++;
     }
     if (this.velocity.y > 0 && this.y > game.height - 100) {
         this.velocity.y *= -1;
+        this.game.bounceTime++;
     }
     if (this.y > game.height - 100) {
         this.y = game.height - 100;
+        this.game.bounceTime++;
     }
     if (this.velocity.y < 0 && this.y < 0) {
         this.velocity.y *= -1;
+        this.game.bounceTime++;
     }
     if (this.y < 0) {
         this.y = 0;
+        this.game.bounceTime++;
     }
     var PP = Phaser.Point;
     var pos1 = this.position;
@@ -55,6 +63,7 @@ Ball.prototype.update = function(){
             d.setMagnitude(d.getMagnitude() - 100);
             pos1.add(d.x / 2, d.y / 2);
             pos2.subtract(d.x / 2, d.y / 2);
+            this.game.bounceTime++;
         }
     }
 };

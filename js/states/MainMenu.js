@@ -51,6 +51,7 @@ MainMenu.prototype.create = function () {
     this.lblHelp.anchor.set(0.5, 0.5);
     this.lblVersion = this.add.text(-1000, -1000, 'v0.5.1');
     this.lblVersion.anchor.set(1, 1);
+    this.game.bounceTime = 0;
 };
 
 MainMenu.prototype.update = function () {
@@ -78,6 +79,7 @@ MainMenu.prototype.update = function () {
     this.lblHelp.y += window.devicePixelRatio || 1;
     this.btnHelp.scale.setTo(dim / 360);
     this.lblVersion.position.set(gw, gh);
+    this.lblVersion.text = "v0.5.1." + this.game.bounceTime;
 };
 
 MainMenu.prototype.move = function(pointer, x, y){
