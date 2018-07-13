@@ -124,7 +124,7 @@ Board.prototype.clearShape = function (x, y, dir) {
 Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
     //if (this.changed || this.swaps.length > 0) return;
-    if (this.remainingTime <= 0) return ;
+    if (this.remainingTime <= 0 && !this.debug.allowIllegalMove) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
     if ((!sh1.canSwap() || !sh2.canSwap()) && !this.debug.allowIllegalMove) {
@@ -215,7 +215,7 @@ Board.prototype.update = function () {
         var hasSpecial = false;
         for (var i = 0; i < this.shapes.length; i++) {
             if (this.shapes[i].special > 0) {
-                this.clearShape(i%9, i/9|0);
+                this.clearShape(i%this.width, i/this.width|0);
                 hasSpecial = true; break;
             }
         }
@@ -223,7 +223,7 @@ Board.prototype.update = function () {
             // chocolate
             for (var i = 0; i < this.shapes.length; i++) {
                 if (this.shapes[i].type === 10) {
-                    this.clearShape(i%9, i/9|0);
+                    this.clearShape(i%this.width, i/this.width|0);
                     hasSpecial = true; break;
                 }
             }
@@ -579,29 +579,50 @@ Board.prototype.fall = function () {
                 sh.speed = 10;
             }
             sh.pos -= sh.speed;
+            // HACK way to simulate Candy Crush
+            if (sh.pos < 5 && i >= this.width) {
+                this.unlockPosition(i%this.width, (i/this.width|0)-1, this.fall);
+            }
+            // end of HACK
             if (!sh.bouncing) {
                 this.falling = true;
             }
             this.changed = true;
-            if (dsh != null && !dsh.isEmpty() && dsh.pos > sh.pos && !dsh.swapping && dsh.dir.x === 0) {
+            if (dsh != null && !dsh.isEmpty() && dsh.pos > sh.pos && !dsh.swapping) {
                 sh.pos = dsh.pos;
                 if (dsh.isMoving()) {
                     sh.speed = dsh.speed;
                 }
             }
         }
+        // HACK way to simulate Candy Crush
+        else if (i >= this.width && this.tileLocked(i-this.width)) {
+            this.unlockPosition(i%this.width, (i/this.width|0)-1, this.fall);
+        }
+        // end of HACK
         wd.push(false);
     }
+    // HACK way to simulate Candy Crush
+    var lock = [];
+    // end of HACK
     for (var x = 0; x < this.width; x++) {
         for (var y = this.height - 2; y >= 0; y--) {
             var pos = y * this.width + x;
             var sh = this.shapes[pos], dsh = this.shapes[pos + this.width];
             if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(pos + this.width)) {
                 this.moveShape(sh, 0, +1);
+                // HACK way to simulate Candy Crush
+                lock.push([x, y]);
+                // end of HACK
                 this.falling = true;
             }
         }
     }
+    // HACK way to simulate Candy Crush
+    for (var i = 0; i < lock.length; i++) {
+        this.lockPosition(lock[i][0], lock[i][1], this.fall);
+    }
+    // end of HACK
     for (var i = 0; i < this.width; i++) {
         var dsh = this.shapes[i + this.width];
         if (this.shapes[i].isEmpty() && !this.tileLocked(i)) {
