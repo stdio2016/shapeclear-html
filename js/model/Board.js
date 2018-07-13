@@ -19,6 +19,7 @@ function Board(game) {
     this.tileLocks = [];
     this.itemChanged = false;
     this.state = Board.PLAYING;
+    this.passedTime = 0;
 
     // position of board in the game
     this.x = 0;
@@ -54,7 +55,7 @@ Board.prototype.generateSimple = function () {
             var r;
             do {
                 r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
-            } while (r1 == r || r2 == r) ;
+            } while ((r1 == r || r2 == r) && AppleFools.COLOR_COUNT > 2) ;
             if (Debug.testDiagonalFall && this.game.rnd.between(1, 10)  == 1) r = -1;
             var sh = new Shape(r, j, i, this);
             arr[i * width + j] = sh;
@@ -89,6 +90,7 @@ Board.prototype.setShape = function (x, y, sh) {
 };
 
 Board.prototype.clearShape = function (x, y, dir) {
+    this.changed = true;
     // bound check
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
     if (y >= this.height || y < 0) return RangeError('y out of bound');
@@ -217,7 +219,19 @@ Board.prototype.update = function () {
                 hasSpecial = true; break;
             }
         }
+        if (!hasSpecial) {
+            // chocolate
+            for (var i = 0; i < this.shapes.length; i++) {
+                if (this.shapes[i].type === 10) {
+                    this.clearShape(i%9, i/9|0);
+                    hasSpecial = true; break;
+                }
+            }
+        }
         if (!hasSpecial) this.state = Board.ENDED;
+    }
+    if (this.state !== Board.ENDED) {
+        this.passedTime++;
     }
 };
 
@@ -628,22 +642,22 @@ Board.prototype.fall = function () {
             var pos = y * this.width + x;
             var sh = this.shapes[pos];
             var diagonal = false;
-            var dpos = pos + this.width + 1;
-            if (x < this.width-1 && !wd[dpos]) {
+            var dpos = pos + this.width - 1;
+            if (x > 0 && !wd[dpos]) {
                 var dsh = this.shapes[dpos];
                 if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(dpos)) {
                     sh.speed = sh.pos = 0;
-                    this.moveShape(sh, +1, +1);
+                    this.moveShape(sh, -1, +1);
                     diagonal = true;
                 }
             }
             if (!diagonal) {
-                dpos = pos + this.width - 1;
-                if (x > 0 && !wd[dpos]) {
+                dpos = pos + this.width + 1;
+                if (x < this.width-1 && !wd[dpos]) {
                     var dsh = this.shapes[dpos];
                     if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(dpos)) {
                         sh.speed = sh.pos = 0;
-                        this.moveShape(sh, -1, +1);
+                        this.moveShape(sh, +1, +1);
                         diagonal = true;
                     }
                 }

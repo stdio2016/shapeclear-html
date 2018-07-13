@@ -85,10 +85,10 @@ GameScreen.prototype.resumed = function () {
 GameScreen.prototype.update = function () {
     this.fixTime();
     var runTime = this.runTime;
-    runTime[3] = Math.min(runTime[3] + runTime[5]/10 * this.game.time.desiredFps, 5);
+    runTime[3] = Math.min(runTime[3] + runTime[5]/10 * 60, 5);
     while (runTime[3] > 0) {
         this.updateOnce();
-        runTime[3]--;
+        runTime[3] -= Math.max(this.game.time.slowMotion, 0.001);
     }
 };
 
@@ -110,7 +110,20 @@ GameScreen.prototype.fixTime = function () {
 
 GameScreen.prototype.updateOnce = function () {
     this.touchDetector.update();
-    this.board.update();
+    // Only need this if you want to speed up 1000x
+    /*
+    for (var i = 0; i < this.board.shapes.length; i++) {
+        if (this.board.shapes[i].sprite) {
+            this.board.shapes[i].sprite.kill();
+            this.board.shapes[i].sprite = null;
+        }
+    }
+    for (var i = 0; i < 1; i++) {
+    */
+        this.board.update();
+    /*
+    }
+    */
     var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
     this.lblTime.fontSize = fontSize;
     this.lblScore.fontSize = fontSize;
@@ -231,14 +244,18 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             }
             var spr = shape.sprite;
             if (spr !== null) {
+                var pos = shape.pos;
+                if (!shape.swapping && shape.dir.x !== 0) { // diagonal fall looks faster
+                    pos = Math.max(shape.pos * 2 - 10, 0);
+                }
                 var frameName = Shape.typeNames[shape.type - 1];
                 if (shape.special == 1) frameName += "HStripe";
                 if (shape.special == 2) frameName += "VStripe";
                 if (shape.special == 3) frameName += "Wrapped";
                 if (spr.frameName !== frameName)
                     spr.frameName = frameName;
-                spr.x = startX + (x - shape.dir.x * shape.pos/10 + 0.5) * gridSize;
-                spr.y = startY + (y - shape.dir.y * shape.pos/10 + 0.5) * gridSize;
+                spr.x = startX + (x - shape.dir.x * pos/10 + 0.5) * gridSize;
+                spr.y = startY + (y - shape.dir.y * pos/10 + 0.5) * gridSize;
                 spr.scale.x = scale * spr.alpha;
                 spr.scale.y = scale * spr.alpha;
             }
