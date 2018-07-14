@@ -71,6 +71,9 @@ Debug.prototype.runSetCommand = function (cmd) {
     if (name[0] == 'time') {
         this.board.remainingTime = Math.max(Math.floor(name[1] * 60 || 0), 0);
     }
+    if (name[0] == 'slow') {
+        this.board.game.time.slowMotion = Math.max(Math.floor(name[1] * 1 || 0), 0);
+    }
 };
 
 Debug.prototype.autoSwipeTest = function () {
