@@ -170,7 +170,6 @@ Board.prototype.lockPosition = function (x, y, key) {
 };
 
 Board.prototype.unlockPosition = function (x, y, key) {
-    this.changed = true;
     var lock = this.tileLocks[x + y * this.width];
     for (var i = 0; i < lock.length; i++) {
         if (lock[i] === key) {
@@ -180,6 +179,7 @@ Board.prototype.unlockPosition = function (x, y, key) {
     if (i < lock.length) {
         lock[i] = lock[lock.length - 1];
         lock.length--;
+        this.changed = true;
     }
 };
 
@@ -596,7 +596,7 @@ Board.prototype.fall = function () {
             }
         }
         // HACK way to simulate Candy Crush
-        else if (i >= this.width && this.tileLocked(i-this.width)) {
+        else if (i >= this.width) {
             this.unlockPosition(i%this.width, (i/this.width|0)-1, this.fall);
         }
         // end of HACK
