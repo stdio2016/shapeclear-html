@@ -20,7 +20,6 @@ Ball.prototype.update = function(){
     }
     if (this.x > game.width-100) {
         this.x = game.width-100;
-        this.game.bounceTime++;
     }
     if (this.velocity.x < 0 && this.x < 0) {
         this.velocity.x *= -1;
@@ -28,7 +27,6 @@ Ball.prototype.update = function(){
     }
     if (this.x < 0) {
         this.x = 0;
-        this.game.bounceTime++;
     }
     if (this.velocity.y > 0 && this.y > game.height - 100) {
         this.velocity.y *= -1;
@@ -36,7 +34,6 @@ Ball.prototype.update = function(){
     }
     if (this.y > game.height - 100) {
         this.y = game.height - 100;
-        this.game.bounceTime++;
     }
     if (this.velocity.y < 0 && this.y < 0) {
         this.velocity.y *= -1;
@@ -44,7 +41,6 @@ Ball.prototype.update = function(){
     }
     if (this.y < 0) {
         this.y = 0;
-        this.game.bounceTime++;
     }
     var PP = Phaser.Point;
     var pos1 = this.position;
