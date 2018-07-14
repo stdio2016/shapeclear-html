@@ -88,3 +88,18 @@
 .prompt-box-ie .input input {
     width: auto;
 }
+.center-of-screen {
+    position: fixed;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.center-of-screen {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}

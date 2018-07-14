@@ -1,7 +1,7 @@
 function safeInnerHTML(str) {
     str = '' + str;
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').
-      replace(/]]>/g, ']]%gt;').replace(/\n/g, '<br>');
+      replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 }
 
 function errorHandler(msg, source, lineno, colno, err) {
@@ -123,4 +123,8 @@ function confirmBox(message, callback) {
             callback(false);
         }
     };
+}
+
+function errorbox(err) {
+    onerror(err+'', err.fileName || '?', err.lineNumber || '?', err.columnNumber || '?', err);
 }
