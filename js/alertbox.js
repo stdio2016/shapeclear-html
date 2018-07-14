@@ -73,6 +73,7 @@ function alertBox(message, callback) {
     var box = document.getElementById('prompt');
     var msg = document.getElementById('promptMessage')
     var input = document.getElementById('promptInput');
+    var ok = document.getElementById('promptOK');
     if (typeof message == 'undefined') {
         message = '';
     }
@@ -87,5 +88,39 @@ function alertBox(message, callback) {
         box.style.visibility = 'hidden';
         promptCallback = doesNothing;
         callback();
+    };
+    ok.focus();
+}
+
+function confirmBox(message, callback) {
+    var box = document.getElementById('prompt');
+    var msg = document.getElementById('promptMessage');
+    var input = document.getElementById('promptInput');
+    var ok = document.getElementById('promptOK');
+    if (typeof message == 'undefined') {
+        message = '';
+    }
+    msg.innerHTML = safeInnerHTML(message);
+    if (typeof defaultValue == 'undefined') {
+        defaultValue = '';
+    }
+    if (!callback) {
+        callback = function (result) {
+            console.log(result);
+        };
+    }
+    input.style.display = 'none';
+    box.style.visibility = 'visible';
+    ok.focus();
+    document.getElementById('promptCancel').style.display = '';
+    promptCallback = function (ok) {
+        box.style.visibility = 'hidden';
+        promptCallback = doesNothing;
+        if (ok) {
+            callback(true);
+        }
+        else {
+            callback(false);
+        }
     };
 }
