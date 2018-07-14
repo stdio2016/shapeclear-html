@@ -72,7 +72,8 @@ Debug.prototype.runSetCommand = function (cmd) {
         this.board.remainingTime = Math.max(Math.floor(name[1] * 60 || 0), 0);
     }
     if (name[0] == 'slow') {
-        this.board.game.time.slowMotion = Math.max(Math.floor(name[1] * 1 || 0), 0);
+        console.log(name[1]);
+        this.board.game.time.slowMotion = Math.max(name[1] * 1 || 1, 0);
     }
 };
 

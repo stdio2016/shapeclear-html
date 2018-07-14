@@ -17,6 +17,7 @@
 }
 
 MainMenu.prototype.create = function () {
+    this.game.version = 'v0.5.1';
     this.background = this.add.image(0, 0, 'background');
     this.music = this.add.sound('music');
     this.music.loop = true;
@@ -33,7 +34,7 @@ MainMenu.prototype.create = function () {
     this.title.inputEnabled = true;
     this.title.events.onInputUp.add(function () {
         alertBox(
-          "Copyright (c) 2016~2017 Yi-Feng Chen(陳羿豐)\n" +
+          "Copyright (c) 2016~2018 Yi-Feng Chen(陳羿豐)\n" +
           "Licensed under MIT license\n" +
           "This game uses Phaser game engine"
         );
@@ -49,7 +50,7 @@ MainMenu.prototype.create = function () {
     this.btnHelp.tint = 0xffff00;
     this.lblHelp = this.add.text(-1000, -1000, 'Board with holes');
     this.lblHelp.anchor.set(0.5, 0.5);
-    this.lblVersion = this.add.text(-1000, -1000, 'v0.5.1');
+    this.lblVersion = this.add.text(-1000, -1000, this.game.version);
     this.lblVersion.anchor.set(1, 1);
     this.game.bounceTime = 0;
 };
@@ -79,7 +80,7 @@ MainMenu.prototype.update = function () {
     this.lblHelp.y += window.devicePixelRatio || 1;
     this.btnHelp.scale.setTo(dim / 360);
     this.lblVersion.position.set(gw, gh);
-    this.lblVersion.text = "v0.5.1." + this.game.bounceTime;
+    this.lblVersion.text = this.game.version + '.' + this.game.bounceTime;
 };
 
 MainMenu.prototype.move = function(pointer, x, y){
