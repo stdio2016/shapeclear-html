@@ -76,10 +76,12 @@ GameScreen.prototype.addSelectSprite = function(){
 GameScreen.prototype.paused = function () {
     console.log("paused");
     this.runTime[4] = false;
+    this.music.pause();
 };
 
 GameScreen.prototype.resumed = function () {
     console.log("resumed");
+    this.music.resume();
 }
 
 GameScreen.prototype.update = function () {

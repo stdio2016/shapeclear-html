@@ -55,6 +55,16 @@ MainMenu.prototype.create = function () {
     this.game.bounceTime = 0;
 };
 
+MainMenu.prototype.paused = function () {
+    console.log("paused");
+    this.music.pause();
+};
+
+MainMenu.prototype.resumed = function () {
+    console.log("resumed");
+    this.music.resume();
+}
+
 MainMenu.prototype.update = function () {
     var gw = this.game.width, gh = this.game.height, dim = Math.min(gw, gh);
     this.background.width = gw;
