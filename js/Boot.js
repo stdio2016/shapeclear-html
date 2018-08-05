@@ -20,6 +20,31 @@
         "if (!this.game.device.firefox && file.data.complete && file.data.width && file.data.height)"
     );
     Phaser.Loader.prototype.loadImageTag = window.eval('(' + code + ')');
+    // porting changes from
+    // https://github.com/samme/phaser-ce/commit/1bf7ca70be9e45308a4761417caf520e0fb786ac
+    Phaser.BitmapData.generateTexture = function (key, callback, callbackContext) {
+        var cache = this.game.cache;
+        var image = new Image();
+
+        image.src = this.canvas.toDataURL("image/png");
+
+        if (!callback || image.complete)
+        {
+            var obj = cache.addImage(key, '', image);
+            return new PIXI.Texture(obj.base);
+        }
+        else
+        {
+            image.onload = function () {
+                var obj = cache.addImage(key, '', image);
+                var texture = new PIXI.Texture(obj.base);
+                callback.call(callbackContext || null, texture);
+                image.onload = null;
+            };
+        }
+
+        return null;
+    };
 })();
 
 // Finished loading phaser.js
