@@ -9,7 +9,8 @@ function Shape(type, x, y, board) {
     this.bouncing = false;
     this.swapping = false;
     this.cleared = false;
-    this.tick = 10;
+    this.tickClear = 10;
+    this.tick = 0;
 
     // is it part of a matching?
     this.match = null;
@@ -46,7 +47,7 @@ Shape.prototype.canFall = function () {
 };
 
 Shape.prototype.isDeleted = function () {
-    return this.tick <= 0 || this.type == 0;
+    return this.tickClear <= 0 || this.type == 0;
 };
 
 Shape.prototype.stopSwapping = function () {
@@ -69,12 +70,27 @@ Shape.prototype.stopFalling = function () {
 };
 
 Shape.prototype.deleteUpdate = function () {
-    this.tick--;
-    if (this.tick <= 0) {
+    this.tickClear--;
+    if (this.tickClear <= 0) {
         if (this.board.getShape(this.x, this.y) === this) {
             this.board.setShape(this.x, this.y, new Shape(0, this.x, this.y, this.board));
         }
         return false;
     }
     return true;
+};
+
+Shape.prototype.update = function () {
+    ;
+};
+
+Shape.prototype.toString = function () {
+    var b = this.board;
+    var sp = this.sprite;
+    this.board = null;
+    this.sprite = null;
+    var str = "[Object "+this.constructor.name+"]" + JSON.stringify(this);
+    this.board = b;
+    this.sprite = sp;
+    return str;
 };

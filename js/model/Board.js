@@ -96,22 +96,34 @@ Board.prototype.clearShape = function (x, y, dir) {
     if (y >= this.height || y < 0) return RangeError('y out of bound');
     // TODO: handle special shapes such as striped or wrapped ones
     var i = x + y * this.width;
-    if (this.shapes[i].type > 0 && !this.shapes[i].cleared && !this.shapes[i].swapping) {
-        this.deletedShapes.push(this.shapes[i]);
-        this.shapes[i].cleared = true;
+    var sh = this.shapes[i];
+    if (sh.type > 0 && !sh.cleared && !sh.swapping) {
+        if (sh.special !== 3 && sh.special !== 4) {
+            this.deletedShapes.push(sh);
+            sh.cleared = true;
+        }
         //this.shapes[i] = new Shape(0, x, y);
-        switch (this.shapes[i].special) {
+        switch (sh.special) {
           case 1:
-            this.addItemToClear(new StripeEffect(this, x, y, 1, this.shapes[i].type));
+            this.addItemToClear(new StripeEffect(this, x, y, 1, sh.type));
             break;
           case 2:
-            this.addItemToClear(new StripeEffect(this, x, y, 2, this.shapes[i].type));
+            this.addItemToClear(new StripeEffect(this, x, y, 2, sh.type));
             break;
           case 3:
-            this.addItemToClear(new WrappedEffect(this, x, y, this.shapes[i].type));
+            if (sh.state === WrappedShape.NORMAL) {
+                sh.state = WrappedShape.EXPLODED;
+                this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
+            }
+          case 4:
+            if (sh.state === WrappedShape.CAN_CLEAR) {
+                this.deletedShapes.push(sh);
+                sh.cleared = true;
+                this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
+            }
             break;
         }
-        if (this.shapes[i].type === 10) {
+        if (sh.type === 10) {
             this.elcShape(dir || this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT));
         }
     }
@@ -203,7 +215,21 @@ Board.prototype.update = function () {
     }
     this.changed = this.changed || this.itemChanged;
     if (!this.changed && this.matches.length == 0) {
-        this.combo = 0;
+        var hasBomb = false;
+        for (var i = 0; i < this.shapes.length; i++) {
+            if (this.shapes[i].special === 4 &&
+                this.shapes[i].state === WrappedShape.WAIT_EXPLODE_AGAIN)
+            {
+                this.shapes[i].tick = 1;
+                hasBomb = true;
+            }
+        }
+        if (hasBomb) {
+            this.changed = true;
+        }
+        else {
+            this.combo = 0;
+        }
     }
     if (this.remainingTime > 0)
         this.remainingTime--;
@@ -255,6 +281,10 @@ Board.prototype.shapeClearUpdate = function () {
         this.changed = true;
     }
     this.deletedShapes = newDelShapes;
+    for (var i = 0; i < this.shapes.length; i++) {
+        if (!this.shapes[i].cleared)
+            this.shapes[i].update();
+    }
 };
 
 Board.prototype.updateSwaps = function () {
@@ -623,8 +653,8 @@ Board.prototype.fall = function () {
         var dsh = this.shapes[i + this.width];
         if (this.shapes[i].isEmpty() && !this.tileLocked(i)) {
             this.falling = true;
-            var r = Math.floor(Math.random() * AppleFools.DROP_COLOR_COUNT);
-            var sh = new Shape(r + 1, i, 0, this);
+            var r = this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT);
+            var sh = new Shape(r, i, 0, this);
             this.shapes[i] = sh;
             sh.dir = {x: 0, y: 1};
             if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {

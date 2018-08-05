@@ -243,6 +243,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                 shape.sprite = this.shapeGroup.getFirstDead(true, 100, 100, 'shapes', Shape.typeNames[shape.type - 1]);
                 shape.sprite.alpha = 1;
                 shape.sprite.anchor = new Phaser.Point(0.5, 0.5);
+                shape.sprite.data = shape;
             }
             var spr = shape.sprite;
             if (spr !== null) {
@@ -283,12 +284,19 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         if (sh.sprite) {
             sh.sprite.alpha -= 0.1;
         }
-        if (sh.tick == 1) {
+        if (sh.tickClear == 1) {
             if (sh.sprite) {
                 sh.sprite.kill();
             }
         }
     }
+    this.shapeGroup.forEachAlive(function (spr) {
+        var sh = spr.data;
+        if (this.board.getShape(sh.x, sh.y) !== sh) {
+            sh.sprite = null;
+            spr.kill();
+        }
+    });
     var scores = this.board.gainScores, aliveScoreTexts = [];
     for (var i = 0; i < scores.length; i++) {
         var s = scores[i];

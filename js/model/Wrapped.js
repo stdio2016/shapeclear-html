@@ -1,9 +1,36 @@
 function WrappedShape(type, x, y, board) {
     Shape.call(this, type, x, y, board);
+    this.state = WrappedShape.NORMAL;
 }
+
+WrappedShape.NORMAL = 0;
+WrappedShape.EXPLODED = 1;
+WrappedShape.WAIT_EXPLODE_AGAIN = 2;
+WrappedShape.CAN_CLEAR = 3;
 
 WrappedShape.prototype = new Shape();
 WrappedShape.prototype.constructor = WrappedShape;
+
+WrappedShape.prototype.update = function () {
+    if (this.state === WrappedShape.EXPLODED) {
+        this.state = WrappedShape.WAIT_EXPLODE_AGAIN;
+        this.special = 4;
+        this.tick = 60 * 5 - this.board.passedTime%60;
+    }
+    this.tick--;
+    if (this.tick === 0 && this.state === WrappedShape.WAIT_EXPLODE_AGAIN) {
+        this.state = WrappedShape.CAN_CLEAR;
+        this.board.clearShape(this.x, this.y);
+    }
+};
+
+WrappedShape.prototype.canMatch = function () {
+    if (this.state === WrappedShape.NORMAL) {
+        // call base class
+        return Shape.prototype.canMatch.call(this);
+    }
+    return false;
+};
 
 function WrappedEffect(board, x, y, color) {
     this.board = board;
@@ -18,7 +45,8 @@ WrappedEffect.prototype.explode = function () {
     var i, j;
     for (i = Math.max(this.x-1, 0); i <= this.x+1 && i < this.board.width; i++) {
         for (j = Math.min(this.y+1, this.board.height-1); j >= this.y-1 && j >= 0 ; j--) {
-            this.board.clearShape(i, j);
+            if (i !== this.x || j !== this.y)
+                this.board.clearShape(i, j);
         }
         var sh;
         while (j >= 0) {
@@ -32,6 +60,13 @@ WrappedEffect.prototype.explode = function () {
             j--;
         }
     }
+    this.board.gainScores.push({
+      x: this.x,
+      y: this.y,
+      type: this.type,
+      score: 540
+    });
+    this.board.score += 540;
 };
 
 WrappedEffect.prototype.update = function () {
