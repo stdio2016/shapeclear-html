@@ -18,9 +18,13 @@ WrappedShape.prototype.update = function () {
         this.tick = 60 * 5 - this.board.passedTime%60;
     }
     this.tick--;
-    if (this.tick === 0 && this.state === WrappedShape.WAIT_EXPLODE_AGAIN) {
+    if (this.tick <= 0 && this.state === WrappedShape.WAIT_EXPLODE_AGAIN) {
         this.state = WrappedShape.CAN_CLEAR;
         this.board.clearShape(this.x, this.y);
+        // sometimes the shape might fail to explode
+        if (!this.cleared) {
+            this.state = WrappedShape.WAIT_EXPLODE_AGAIN;
+        }
     }
 };
 
