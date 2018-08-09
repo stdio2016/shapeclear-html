@@ -40,7 +40,7 @@ function addScriptTag(src, onload, onerror) {
 
 var loadProgress = document.getElementById('loadProgress');
 var loadingInfo = document.getElementById('loadingInfo');
-loadingInfo.innerText = 'Loading phaser.js';
+loadingInfo.innerHTML = 'Loading phaser.js';
 loadScript('lib/phaser.js', function (e) {
     if (e.lengthComputable) {
         loadProgress.value = e.loaded;
@@ -48,14 +48,14 @@ loadScript('lib/phaser.js', function (e) {
     }
     else {
         loadProgress.value = e.loaded;
-        loadProgress.max = 3338647;
+        loadProgress.max = 3272160;
     }
 }, function (e) {
     if (e) {
-        loadingInfo.innerText = 'Unable to load Phaser.js';
+        loadingInfo.innerHTML = 'Unable to load Phaser.js';
         return;
     }
-    loadingInfo.innerText = 'Loading my program';
+    loadingInfo.innerHTML = 'Loading my program';
     var srcs = [
       'js/model/Board.js',
       'js/model/Shape.js',
@@ -84,7 +84,7 @@ loadScript('lib/phaser.js', function (e) {
         }
     }
     function onerror() {
-        loading.innerText = 'Unable to load my program';
+        loading.innerHTML = 'Unable to load my program';
     }
     for (var i = 0; i < srcs.length; i++) {
         addScriptTag(srcs[i], onload, onerror);

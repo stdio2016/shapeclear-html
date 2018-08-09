@@ -45,6 +45,78 @@
 
         return null;
     };
+    
+    Phaser.Sound.prototype.resume = function () {
+    
+        if (this.paused && this._sound)
+        {
+            if (this.usingWebAudio)
+            {
+                var p = Math.max(0, this.position + (this.pausedPosition / 1000));
+    
+                this._sound = this.context.createBufferSource();
+                this._sound.buffer = this._buffer;
+    
+                if (this.externalNode)
+                {
+                    this._sound.connect(this.externalNode);
+                }
+                else
+                {
+                    this._sound.connect(this.gainNode);
+                }
+    
+                if (this.loop)
+                {
+                    this._sound.loop = true;
+                }
+    
+                if (!this.loop && this.currentMarker === '')
+                {
+                    this._sound.onended = this.onEndedHandler.bind(this);
+                }
+    
+                var duration = this.duration - (this.pausedPosition / 1000);
+    
+                if (this._sound.start === undefined)
+                {
+                    this._sound.noteGrainOn(0, p, duration);
+                    //this._sound.noteOn(0); // the zero is vitally important, crashes iOS6 without it
+                }
+                else
+                {
+                    // some strange code that breaks on Edge browser
+                    if (this.loop)
+                    {
+                        //  Handle chrome bug: https://code.google.com/p/chromium/issues/detail?id=457099
+                        if (this.game.device.chrome && this.game.device.chromeVersion === 42)
+                        {
+                            this._sound.start(0);
+                        }
+                        else
+                        {
+                            this._sound.start(0, p);
+                        }
+                    }
+                    else
+                    {
+                        this._sound.start(0, p, duration);
+                    }
+                }
+            }
+            else
+            {
+                this._sound.currentTime = this._tempPause;
+                this._sound.play();
+            }
+    
+            this.isPlaying = true;
+            this.paused = false;
+            this.startTime += (this.game.time.time - this.pausedTime);
+            this.onResume.dispatch(this);
+        }
+    
+    };
 })();
 
 // Finished loading phaser.js
