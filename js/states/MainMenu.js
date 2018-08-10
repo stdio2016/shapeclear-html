@@ -1,5 +1,6 @@
 ﻿function MainMenu() {
     this.background = null;
+    this.castle = null;
     this.music = null;
     /* Main Menu looks like this:
     |     Shape Clear   |
@@ -19,6 +20,8 @@
 MainMenu.prototype.create = function () {
     this.game.version = 'v0.5.1';
     this.background = this.add.image(0, 0, 'background');
+    this.castle = this.add.image(this.game.width/2, this.game.height * 0.705, 'castle');
+    this.castle.anchor.set(0.5, 0.72);
     this.music = this.add.sound('music');
     this.music.loop = true;
     this.music.play();
@@ -69,6 +72,9 @@ MainMenu.prototype.update = function () {
     var gw = this.game.width, gh = this.game.height, dim = Math.min(gw, gh);
     this.background.width = gw;
     this.background.height = gh;
+    var castleScale = Math.min(gh * 0.9, gw) / 800;
+    this.castle.scale.set(castleScale, castleScale);
+    this.castle.position.set(gw / 2, gh * 0.705);
     this.title.fontSize = dim / 10;
     this.lblPlay.fontSize = dim / 18;
     this.lblHelp.fontSize = dim / 25;

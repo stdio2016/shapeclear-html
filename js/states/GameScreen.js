@@ -1,6 +1,7 @@
 function GameScreen() {
     this.debug = null; // To show debug message
     this.background = null;
+    this.castle = null;
     this.board = null;
     this.touchDetector = null;
     this.music = null;
@@ -24,6 +25,8 @@ GameScreen.prototype.preload = function () {
 GameScreen.prototype.create = function () {
     console.log("So don't expect me to make a game");
     this.background = game.add.sprite(0, 0, 'background');
+    this.castle = this.add.image(this.game.width/2, this.game.height * 0.705, 'castle');
+    this.castle.anchor.set(0.5, 0.72);
     this.addDebugText();
     window.board = this.board = new Board(this.game);
     this.board.generateSimple();
@@ -133,6 +136,11 @@ GameScreen.prototype.updateOnce = function () {
     this.debug.text = this.board.debug.getDebugMessage();
     this.background.width = game.width;
     this.background.height = game.height;
+
+    var castleScale = Math.min(this.game.height * 0.9, this.game.width) / 800;
+    this.castle.scale.set(castleScale, castleScale);
+    this.castle.position.set(this.game.width / 2, this.game.height * 0.705);
+
     this.scoreText.setScore(this.board.score);
     var remainingTime = this.board.remainingTime;
     if (Math.ceil(remainingTime / 60) <= 10 && (remainingTime-1)%60 >= 30 || remainingTime == 0) {

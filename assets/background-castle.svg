@@ -13,11 +13,7 @@
    height="274"
    id="svg2985"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="background-castle.svg"
-   inkscape:export-filename="/home/stdio2016/Documents/ShapeClear/images/background_landscape.png"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <defs
      id="defs2987">
     <linearGradient
@@ -68,15 +64,15 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="374.24844"
-     inkscape:cy="40.869783"
+     inkscape:cy="120.86978"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g3268"
      showgrid="false"
-     inkscape:window-width="1536"
-     inkscape:window-height="801"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1063"
+     inkscape:window-height="648"
+     inkscape:window-x="430"
+     inkscape:window-y="338"
+     inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true"
      fit-margin-top="0"
@@ -91,7 +87,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="" />
       </cc:Work>
@@ -138,38 +134,38 @@
          style="fill:#b3b3b3;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none" />
       <path
          inkscape:transform-center-y="-2.4063889"
-         d="m 639.79999,53.999996 23.96662,17.412773 -9.15443,28.174457 -29.62438,-10e-7 -9.15444,-28.174457 z"
+         d="m 639.79999,53.999996 21.82384,12.600001 0,25.200001 L 639.79999,104.4 617.97615,91.799997 l 0,-25.200001 z"
          inkscape:randomized="0"
          inkscape:rounded="0"
          inkscape:flatsided="true"
-         sodipodi:arg2="-0.9424778"
+         sodipodi:arg2="-1.0471975"
          sodipodi:arg1="-1.5707963"
          sodipodi:r2="20.387228"
          sodipodi:r1="25.200001"
          sodipodi:cy="79.199997"
          sodipodi:cx="639.79999"
-         sodipodi:sides="5"
+         sodipodi:sides="6"
          id="path4012"
          style="fill:#2a7fff;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none"
          sodipodi:type="star"
-         inkscape:transform-center-x="1.2207031e-005" />
+         inkscape:transform-center-x="1.2207031e-05" />
       <path
          sodipodi:type="star"
          style="fill:#2a7fff;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none"
          id="path4014"
-         sodipodi:sides="5"
+         sodipodi:sides="6"
          sodipodi:cx="794.59998"
          sodipodi:cy="79.199997"
          sodipodi:r1="25.200001"
          sodipodi:r2="20.387228"
          sodipodi:arg1="-1.5707963"
-         sodipodi:arg2="-0.9424778"
+         sodipodi:arg2="-1.0471975"
          inkscape:flatsided="true"
          inkscape:rounded="0"
          inkscape:randomized="0"
-         d="m 794.59998,53.999996 23.96662,17.412773 -9.15444,28.174457 -29.62437,-10e-7 -9.15444,-28.174457 z"
+         d="m 794.59998,53.999996 21.82384,12.600001 0,25.200001 L 794.59997,104.4 772.77613,91.799997 l 1e-5,-25.200001 z"
          inkscape:transform-center-y="-2.4063889"
-         inkscape:transform-center-x="2.4414063e-005" />
+         inkscape:transform-center-x="2.4414063e-05" />
       <g
          transform="matrix(1.0500983,1.0500983,-1.0500983,1.0500983,386.81679,-610.41555)"
          id="g4026"
@@ -439,24 +435,5 @@
          d="m 560.65618,10.7032 -43.31236,0 L 539,-26.806399 Z"
          inkscape:transform-center-y="-6.2515999" />
     </g>
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="text"
-     style="display:none"
-     transform="translate(-3.0085783e-6,-805.99998)">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:47.99999619px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none"
-       x="438.3999"
-       y="529.20001"
-       id="text3001"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3003"
-         x="438.3999"
-         y="529.20001"
-         style="font-size:76.79999542px">形狀消消樂</tspan></text>
   </g>
 </svg>
