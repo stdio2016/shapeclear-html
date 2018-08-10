@@ -34,7 +34,7 @@
 localStorage.removeItem('ShapeClear.renderer');
 var detectRenderer = document.getElementById('detectRenderer');
 var choiceBox = document.getElementById('choice');
-var renderer = localStorage.getItem('ShapeClear_renderer');
+var renderer = localStorage.getItem('ShapeClear_renderer') || 'AUTO';
 var resIn = document.getElementById('resolution');
 var resOut = document.getElementById('res');
 var resolution = localStorage.getItem('ShapeClear_resolution');

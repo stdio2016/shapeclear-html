@@ -129,8 +129,9 @@ Load.prototype.testRenderer = function () {
         renderer = 'HEADLESS';
         break;
     }
+    // don't store into localStorage!
     try {
-        localStorage.setItem('ShapeClear_renderer', renderer);
+        // localStorage.setItem('ShapeClear_renderer', renderer);
     }
     catch (e) {
         ;
