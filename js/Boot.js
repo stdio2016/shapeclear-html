@@ -174,6 +174,29 @@ function getWindowSize() {
     return [width, height];
 }
 
+function Li(s, x) {
+  if (s < 0) return NaN;
+  if (x >= 1 || x <= -1) return NaN;
+  var sum = 0, term = x, i = 1, xx = x;
+  while (term > 1e-14 || term < -1e-14) {
+    sum += term;
+    ++i;
+    xx *= x;
+    term = xx / Math.pow(i, s);
+  }
+  return sum;
+}
+
+function prank(T, v) {
+  var x = v / T;
+  var ex = Math.exp(-x);
+  var pi4 = Math.pow(Math.PI, 4);
+  return T*T*T*T * (
+    pi4 / 15 - x*x*x * Li(1, ex) - 3 * x*x * Li(2, ex) -
+      6 * x * Li(3, ex) - 6 * Li(4, ex)
+  );
+}
+
 // Start my game!
 var windowSize = getWindowSize();
 var game = new Phaser.Game({
