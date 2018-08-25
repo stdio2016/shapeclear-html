@@ -98,7 +98,7 @@ Board.prototype.clearShape = function (x, y, dir) {
     var i = x + y * this.width;
     var sh = this.shapes[i];
     if (sh.type > 0 && !sh.cleared && !sh.swapping) {
-        if (sh.special !== WrappedShape.SPECIAL && sh.special !== WrappedShape.SPECIAL_WAIT_EXPLODE) {
+        if (sh.canBeCleared()) {
             this.deletedShapes.push(sh);
             sh.cleared = true;
         }
@@ -117,13 +117,14 @@ Board.prototype.clearShape = function (x, y, dir) {
             }
           case WrappedShape.SPECIAL_WAIT_EXPLODE:
             if (sh.state === WrappedShape.CAN_CLEAR) {
-                this.deletedShapes.push(sh);
-                sh.cleared = true;
                 this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
             }
             break;
           case TaserShape.SPECIAL:
-            this.elcShape(dir || this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT));
+            if (sh.state === TaserShape.NORMAL) {
+                sh.state = TaserShape.ACTIVE;
+                this.addItemToClear(new TaserEffect(this, dir, sh));
+            }
             break;
         }
     }
@@ -752,19 +753,4 @@ Board.prototype.fall = function () {
         }
     }
     this.changed = this.changed || this.falling;
-};
-
-Board.prototype.elcShape = function (type) {
-    var count = 0, all = [];
-    for (var i = 0; i < this.shapes.length; i++) {
-        if (this.shapes[i].type == type) {
-            count++;
-            all.push(i);
-            this.clearShape(i%this.width, Math.floor(i/this.width));
-        }
-    }
-    for (var i = 0; i < count; i++) {
-        this.gainScores.push({x: all[i]%this.width, y: Math.floor(all[i]/this.width), type: type, score: 60 * count});
-        this.score += 60 * count;
-    }
 };

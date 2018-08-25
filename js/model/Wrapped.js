@@ -40,6 +40,13 @@ WrappedShape.prototype.canMatch = function () {
     return false;
 };
 
+WrappedShape.prototype.canBeCleared = function () {
+    if (Shape.prototype.canBeCleared.call(this)) {
+        return this.state === WrappedShape.CAN_CLEAR;
+    }
+    return false;
+};
+
 function WrappedEffect(board, x, y, color) {
     this.board = board;
     this.x = x;

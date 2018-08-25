@@ -52,6 +52,10 @@ Shape.prototype.isDeleted = function () {
     return this.tickClear <= 0 || this.type == 0;
 };
 
+Shape.prototype.canBeCleared = function () {
+    return !this.swapping && !this.cleared;
+}
+
 Shape.prototype.stopSwapping = function () {
     this.swapping = false;
     this.dir = {x: 0, y: 0};
