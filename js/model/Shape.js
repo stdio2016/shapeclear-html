@@ -21,13 +21,15 @@ function Shape(type, x, y, board) {
 
 Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
  'downTriangle', 'rhombus', 'apple', 'pineapple', 'pen', 'taser'];
+Shape.UNMATCHABLE_TYPE = 100;
 
 Shape.prototype.canSwap = function () {
     return !this.swapping && !this.isMoving() && this.type > 0 && !this.cleared;
 };
 
 Shape.prototype.canMatch = function () {
-    return !this.swapping && (!this.isMoving() || this.bouncing) && this.type > 0 && !this.cleared;
+    return !this.swapping && (!this.isMoving() || this.bouncing) &&
+    (this.type > 0 && this.type !== Shape.UNMATCHABLE_TYPE) && !this.cleared;
 };
 
 Shape.prototype.isMoving = function () {

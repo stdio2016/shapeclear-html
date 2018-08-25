@@ -64,6 +64,7 @@ loadScript('lib/phaser.js', function (e) {
       'js/model/Debug.js',
       'js/model/Striped.js',
       'js/model/Wrapped.js',
+      'js/model/Taser.js',
       'js/states/Load.js',
       'js/states/GameScreen.js',
       'js/states/MainMenu.js',

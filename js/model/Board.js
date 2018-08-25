@@ -98,33 +98,33 @@ Board.prototype.clearShape = function (x, y, dir) {
     var i = x + y * this.width;
     var sh = this.shapes[i];
     if (sh.type > 0 && !sh.cleared && !sh.swapping) {
-        if (sh.special !== 3 && sh.special !== 4) {
+        if (sh.special !== WrappedShape.SPECIAL && sh.special !== WrappedShape.SPECIAL_WAIT_EXPLODE) {
             this.deletedShapes.push(sh);
             sh.cleared = true;
         }
         //this.shapes[i] = new Shape(0, x, y);
         switch (sh.special) {
-          case 1:
-            this.addItemToClear(new StripeEffect(this, x, y, 1, sh.type));
+          case StripedShape.HORIZONTAL:
+            this.addItemToClear(new StripeEffect(this, x, y, StripeEffect.HORIZONTAL, sh.type));
             break;
-          case 2:
-            this.addItemToClear(new StripeEffect(this, x, y, 2, sh.type));
+          case StripedShape.VERTICAL:
+            this.addItemToClear(new StripeEffect(this, x, y, StripeEffect.VERTICAL, sh.type));
             break;
-          case 3:
+          case WrappedShape.SPECIAL:
             if (sh.state === WrappedShape.NORMAL) {
                 sh.state = WrappedShape.EXPLODED;
                 this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
             }
-          case 4:
+          case WrappedShape.SPECIAL_WAIT_EXPLODE:
             if (sh.state === WrappedShape.CAN_CLEAR) {
                 this.deletedShapes.push(sh);
                 sh.cleared = true;
                 this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
             }
             break;
-        }
-        if (sh.type === 10) {
+          case TaserShape.SPECIAL:
             this.elcShape(dir || this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT));
+            break;
         }
     }
 };
@@ -217,7 +217,7 @@ Board.prototype.update = function () {
     if (!this.changed && this.matches.length == 0) {
         var hasBomb = false;
         for (var i = 0; i < this.shapes.length; i++) {
-            if (this.shapes[i].special === 4 &&
+            if (this.shapes[i].special === WrappedShape.SPECIAL_WAIT_EXPLODE &&
                 this.shapes[i].state === WrappedShape.WAIT_EXPLODE_AGAIN)
             {
                 this.shapes[i].tick = 1;
@@ -234,27 +234,33 @@ Board.prototype.update = function () {
     if (this.remainingTime > 0)
         this.remainingTime--;
     if (this.state === Board.BONUS_TIME && !this.changed) {
-        var hasSpecial = false;
-        for (var i = 0; i < this.shapes.length; i++) {
-            if (this.shapes[i].special > 0) {
-                this.clearShape(i%this.width, i/this.width|0);
-                hasSpecial = true; break;
-            }
-        }
-        if (!hasSpecial) {
-            // chocolate
-            for (var i = 0; i < this.shapes.length; i++) {
-                if (this.shapes[i].type === 10) {
-                    this.clearShape(i%this.width, i/this.width|0);
-                    hasSpecial = true; break;
-                }
-            }
-        }
+        var hasSpecial = this.findSpecial(WrappedShape.SPECIAL);
+        if (!hasSpecial) hasSpecial = this.findSpecial(function (sh) {
+            return sh.special === StripedShape.HORIZONTAL || sh.special === StripedShape.VERTICAL;
+        });
+        if (!hasSpecial) hasSpecial = this.findSpecial(TaserShape.SPECIAL);
         if (!hasSpecial) this.state = Board.ENDED;
     }
     if (this.state !== Board.ENDED) {
         this.passedTime++;
     }
+};
+
+Board.prototype.findSpecial = function (specialTest) {
+    if ((typeof specialTest) !== "function") {
+        var spe = specialTest;
+        specialTest = function (sh) {
+            return sh.special === spe;
+        };
+    }
+    for (var i = 0; i < this.shapes.length; i++) {
+        var sh = this.shapes[i];
+        if (specialTest(sh)) {
+            this.clearShape(i%this.width, i/this.width|0);
+            return true;
+        }
+    }
+    return false;
 };
 
 Board.prototype.itemClearUpdate = function () {
@@ -304,11 +310,11 @@ Board.prototype.updateSwaps = function () {
                 this.swaps.length--;
                 --i;
             }
-            else if (from.type === 10 || to.type === 10) {
-                if (from.type === 10) {
+            else if (from.special === TaserShape.SPECIAL || to.special === TaserShape.SPECIAL) {
+                if (from.special === TaserShape.SPECIAL) {
                     this.clearShape(from.x, from.y, to.type);
                 }
-                if (to.type === 10) {
+                if (to.special === TaserShape.SPECIAL) {
                     this.clearShape(to.x, to.y, from.type);
                 }
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
@@ -466,24 +472,26 @@ Board.prototype.clearMatch = function () {
         }
         if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
             var r = this.game.rnd.between(1,2)+m.hx, sh;
-            this.setShape(r, m.hy, sh = new StripedShape(type, r, m.hy, 2, this));
-            sh.special = 2;
+            sh = new StripedShape(type, r, m.hy, StripedShape.VERTICAL, this);
+            this.setShape(r, m.hy, sh);
         }
         if (m.vlength == 4 && m.type === Match.VERTICAL) {
             var r = this.game.rnd.between(1,2)+m.vy;
-            this.setShape(m.vx, r, sh = new StripedShape(type, m.vx, r, 1, this));
-            sh.special = 1;
+            sh = new StripedShape(type, m.vx, r, StripedShape.HORIZONTAL, this);
+            this.setShape(m.vx, r, sh);
         }
         if (m.type === Match.CROSS && m.hlength < 5 && m.vlength < 5) {
-            this.setShape(m.vx, m.hy, sh = new WrappedShape(type, m.vx, m.hy, this));
-            sh.special = 3;
+            sh = new WrappedShape(type, m.vx, m.hy, this);
+            this.setShape(m.vx, m.hy, sh);
         }
         if (Debug.createSpecial) {
             if (m.hlength >= 5) {
-                this.setShape(m.hx+2, m.hy, new Shape(10, m.hx+2, m.hy, this));
+                sh = new TaserShape(m.hx+2, m.hy, this);
+                this.setShape(m.hx+2, m.hy, sh);
             }
             if (m.vlength >= 5) {
-                this.setShape(m.vx, m.vy+2, new Shape(10, m.vx, m.vy+2, this));
+                sh = new TaserShape(m.vx, m.vy+2, this);
+                this.setShape(m.vx, m.vy+2, sh);
             }
         }
         this.combo++;

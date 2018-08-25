@@ -1,24 +1,18 @@
-function WrappedShape(type, x, y, board) {
-    Shape.call(this, type, x, y, board);
+function TaserShape(x, y, board) {
+    Shape.call(this, Shape.UNMATCHABLE_TYPE, x, y, board);
     this.state = WrappedShape.NORMAL;
-    this.special = WrappedShape.SPECIAL;
+    this.special = TaserShape.SPECIAL;
 }
 
-WrappedShape.NORMAL = 0;
-WrappedShape.EXPLODED = 1;
-WrappedShape.WAIT_EXPLODE_AGAIN = 2;
-WrappedShape.CAN_CLEAR = 3;
+TaserShape.SPECIAL = 5;
 
-WrappedShape.SPECIAL = 3;
-WrappedShape.SPECIAL_WAIT_EXPLODE = 4;
+TaserShape.prototype = new Shape();
+TaserShape.prototype.constructor = WrappedShape;
 
-WrappedShape.prototype = new Shape();
-WrappedShape.prototype.constructor = WrappedShape;
-
-WrappedShape.prototype.update = function () {
+TaserShape.prototype.update = function () {
     if (this.state === WrappedShape.EXPLODED) {
         this.state = WrappedShape.WAIT_EXPLODE_AGAIN;
-        this.special = WrappedShape.SPECIAL_WAIT_EXPLODE;
+        this.special = 4;
         this.tick = 60 * 5 - this.board.passedTime%60;
     }
     this.tick--;
@@ -40,7 +34,7 @@ WrappedShape.prototype.canMatch = function () {
     return false;
 };
 
-function WrappedEffect(board, x, y, color) {
+function TaserEffect(board, x, y, color) {
     this.board = board;
     this.x = x;
     this.y = y;

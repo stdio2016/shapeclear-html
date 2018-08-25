@@ -263,6 +263,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                 if (shape.special == 1) frameName += "HStripe";
                 if (shape.special == 2) frameName += "VStripe";
                 if (shape.special == 3) frameName += "Wrapped";
+                if (shape.special === 5) frameName = "taser";
                 if (spr.frameName !== frameName)
                     spr.frameName = frameName;
                 spr.x = startX + (x - shape.dir.x * pos/10 + 0.5) * gridSize;

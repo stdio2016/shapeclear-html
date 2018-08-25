@@ -1,7 +1,16 @@
 function StripedShape(type, x, y, dir, board) {
     Shape.call(this, type, x, y, board);
     this.stripeDirection = dir;
+    if (dir === StripedShape.HORIZONTAL) {
+        this.special = StripedShape.HORIZONTAL;
+    }
+    else {
+        this.special = StripedShape.VERTICAL;
+    }
 }
+
+StripedShape.HORIZONTAL = 1;
+StripedShape.VERTICAL = 2;
 
 StripedShape.prototype = new Shape();
 StripedShape.prototype.constructor = StripedShape;
