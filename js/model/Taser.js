@@ -77,6 +77,10 @@ TaserEffect.prototype.update = function () {
                 this.taser.state = TaserShape.FINISHED;
             }
         }
+        //  taser has no target!
+        if (this.count === 0) {
+            this.taser.state = TaserShape.FINISHED;
+        }
     }
     if (this.progress < this.count-1 || this.tick === this.totalTicks) {
         this.board.itemChanged = true;
