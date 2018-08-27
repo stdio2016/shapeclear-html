@@ -47,6 +47,13 @@ WrappedShape.prototype.canBeCleared = function () {
     return false;
 };
 
+WrappedShape.prototype.canCrush = function () {
+    if (Shape.prototype.canBeCleared.call(this)) {
+        return this.state === WrappedShape.NORMAL;
+    }
+    return false;
+};
+
 function WrappedEffect(board, x, y, color) {
     this.board = board;
     this.x = x;

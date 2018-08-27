@@ -31,6 +31,13 @@ TaserShape.prototype.canBeCleared = function () {
     return false;
 };
 
+TaserShape.prototype.canCrush = function () {
+    if (Shape.prototype.canBeCleared.call(this)) {
+        return this.state === TaserShape.NORMAL;
+    }
+    return false;
+};
+
 function TaserEffect(board, color, taser) {
     this.board = board;
     this.totalTicks = 2;
@@ -47,7 +54,7 @@ function TaserEffect(board, color, taser) {
 TaserEffect.prototype.elcShape = function (type) {
     var shapes = this.board.shapes;
     for (var i = 0; i < shapes.length; i++) {
-        if (shapes[i].type == type && shapes[i].canBeCleared()) {
+        if (shapes[i].type == type && shapes[i].canCrush()) {
             this.count++;
             this.all.push(shapes[i]);
         }
