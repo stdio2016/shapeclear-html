@@ -207,6 +207,25 @@ var game = new Phaser.Game({
     "enableDebug": false,
     "resolution": getResolutionConfig()
 });
+
+// DEBUG: Firefox for Android 61 will leak memory after closing this game
+function gameDestructor() {
+    if (game) game.destroy();
+    game = null;
+    mainMenu = null;
+    gameScreen = null;
+}
+window.addEventListener('unload', gameDestructor);
+
+function preventLeave(event) {
+    if (game.state.current === "GameScreen") {
+        event.returnValue = "Your game is not finished. Do you want to leave?";
+        return event.returnValue;
+    }
+    return "";
+}
+window.addEventListener('beforeunload', preventLeave);
+
 var gameScreen = new GameScreen();
 game.state.add("GameScreen", gameScreen);
 game.state.add("Load", new Load());
