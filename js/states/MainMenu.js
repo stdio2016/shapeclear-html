@@ -36,10 +36,19 @@ MainMenu.prototype.create = function () {
     this.title.anchor.set(0.5, 0.5);
     this.title.inputEnabled = true;
     this.title.events.onInputUp.add(function () {
+        var xp = localStorage.ShapeClear_xp || 0;
+        var times = localStorage.ShapeClear_played || 0;
+        var lv = 1;
+        var req;
+        while (lv < 50 && xp > (req = Math.floor(prank(lv+1, 40)) * 10)) {
+            lv++;
+        }
         alertBox(
           "Copyright (c) 2016~2018 Yi-Feng Chen(陳羿豐)\n" +
           "Licensed under MIT license\n" +
-          "This game uses Phaser game engine"
+          "This game uses Phaser game engine\n" +
+          "Lv. " + lv + " xp: " + xp + "/" + req + "\n" +
+          "You played " + times + " times"
         );
         Debug.createSpecial ^= 1;
     }, this);

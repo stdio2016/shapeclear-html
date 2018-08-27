@@ -154,6 +154,7 @@ GameScreen.prototype.updateOnce = function () {
         if (this.board.state == Board.ENDED) {
         var me = this;
         if (promptCallback === doesNothing) {
+            me.saveScore(me.board.score);
             alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
                 me.state.start('MainMenu');
             });
@@ -401,4 +402,20 @@ GameScreen.prototype.shutdown = function () {
     this.scorePopups = [];
     window.board = null;
     this.effectSprites = [];
+};
+
+GameScreen.prototype.saveScore = function (score) {
+    if (this.board.debug.autoSwipe) return ;
+    try {
+        var xp = +localStorage.ShapeClear_xp;
+        if (!xp) xp = 0;
+        xp += Math.floor(score / 10);
+        localStorage.ShapeClear_xp = xp;
+        var times = +localStorage.ShapeClear_played;
+        if (!times) times = 0;
+        localStorage.ShapeClear_played = times + 1;
+    }
+    catch (x) {
+        ;
+    }
 };
