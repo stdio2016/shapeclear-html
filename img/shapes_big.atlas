@@ -1,223 +1,223 @@
 
 shapes_big.png
-size: 1024,128
+size: 1024,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 apple
   rotate: false
-  xy: 281, 58
-  size: 56, 69
+  xy: 75, 94
+  size: 58, 71
   orig: 72, 72
-  offset: 9, 2
+  offset: 8, 1
   index: -1
 board
   rotate: false
-  xy: 1, 55
+  xy: 1, 167
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 circle
   rotate: false
-  xy: 589, 9
-  size: 56, 56
+  xy: 309, 121
+  size: 58, 58
   orig: 72, 72
-  offset: 8, 8
+  offset: 7, 7
   index: -1
 circleHStripe
   rotate: false
-  xy: 469, 7
-  size: 58, 58
+  xy: 945, 179
+  size: 60, 60
   orig: 72, 72
-  offset: 7, 7
+  offset: 6, 6
   index: -1
 circleVStripe
   rotate: false
-  xy: 529, 7
+  xy: 191, 113
+  size: 60, 60
+  orig: 72, 72
+  offset: 6, 6
+  index: -1
+circleWrapped
+  rotate: false
+  xy: 369, 121
   size: 58, 58
   orig: 72, 72
   offset: 7, 7
   index: -1
-circleWrapped
-  rotate: false
-  xy: 647, 9
-  size: 56, 56
-  orig: 72, 72
-  offset: 8, 8
-  index: -1
 downTriangle
   rotate: false
-  xy: 223, 1
-  size: 62, 54
+  xy: 553, 183
+  size: 64, 56
   orig: 72, 72
-  offset: 5, 9
+  offset: 4, 8
   index: -1
 downTriangleHStripe
   rotate: false
-  xy: 403, 71
-  size: 64, 56
+  xy: 281, 181
+  size: 66, 58
   orig: 72, 72
-  offset: 4, 8
+  offset: 3, 7
   index: -1
 downTriangleVStripe
   rotate: false
-  xy: 403, 13
+  xy: 349, 181
+  size: 66, 58
+  orig: 72, 72
+  offset: 3, 7
+  index: -1
+downTriangleWrapped
+  rotate: false
+  xy: 619, 183
   size: 64, 56
   orig: 72, 72
   offset: 4, 8
   index: -1
-downTriangleWrapped
-  rotate: false
-  xy: 787, 73
-  size: 62, 54
-  orig: 72, 72
-  offset: 5, 9
-  index: -1
 hexagon
   rotate: false
-  xy: 817, 11
-  size: 52, 60
+  xy: 135, 103
+  size: 54, 62
   orig: 72, 72
-  offset: 10, 6
+  offset: 9, 5
   index: -1
 hexagonHStripe
   rotate: false
-  xy: 705, 7
-  size: 54, 62
+  xy: 61, 27
+  size: 56, 64
   orig: 72, 72
-  offset: 9, 5
+  offset: 8, 4
   index: -1
 hexagonVStripe
   rotate: false
-  xy: 761, 7
+  xy: 119, 28
+  size: 56, 64
+  orig: 72, 72
+  offset: 8, 4
+  index: -1
+hexagonWrapped
+  rotate: false
+  xy: 253, 111
   size: 54, 62
   orig: 72, 72
   offset: 9, 5
   index: -1
-hexagonWrapped
-  rotate: false
-  xy: 871, 11
-  size: 52, 60
-  orig: 72, 72
-  offset: 10, 6
-  index: -1
 pen
   rotate: false
-  xy: 925, 17
-  size: 55, 54
+  xy: 429, 123
+  size: 57, 56
   orig: 72, 72
-  offset: 10, 9
+  offset: 9, 8
   index: -1
 pineapple
   rotate: false
-  xy: 223, 57
-  size: 56, 70
+  xy: 1, 19
+  size: 58, 72
   orig: 72, 72
-  offset: 8, 1
+  offset: 7, 0
   index: -1
 rhombus
   rotate: false
-  xy: 469, 67
-  size: 60, 60
+  xy: 191, 61
+  size: 54, 50
   orig: 72, 72
-  offset: 6, 6
+  offset: 9, 10
   index: -1
 rhombusHStripe
   rotate: false
-  xy: 339, 65
-  size: 62, 62
+  xy: 149, 175
+  size: 64, 64
   orig: 72, 72
-  offset: 5, 5
+  offset: 4, 4
   index: -1
 rhombusVStripe
   rotate: false
-  xy: 339, 1
+  xy: 215, 175
+  size: 64, 64
+  orig: 72, 72
+  offset: 4, 4
+  index: -1
+rhombusWrapped
+  rotate: false
+  xy: 817, 177
   size: 62, 62
   orig: 72, 72
   offset: 5, 5
   index: -1
-rhombusWrapped
-  rotate: false
-  xy: 531, 67
-  size: 60, 60
-  orig: 72, 72
-  offset: 6, 6
-  index: -1
 selected
   rotate: false
-  xy: 75, 55
+  xy: 1, 93
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 149, 55
+  xy: 75, 167
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 square
   rotate: false
-  xy: 287, 6
-  size: 50, 50
+  xy: 177, 7
+  size: 52, 52
   orig: 72, 72
-  offset: 11, 11
+  offset: 10, 10
   index: -1
 squareHStripe
   rotate: false
-  xy: 1, 1
-  size: 52, 52
+  xy: 488, 125
+  size: 54, 54
   orig: 72, 72
-  offset: 10, 10
+  offset: 9, 9
   index: -1
 squareVStripe
   rotate: false
-  xy: 55, 1
+  xy: 247, 55
+  size: 54, 54
+  orig: 72, 72
+  offset: 9, 9
+  index: -1
+squareWrapped
+  rotate: false
+  xy: 231, 1
   size: 52, 52
   orig: 72, 72
   offset: 10, 10
   index: -1
-squareWrapped
-  rotate: false
-  xy: 109, 3
-  size: 50, 50
-  orig: 72, 72
-  offset: 11, 11
-  index: -1
 taser
   rotate: false
-  xy: 593, 67
-  size: 60, 60
+  xy: 881, 177
+  size: 62, 62
   orig: 72, 72
-  offset: 6, 6
+  offset: 5, 5
   index: -1
 triangle
   rotate: false
-  xy: 851, 73
-  size: 62, 54
+  xy: 685, 183
+  size: 64, 56
   orig: 72, 72
-  offset: 5, 9
+  offset: 4, 8
   index: -1
 triangleHStripe
   rotate: false
-  xy: 655, 71
-  size: 64, 56
+  xy: 417, 181
+  size: 66, 58
   orig: 72, 72
-  offset: 4, 8
+  offset: 3, 7
   index: -1
 triangleVStripe
   rotate: false
-  xy: 721, 71
-  size: 64, 56
+  xy: 485, 181
+  size: 66, 58
   orig: 72, 72
-  offset: 4, 8
+  offset: 3, 7
   index: -1
 triangleWrapped
   rotate: false
-  xy: 915, 73
-  size: 62, 54
+  xy: 751, 183
+  size: 64, 56
   orig: 72, 72
-  offset: 5, 9
+  offset: 4, 8
   index: -1

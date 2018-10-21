@@ -485,15 +485,13 @@ Board.prototype.clearMatch = function () {
             sh = new WrappedShape(type, m.vx, m.hy, this);
             this.setShape(m.vx, m.hy, sh);
         }
-        if (Debug.createSpecial) {
-            if (m.hlength >= 5) {
-                sh = new TaserShape(m.hx+2, m.hy, this);
-                this.setShape(m.hx+2, m.hy, sh);
-            }
-            if (m.vlength >= 5) {
-                sh = new TaserShape(m.vx, m.vy+2, this);
-                this.setShape(m.vx, m.vy+2, sh);
-            }
+        if (m.hlength >= 5) {
+            sh = new TaserShape(m.hx+2, m.hy, this);
+            this.setShape(m.hx+2, m.hy, sh);
+        }
+        if (m.vlength >= 5) {
+            sh = new TaserShape(m.vx, m.vy+2, this);
+            this.setShape(m.vx, m.vy+2, sh);
         }
         this.combo++;
         var len = m.hlength + m.vlength - (m.type == Match.HORIZONTAL + Match.VERTICAL ? 1 : 0);
