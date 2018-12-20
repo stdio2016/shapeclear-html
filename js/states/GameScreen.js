@@ -155,7 +155,7 @@ GameScreen.prototype.updateOnce = function () {
         var me = this;
         if (promptCallback === doesNothing) {
             me.saveScore(me.board.score);
-            alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
+            alertBox("Merry Xmas!" + "\nYour score: " + me.board.score + "\nPress OK to replay", function () {
                 me.state.start('MainMenu');
             });
         }
