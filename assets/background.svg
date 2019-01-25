@@ -14,7 +14,7 @@
    height="720"
    id="svg2985"
    version="1.1"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="background.svg"
    inkscape:export-filename="C:\Users\User\Documents\shapeclear-html\assets\background.png"
    inkscape:export-xdpi="90"
@@ -43,19 +43,19 @@
     <linearGradient
        id="linearGradient3045">
       <stop
-         style="stop-color:#86475e;stop-opacity:1"
+         style="stop-color:#0080ff;stop-opacity:1;"
          offset="0"
          id="stop3047" />
       <stop
          id="stop3053"
          offset="0.70006889"
-         style="stop-color:#d96696;stop-opacity:1" />
+         style="stop-color:#79e1ff;stop-opacity:1;" />
       <stop
-         style="stop-color:#545e01;stop-opacity:1"
+         style="stop-color:#009e00;stop-opacity:1;"
          offset="0.71038371"
          id="stop3055" />
       <stop
-         style="stop-color:#5bb916;stop-opacity:1"
+         style="stop-color:#00ff00;stop-opacity:1;"
          offset="1"
          id="stop3049" />
     </linearGradient>
@@ -77,17 +77,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="192.36986"
+     inkscape:zoom="1"
+     inkscape:cx="441.42544"
      inkscape:cy="389.76223"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1238"
-     inkscape:window-height="794"
-     inkscape:window-x="112"
-     inkscape:window-y="77"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true"
      fit-margin-top="0"
@@ -139,17 +139,14 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot2993"
-       style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
-         id="flowRegion2995"
-         style="font-family:sans-serif"><rect
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
+         id="flowRegion2995"><rect
            id="rect2997"
            width="379"
            height="154"
            x="254"
-           y="108"
-           style="font-family:sans-serif" /></flowRegion><flowPara
-         id="flowPara2999"
-         style="font-size:40px;line-height:1.25;font-family:sans-serif"> </flowPara></flowRoot>  </g>
+           y="108" /></flowRegion><flowPara
+         id="flowPara2999" /></flowRoot>  </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
@@ -158,14 +155,15 @@
      transform="translate(0,-360)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;font-size:47.99999619px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none"
        x="438.3999"
        y="529.20001"
-       id="text3001"><tspan
+       id="text3001"
+       sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3003"
          x="438.3999"
          y="529.20001"
-         style="font-size:76.79999542px;line-height:1.25;font-family:sans-serif">形狀消消樂</tspan></text>
+         style="font-size:76.79999542px">形狀消消樂</tspan></text>
   </g>
 </svg>

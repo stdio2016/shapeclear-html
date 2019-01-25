@@ -105,7 +105,5 @@ Debug.prototype.autoSwipeTest = function () {
 };
 
 Debug.prototype.getDebugMessage = function () {
-    //return this.board.game.time.fps;
-    if (this.board.score > 10000) return "Happy New Year!";
-    return "Merry Xmas!";
+    return this.board.game.time.fps;
 };
