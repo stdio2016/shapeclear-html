@@ -100,10 +100,10 @@ MainMenu.prototype.update = function () {
     }
     this.lblPlay.position.copyFrom(this.btnPlay.position);
     this.lblPlay.y += window.devicePixelRatio || 1;
-    this.btnPlay.scale.setTo(dim / 360);
+    this.btnPlay.scale.setTo(dim / this.btnPlay.texture.frame.width * (125/360));
     this.lblHelp.position.copyFrom(this.btnHelp.position);
     this.lblHelp.y += window.devicePixelRatio || 1;
-    this.btnHelp.scale.setTo(dim / 360);
+    this.btnHelp.scale.setTo(dim / this.btnPlay.texture.frame.width * (125/360));
     this.lblVersion.position.set(gw, gh);
     this.lblVersion.text = this.game.version + '.' + this.game.bounceTime;
 };

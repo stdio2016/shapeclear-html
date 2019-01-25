@@ -36,16 +36,18 @@ Load.prototype.preload = function () {
 
     // load assets
     game.load.image('ball', 'assets/ball.png');
-    if (screen.width * screen.height > 1024*768) {
+    if (Math.min(screen.width, screen.height) > 750) {
         this.gridPx = 72;
         game.load.atlasJSONArray('shapes', 'img/shapes_big.png', 'img/shapes_big.json');
+        game.load.atlasJSONArray('number', 'img/number_big.png', 'img/number_big.json');
+        game.load.atlasJSONArray('ui', 'img/ui_big.png', 'img/ui_big.json');
     }
     else {
         this.gridPx = 36;
         game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
+        game.load.atlasJSONArray('number', 'img/number_small.png', 'img/number_small.json');
+        game.load.atlasJSONArray('ui', 'img/ui_small.png', 'img/ui_small.json');
     }
-    game.load.atlasJSONArray('number', 'img/number_small.png', 'img/number_small.json');
-    game.load.atlasJSONArray('ui', 'img/ui_small.png', 'img/ui_small.json');
     game.load.image('background', 'assets/background.png');
     game.load.image('castle', 'assets/background-castle.png');
     if (Load.shouldLoadAudio()) {
