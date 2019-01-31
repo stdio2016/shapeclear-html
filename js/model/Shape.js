@@ -45,7 +45,8 @@ Shape.prototype.isEmpty = function () {
 };
 
 Shape.prototype.canFall = function () {
-    return !this.swapping && this.type > 0 && !this.cleared;
+    return !this.swapping && this.type > 0 && !this.cleared &&
+     (this.isStopped() || this.pos <= 0 || this.bouncing);
 };
 
 Shape.prototype.isDeleted = function () {

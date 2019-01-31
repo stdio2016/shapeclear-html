@@ -642,7 +642,7 @@ Board.prototype.fall = function () {
         for (var y = this.height - 2; y >= 0; y--) {
             var pos = y * this.width + x;
             var sh = this.shapes[pos], dsh = this.shapes[pos + this.width];
-            if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(pos + this.width)) {
+            if (sh.canFall() && dsh.isEmpty() && !this.tileLocked(pos + this.width)) {
                 this.moveShape(sh, 0, +1);
                 // HACK way to simulate Candy Crush
                 lock.push([x, y]);
@@ -699,7 +699,7 @@ Board.prototype.fall = function () {
             var dpos = pos + this.width - 1;
             if (x > 0 && !wd[dpos]) {
                 var dsh = this.shapes[dpos];
-                if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(dpos)) {
+                if (sh.canFall() && dsh.isEmpty() && !this.tileLocked(dpos)) {
                     sh.speed = sh.pos = 0;
                     this.moveShape(sh, -1, +1);
                     diagonal = true;
@@ -709,7 +709,7 @@ Board.prototype.fall = function () {
                 dpos = pos + this.width + 1;
                 if (x < this.width-1 && !wd[dpos]) {
                     var dsh = this.shapes[dpos];
-                    if (sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing) && dsh.isEmpty() && !this.tileLocked(dpos)) {
+                    if (sh.canFall() && dsh.isEmpty() && !this.tileLocked(dpos)) {
                         sh.speed = sh.pos = 0;
                         this.moveShape(sh, +1, +1);
                         diagonal = true;
@@ -720,7 +720,7 @@ Board.prototype.fall = function () {
                 this.falling = true;
                 pos -= this.width;
                 sh = this.shapes[pos];
-                while (pos >= 0 && sh.canFall() && (sh.isStopped() || sh.pos <= 0 || sh.bouncing)) {
+                while (pos >= 0 && sh.canFall()) {
                     this.moveShape(this.shapes[pos], 0, +1);
                     pos -= this.width;
                     sh = this.shapes[pos];
