@@ -20,6 +20,7 @@ function Board(game) {
     this.itemChanged = false;
     this.state = Board.PLAYING;
     this.passedTime = 0;
+    this.tick = 0;
 
     // position of board in the game
     this.x = 0;
@@ -133,6 +134,7 @@ Board.prototype.clearShape = function (x, y, dir) {
 Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
     //if (this.changed || this.swaps.length > 0) return;
+    if (this.state === Board.SHUFFLING) return ;
     if (this.remainingTime <= 0 && !this.debug.allowIllegalMove) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
@@ -197,6 +199,7 @@ Board.prototype.tileLocked = function (index) {
 };
 
 Board.prototype.update = function () {
+    if (this.state === Board.SHUFFLING) return this.shuffleUpdate();
     this.debug.autoSwipeTest();
     this.gainScores = [];
     this.falling = false;
@@ -230,6 +233,14 @@ Board.prototype.update = function () {
         }
         else {
             this.combo = 0;
+            if (this.swaps.length === 0 && this.state === Board.PLAYING) {
+                var hints = this.hintMoves();
+                if (hints.length === 0) {
+                    this.state = Board.SHUFFLING;
+                    this.tick = 0;
+                    return ;
+                }
+            }
         }
     }
     if (this.remainingTime > 0)
@@ -751,4 +762,75 @@ Board.prototype.fall = function () {
         }
     }
     this.changed = this.changed || this.falling;
+};
+
+Board.prototype.shuffle = function () {
+    var r = [];
+    for (var i = 0; i < this.shapes.length; i++) {
+        var sh = this.shapes[i];
+        sh.tick = 0;
+        sh.cleared = false;
+        if (sh.canSwap()) {
+            r.push(sh);
+        }
+    }
+    for (var i = r.length; i > 0; i--) {
+        var rr = Math.random() * i | 0;
+        var tmp = r[i-1];
+        r[i-1] = r[rr];
+        r[rr] = tmp;
+    }
+    for (var i = 0; i < this.shapes.length; i++) {
+        if (this.shapes[i].canSwap()) {
+            var sh = r.pop();
+            sh.x = i%this.width;
+            sh.y = i/this.width | 0;
+            sh.sprite = null;
+            this.shapes[i] = sh;
+        }
+    }
+    this.deletedShapes.length = 0;
+};
+
+Board.prototype.shuffleUpdate = function () {
+    this.swaps.length = 0;
+    this.runningItems.length = 0;
+    this.stoppedItems.length = 0;
+    this.tick++;
+    if (this.tick < 30) {
+        var r = (this.width + this.height) * this.tick/30;
+        for (var i = 0; i < this.width; i++) {
+            for (var j = 0; j < this.height; j++) {
+                if (i + j <= r)
+                    this.clearShape(i, j);
+            }
+        }
+    }
+    else {
+        if (this.tick === 40) {
+            this.shuffle();
+        }
+        if (this.tick === 70) {
+            this.state = Board.PLAYING;
+            this.tick = 0;
+        }
+    }
+};
+
+Board.prototype.hintMoves = function () {
+    var swipes = [];
+    Board.forEachPossibleMatch(0, 0, this.width, this.height, function (x1, y1, x2, y2, x3, y3, x4, y4) {
+        var s1 = board.getShape(x1, y1);
+        var s2 = board.getShape(x2, y2);
+        var s3 = board.getShape(x3, y3);
+        var s4 = board.getShape(x4, y4);
+        if (s3.canSwap() && s4.canSwap()) {
+            if (s1.canMatch() && s2.canMatch() && s3.canMatch()) {
+                if (s1.type == s2.type && s1.type == s3.type) {
+                    swipes.push([{x: x3, y: y3}, {x: x4, y: y4}]);
+                }
+            }
+        }
+    });
+    return swipes;
 };
