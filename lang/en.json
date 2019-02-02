@@ -1,0 +1,17 @@
+{
+  "Start!": "Start!",
+  "Shape Clear": "Shape Clear",
+  "Play!": "Play!",
+  "Board with holes": "Board with holes",
+  "Time": "Time",
+  "Score": "Score",
+  "Time's up\nYour score: ": "Time's up\nYour score: ",
+  "\nPress OK to replay": "\nPress OK to replay",
+  "Copyright": "Copyright (c) 2016~2019 Yi-Feng Chen(陳羿豐)",
+  "Licensed": "Licensed under MIT license",
+  "UsePhaser": "This game uses Phaser game engine",
+  "You played ": "You played ",
+  "? times": " times",
+  "Input debug command:": "Input debug command:",
+  "": ""
+}

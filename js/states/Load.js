@@ -56,6 +56,16 @@ Load.prototype.preload = function () {
         game.load.audio('match', ['assets/sound/match.wav', 'assets/sound/match.mp3']);
         game.load.audio('nomatch', ['assets/sound/nomatch.wav', 'assets/sound/nomatch.mp3']);
     }
+    Translation = {};
+    game.load.json('text', 'lang/en.json');
+    var lang = navigator.languages;
+    var supportedLanguage = {
+      "en": 1, "zh-TW": 1
+    };
+    for (var i = 0; i < lang.length; i++) {
+      if (lang[i] in supportedLanguage) break;
+    }
+    game.load.json('translation', 'lang/' + lang[i] + '.json');
 
     // create texture for showing match-3
     this.game.create.texture('whiteSquare', ['2']);
@@ -63,7 +73,7 @@ Load.prototype.preload = function () {
     // debugger
     this.input.onTap.add(function (pointer, dblClick) {
         if (dblClick) {
-            promptBox('eval what?', '', function (cmd) {
+            promptBox(Translation['Input debug command:'], '', function (cmd) {
                 try {
                     if (cmd) alertBox(window.eval(cmd) + "");
                 } catch (e) {
@@ -82,12 +92,14 @@ Load.prototype.loadUpdate = function () {
 };
 
 Load.prototype.create = function() {
+    Translation = this.game.cache.getJSON('text') || {};
+    Object.assign(Translation, this.game.cache.getJSON('translation'));
     this.game.clearBeforeRender = false;
     this.background = this.add.sprite(0, 0, 'background');
     this.background.width = this.game.width;
     this.background.height = this.game.height;
     this.background.moveDown();
-    this.loadBar.text = 'Start!';
+    this.loadBar.text = Translation['Start!'] || "Start!";
     this.playButton = this.add.button(this.game.width / 2 - 100, this.game.height / 2 - 35,
       'ball', this.playGame, this);
     this.loadBar.moveUp();

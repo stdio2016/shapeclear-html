@@ -1,0 +1,17 @@
+{
+  "Start!": "開始!",
+  "Shape Clear": "形狀消消樂",
+  "Play!": "玩!",
+  "Board with holes": "有洞的盤面",
+  "Time": "時間",
+  "Score": "分數",
+  "Time's up\nYour score: ": "時間到\n你的分數: ",
+  "\nPress OK to replay": "\n按 OK 鍵重玩",
+  "Copyright": "版權所有 (c) 2016~2019 陳羿豐",
+  "Licensed": "以 MIT 授權釋出",
+  "UsePhaser": "本遊戲使用 Phaser 遊戲引擎",
+  "You played ": "你玩過",
+  "? times": "次",
+  "Input debug command:": "輸入調試指令",
+  "": ""
+}

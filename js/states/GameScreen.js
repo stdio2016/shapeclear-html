@@ -41,9 +41,9 @@ GameScreen.prototype.create = function () {
     this.music.play();
     this.digitGroup = this.add.group();
     this.scoreText = new ScoreText(0, 0, 0, 0, this.digitGroup);
-    this.lblScore = this.createText("Score");
+    this.lblScore = this.createText(Translation["Score"]);
     this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
-    this.lblTime = this.createText("Time");
+    this.lblTime = this.createText(Translation["Time"]);
     this.runTime = [0, +new Date(), 0, 0, false, 1/6];
 };
 
@@ -54,7 +54,7 @@ GameScreen.prototype.addDebugText = function () {
     this.debug.events.onInputUp.add(function () {
         var debugging = this.board.debug;
         this.game.paused = true;
-        promptBox('Input debug command:', '', function (result) {
+        promptBox(Translation['Input debug command:'], '', function (result) {
             this.game.paused = false;
             debugging.runCommand(result);
         });
@@ -155,7 +155,7 @@ GameScreen.prototype.updateOnce = function () {
         var me = this;
         if (promptCallback === doesNothing) {
             me.saveScore(me.board.score);
-            alertBox("Time's up\nYour score: " + me.board.score + "\nPress OK to replay", function () {
+            alertBox(Translation["Time's up\nYour score: "] + me.board.score + Translation["\nPress OK to replay"], function () {
                 me.state.start('MainMenu');
             });
         }

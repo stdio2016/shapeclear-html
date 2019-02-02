@@ -32,7 +32,7 @@ MainMenu.prototype.create = function () {
     this.ball3 = new Ball(this.game, /*speed: */5, [this.ball1, this.ball2]);
     this.add.existing(this.ball3);
     game.input.addMoveCallback(this.move, this);
-    this.title = this.add.text(-1000, -1000, 'Shape Clear');
+    this.title = this.add.text(-1000, -1000, Translation['Shape Clear']);
     this.title.anchor.set(0.5, 0.5);
     this.title.inputEnabled = true;
     this.title.events.onInputUp.add(function () {
@@ -44,23 +44,23 @@ MainMenu.prototype.create = function () {
             lv++;
         }
         alertBox(
-          "Copyright (c) 2016~2018 Yi-Feng Chen(陳羿豐)\n" +
-          "Licensed under MIT license\n" +
-          "This game uses Phaser game engine\n" +
+          Translation.Copyright + "\n" +
+          Translation.Licensed + "\n" +
+          Translation.UsePhaser + "\n" +
           "Lv. " + lv + " xp: " + xp + "/" + req + "\n" +
-          "You played " + times + " times"
+          Translation["You played "] + times + Translation["? times"]
         );
         Debug.createSpecial ^= 1;
     }, this);
     this.btnPlay = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
     this.btnPlay.anchor.set(0.5, 0.5);
     this.btnPlay.tint = 0xffff00;
-    this.lblPlay = this.add.text(-1000, -1000, 'Play!');
+    this.lblPlay = this.add.text(-1000, -1000, Translation['Play!']);
     this.lblPlay.anchor.set(0.5, 0.5);
     this.btnHelp = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
     this.btnHelp.anchor.set(0.5, 0.5);
     this.btnHelp.tint = 0xffff00;
-    this.lblHelp = this.add.text(-1000, -1000, 'Board with holes');
+    this.lblHelp = this.add.text(-1000, -1000, Translation['Board with holes']);
     this.lblHelp.anchor.set(0.5, 0.5);
     this.lblVersion = this.add.text(-1000, -1000, this.game.version);
     this.lblVersion.anchor.set(1, 1);
