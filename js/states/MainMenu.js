@@ -65,6 +65,12 @@ MainMenu.prototype.create = function () {
     this.lblVersion = this.add.text(-1000, -1000, this.game.version);
     this.lblVersion.anchor.set(1, 1);
     this.game.bounceTime = 0;
+    if (AppleFools.AutoGame) {
+        setTimeout(function () {
+            mainMenu.btnPlay.frameName = 'buttonPressed';
+            mainMenu.playGame(mainMenu.btnPlay);
+        }, 1000);
+    }
 };
 
 MainMenu.prototype.paused = function () {

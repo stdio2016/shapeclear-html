@@ -158,6 +158,11 @@ GameScreen.prototype.updateOnce = function () {
             alertBox(Translation["Time's up\nYour score: "] + me.board.score + Translation["\nPress OK to replay"], function () {
                 me.state.start('MainMenu');
             });
+            if (AppleFools.AutoGame) {
+                setTimeout(function () {
+                    promptOK.onclick();
+                }, 1000);
+            }
         }
         }
         else {
@@ -405,7 +410,7 @@ GameScreen.prototype.shutdown = function () {
 };
 
 GameScreen.prototype.saveScore = function (score) {
-    if (this.board.debug.autoSwipe) return ;
+    if (this.board.debug.debugged) return ;
     try {
         var xp = +localStorage.ShapeClear_xp;
         if (!xp) xp = 0;

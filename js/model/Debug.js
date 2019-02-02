@@ -6,6 +6,12 @@ function Debug(board) {
     this.board = board;
     this.autoSwipe = false;
     this.autoSwipeLoop = 0;
+    this.debugged = false;
+    if (AppleFools.AutoGame) {
+        this.autoSwipe = true;
+        this.board.game.stage.disableVisibilityChange = true;
+        this.debugged = true;
+    }
 }
 
 Debug.testDiagonalFall = false;
@@ -19,6 +25,7 @@ Debug.prototype.runCommand = function (cmd) {
         }
         return ;
     }
+    this.debugged = true;
     switch (cmd) {
       case 'allow illegal move':
         this.allowIllegalMove = true; return ;
@@ -35,7 +42,9 @@ Debug.prototype.runCommand = function (cmd) {
       case 'help': case '?':
         alertBox("Can't help you"); return ;
       case 'auto swipe':
-        this.autoSwipe = !this.autoSwipe; return;
+        this.autoSwipe = !this.autoSwipe;
+        this.board.game.stage.disableVisibilityChange = this.autoSwipe;
+        return;
       case 'mute':
         game.sound.mute = !game.sound.mute; return;
     }
@@ -79,7 +88,7 @@ Debug.prototype.runSetCommand = function (cmd) {
 
 Debug.prototype.autoSwipeTest = function () {
     // no swap after time is up
-    if (!this.autoSwipe || this.board.remainingTime <= 0) return ;
+    if (!this.autoSwipe || this.board.remainingTime <= 0 || this.board.changed) return ;
     this.autoSwipeLoop++;
     if (this.autoSwipeLoop < 30) return ;
     this.autoSwipeLoop = 0;
