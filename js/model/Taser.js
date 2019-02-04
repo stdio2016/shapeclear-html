@@ -11,7 +11,7 @@ TaserShape.DISCHARGING = 2;
 TaserShape.FINISHED = 3;
 
 TaserShape.prototype = new Shape();
-TaserShape.prototype.constructor = WrappedShape;
+TaserShape.prototype.constructor = TaserShape;
 
 TaserShape.prototype.update = function () {
     if (this.state === TaserShape.ACTIVE) {

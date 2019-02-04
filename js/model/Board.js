@@ -785,6 +785,7 @@ Board.prototype.shuffle = function () {
             var sh = r.pop();
             sh.x = i%this.width;
             sh.y = i/this.width | 0;
+            if (sh.sprite) sh.sprite.kill();
             sh.sprite = null;
             this.shapes[i] = sh;
         }
@@ -798,19 +799,13 @@ Board.prototype.shuffleUpdate = function () {
     this.stoppedItems.length = 0;
     this.tick++;
     if (this.tick < 30) {
-        var r = (this.width + this.height) * this.tick/30;
-        for (var i = 0; i < this.width; i++) {
-            for (var j = 0; j < this.height; j++) {
-                if (i + j <= r)
-                    this.clearShape(i, j);
-            }
-        }
+        ;
     }
     else {
-        if (this.tick === 40) {
+        if (this.tick === 30) {
             this.shuffle();
         }
-        if (this.tick === 70) {
+        if (this.tick === 60) {
             this.state = Board.PLAYING;
             this.tick = 0;
         }
