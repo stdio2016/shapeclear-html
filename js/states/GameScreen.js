@@ -424,3 +424,13 @@ GameScreen.prototype.saveScore = function (score) {
         ;
     }
 };
+
+GameScreen.prototype.redraw = function () {
+    this.shapeGroup.children.forEach(function (x) {
+        x.kill();
+    });
+    this.shapeGroup.children.length = 0;
+    this.board.shapes.forEach(function (x) {
+        if (x.sprite) x.sprite = null;
+    });
+};
