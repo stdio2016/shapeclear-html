@@ -5,7 +5,7 @@ function Board(game) {
     this.width = 9;
     this.game = game;
     this.swaps = [];
-    this.matches = [];
+    this.matchFinder = new MatchFinder();
     this.deletedShapes = [];
     this.runningItems = [];
     this.stoppedItems = [];
@@ -207,18 +207,14 @@ Board.prototype.update = function () {
     this.itemChanged = false;
     this.fall();
     this.updateSwaps();
-    this.initMatch();
     this.itemClearUpdate();
     this.shapeClearUpdate();
     if (!this.falling && !this.itemChanged) {
-        this.findVeritcalMatch();
-        this.findHorizontalMatch();
-        // TODO: sort chains by their type
-        // first match-5, then cross, match-4, and finally match-3.
-        this.clearMatch();
+        if (!this.debug.disableMatching)
+            this.matchFinder.findAndClearMatch(this);
     }
     this.changed = this.changed || this.itemChanged;
-    if (!this.changed && this.matches.length == 0) {
+    if (!this.changed && this.matchFinder.matches.length == 0) {
         var hasBomb = false;
         for (var i = 0; i < this.shapes.length; i++) {
             if (this.shapes[i].special === WrappedShape.SPECIAL_WAIT_EXPLODE &&
@@ -343,84 +339,6 @@ Board.prototype.updateSwaps = function () {
     }
 };
 
-Board.prototype.initMatch = function () {
-    this.matches = [];
-    for (var i = 0; i < this.shapes.length; i++) {
-        if (this.shapes[i].match) {
-            this.shapes[i].match = null;
-        }
-    }
-};
-
-Board.prototype.findVeritcalMatch = function () {
-    var w = this.width, h = this.height;
-    var i;
-    var shapes = this.shapes;
-    for (var x = 0; x < w; x++) {
-        i = x;
-        for (var y = 0; y < h - 2; y++) {
-            if (shapes[i].canMatch()) {
-                var sh = shapes[i].type;
-                if (shapes[i + w].canMatch() && shapes[i + w].type === sh
-                 && shapes[i + 2*w].canMatch() && shapes[i + 2*w].type === sh) {
-                    var match = new Match(Match.VERTICAL, x, y, sh);
-                    do {
-                        shapes[i].match = match;
-                        match.vlength++;
-                        y++;
-                        i += w;
-                    } while (y < h && shapes[i].canMatch() && shapes[i].type === sh) ;
-                    y--; i -= w;
-                    this.matches.push(match);
-                }
-            }
-            i += w;
-        }
-    }
-};
-
-Board.prototype.findHorizontalMatch = function () {
-    var w = this.width;
-    var h = this.height;
-    var shapes = this.shapes;
-    var i;
-    for (var y = 0; y < h; y++) {
-        i = y * w;
-        for (var x = 0; x < w - 2; x++) {
-            if (shapes[i].canMatch()) {
-                var sh = shapes[i].type;
-                if (shapes[i + 1].canMatch() && shapes[i + 1].type === sh
-                 && shapes[i + 2].canMatch() && shapes[i + 2].type === sh) {
-                    var match = new Match(Match.HORIZONTAL, x, y, sh);
-                    var cross = null;
-                    do {
-                        match.hlength++;
-                        if (cross === null && shapes[i].match !== null) {
-                            if(shapes[i].match.type === Match.VERTICAL) {
-                                cross = shapes[i].match;
-                            }
-                        }
-                        x++;
-                        i += 1;
-                    } while (x < w && shapes[i].canMatch() && shapes[i].type === sh) ;
-                    x--; i -= 1;
-                    if (cross !== null) { // l/T shaped match
-                        cross.type = Match.CROSS;
-                        cross.hx = match.hx;
-                        cross.hy = match.hy;
-                        cross.hlength = match.hlength;
-                        match = cross;
-                    }
-                    else {
-                        this.matches.push(match);
-                    }
-                }
-            }
-            i += 1;
-        }
-    }
-};
-
 Board.prototype.isValidSwapAt = function (x, y) {
     var leftMatch = 0, rightMatch = 0, upMatch = 0, downMatch = 0;
     var sh = this.getShape(x, y);
@@ -457,68 +375,10 @@ Board.prototype.isValidSwapAt = function (x, y) {
         else break;
     }
     if (upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2) {
-        this.initMatch();
-        this.findVeritcalMatch();
-        this.findHorizontalMatch();
-        this.clearMatch();
+        if (!this.debug.disableMatching)
+            this.matchFinder.findAndClearMatch(this);
     }
     return this.debug.allowIllegalMove || upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
-};
-
-Board.prototype.clearMatch = function () {
-    if (this.debug.disableMatching) return;
-    for (var i = 0; i < this.matches.length; i++) {
-        var m = this.matches[i];
-        var mx = m.vx, my = m.hy, type = m.shapeType;
-        if (m.type & Match.HORIZONTAL) {
-            for (var j = 0; j < m.hlength; j++) {
-                this.clearShape(m.hx + j, m.hy);
-            }
-            mx = m.hx + (m.hlength - 1) / 2;
-        }
-        if (m.type & Match.VERTICAL) {
-            for (var j = 0; j < m.vlength; j++) {
-                this.clearShape(m.vx, m.vy + j);
-            }
-            my = m.vy + (m.vlength - 1) / 2;
-        }
-        if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
-            var r = this.game.rnd.between(1,2)+m.hx, sh;
-            sh = new StripedShape(type, r, m.hy, StripedShape.VERTICAL, this);
-            this.setShape(r, m.hy, sh);
-        }
-        if (m.vlength == 4 && m.type === Match.VERTICAL) {
-            var r = this.game.rnd.between(1,2)+m.vy;
-            sh = new StripedShape(type, m.vx, r, StripedShape.HORIZONTAL, this);
-            this.setShape(m.vx, r, sh);
-        }
-        if (m.type === Match.CROSS && m.hlength < 5 && m.vlength < 5) {
-            sh = new WrappedShape(type, m.vx, m.hy, this);
-            this.setShape(m.vx, m.hy, sh);
-        }
-        if (m.hlength >= 5) {
-            sh = new TaserShape(m.hx+2, m.hy, this);
-            this.setShape(m.hx+2, m.hy, sh);
-        }
-        if (m.vlength >= 5) {
-            sh = new TaserShape(m.vx, m.vy+2, this);
-            this.setShape(m.vx, m.vy+2, sh);
-        }
-        this.combo++;
-        var len = m.hlength + m.vlength - (m.type == Match.HORIZONTAL + Match.VERTICAL ? 1 : 0);
-        var score = len >= 5 ? len * 40 : (len == 4 ? 120 : 60);
-        score *= this.combo;
-        this.gainScores.push({x: mx, y: my, type: m.shapeType, score: score});
-        this.score += score;
-    }
-    if (this.matches.length > 0) {
-        var s = game.add.sound('match');
-        var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][Math.min(this.combo - 1, 14)];
-        s.play();
-        if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
-          s._sound.playbackRate.value = Math.pow(2, cn / 12);
-        }
-    }
 };
 
 Board.forEachPossibleMatch = function (left, top, width, height, callback) {
