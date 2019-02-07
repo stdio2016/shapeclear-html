@@ -210,8 +210,7 @@ Board.prototype.update = function () {
     this.itemClearUpdate();
     this.shapeClearUpdate();
     if (!this.falling && !this.itemChanged) {
-        if (!this.debug.disableMatching)
-            this.matchFinder.findAndClearMatch(this);
+        this.matchFinder.findAndClearMatch(this, this.debug.disableMatching);
     }
     this.changed = this.changed || this.itemChanged;
     if (!this.changed && this.matchFinder.matches.length == 0) {

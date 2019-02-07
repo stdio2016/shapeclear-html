@@ -54,14 +54,14 @@ MatchFinder.matchComparator = function (a, b) {
     return ax - bx;
 };
 
-MatchFinder.prototype.findAndClearMatch = function (board) {
-    this.matches = [];
+MatchFinder.prototype.findAndClearMatch = function (board, disableMatching) {
+    this.matches.length = 0;
     for (var i = 0; i < board.shapes.length; i++) {
         this.vertical[i] = null;
     }
     this.findVeritcalMatch(board);
     this.findHorizontalMatch(board);
-    this.clearMatch(board);
+    if (!disableMatching) this.clearMatch(board);
 };
 
 MatchFinder.prototype.findVeritcalMatch = function (board) {
