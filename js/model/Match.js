@@ -137,14 +137,16 @@ MatchFinder.prototype.putSpecial = function (board, match, special) {
     var place = [];
     if (match.type & Match.HORIZONTAL) {
         for (var j = 0; j < match.hlength; j++) {
-            if (board.getShape(match.hx + j, match.hy).special === 0) {
+            var sh = board.getShape(match.hx + j, match.hy);
+            if (sh.type === match.shapeType && sh.special === 0) {
                 place.push([match.hx + j, match.hy]);
             }
         }
     }
     if (match.type & Match.VERTICAL) {
         for (var j = 0; j < match.vlength; j++) {
-            if (board.getShape(match.vx, match.vy + j).special === 0) {
+            var sh = board.getShape(match.vx, match.vy + j);
+            if (sh.type === match.shapeType && sh.special === 0) {
                 place.push([match.vx, match.vy + j]);
             }
         }
@@ -203,6 +205,7 @@ MatchFinder.prototype.clearMatch = function (board) {
         board.gainScores.push({x: mx, y: my, type: m.shapeType, score: score});
         board.score += score;
     }
+    // TODO: sound overlapping
     if (this.matches.length > 0) {
         var s = game.add.sound('match');
         var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][Math.min(board.combo - 1, 14)];
@@ -211,4 +214,104 @@ MatchFinder.prototype.clearMatch = function (board) {
           s._sound.playbackRate.value = Math.pow(2, cn / 12);
         }
     }
+};
+
+MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
+    // check if swap is valid
+    var sh = board.getShape(x, y);
+    if (!sh.canMatch()) return false;
+
+    var type = sh.type;
+    var leftMatch = 0, rightMatch = 0, upMatch = 0, downMatch = 0;
+    while (x - leftMatch > 0) {
+        sh = board.getShape(x - (leftMatch + 1), y);
+        if (sh.canMatch() && sh.type === type) {
+            leftMatch++;
+        }
+        else break;
+    }
+    while (x + rightMatch < board.width - 1) {
+        sh = board.getShape(x + (rightMatch + 1), y);
+        if (sh.canMatch() && sh.type === type) {
+            rightMatch++;
+        }
+        else break;
+    }
+    while (y - upMatch > 0) {
+        sh = board.getShape(x, y - (upMatch + 1));
+        if (sh.canMatch() && sh.type === type) {
+            upMatch++;
+        }
+        else break;
+    }
+    while (y + downMatch < board.height - 1) {
+        sh = board.getShape(x, y + (downMatch + 1));
+        if (sh.canMatch() && sh.type === type) {
+            downMatch++;
+        }
+        else break;
+    }
+    
+    // clear match
+    var m = new Match(0, 0, 0, type);
+    m.type = 0;
+    var mx = x, my = y;
+    if (upMatch + downMatch >= 2) {
+        m.type |= Match.VERTICAL;
+        m.vx = x;
+        m.vy = y - upMatch;
+        m.vlength = upMatch + downMatch + 1;        
+        for (var j = 0; j < m.vlength; j++) {
+            board.clearShape(m.vx, m.vy + j);
+        }
+        my = m.vy + (m.vlength - 1) / 2;
+    }
+    if (leftMatch + rightMatch >= 2) {
+        m.type |= Match.HORIZONTAL;
+        m.hx = x - leftMatch;
+        m.hy = y;
+        m.hlength = leftMatch + rightMatch + 1;
+        for (var j = 0; j < m.hlength; j++) {
+            board.clearShape(m.hx + j, m.hy);
+        }
+        mx = m.hx + (m.hlength - 1) / 2;
+    }
+    if (m.type === 0) return false;
+    
+    // make special shape
+    var spec = null;
+    if (m.hlength >= 5 || m.vlength >= 5) {
+        spec = new TaserShape(x, y, board);
+    }
+    else if (m.type === Match.CROSS) {
+        spec = new WrappedShape(type, x, y, board);
+    }
+    else if (m.type === Match.HORIZONTAL && m.hlength === 4) {
+        spec = new StripedShape(type, x, y, StripedShape.VERTICAL, board);
+    }
+    else if (m.type === Match.VERTICAL && m.vlength === 4) {
+        spec = new StripedShape(type, x, y, StripedShape.HORIZONTAL, board);
+    }
+    if (spec) {
+        if (sh.special === 0) board.setShape(x, y, spec);
+        else this.putSpecial(board, m, spec);
+    }
+    
+    // make score
+    board.combo++;
+    var len = m.hlength + m.vlength - (m.type == Match.HORIZONTAL + Match.VERTICAL ? 1 : 0);
+    var score = len >= 5 ? len * 40 : (len == 4 ? 120 : 60);
+    score *= board.combo;
+    board.gainScores.push({x: mx, y: my, type: m.shapeType, score: score});
+    board.score += score;
+    
+    // make sound
+    // TODO: sound overlapping
+    var s = game.add.sound('match');
+    var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][Math.min(board.combo - 1, 14)];
+    s.play();
+    if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
+        s._sound.playbackRate.value = Math.pow(2, cn / 12);
+    }
+    return true;
 };

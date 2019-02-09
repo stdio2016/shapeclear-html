@@ -309,8 +309,9 @@ Board.prototype.updateSwaps = function () {
         if (this.swaps[i].tick == 0) {
             from.stopSwapping();
             to.stopSwapping();
-            if ( this.isValidSwapAt(from.x, from.y)
-              || this.isValidSwapAt(to.x, to.y)
+            var valid1 = this.isValidSwapAt(from.x, from.y);
+            var valid2 = this.isValidSwapAt(to.x, to.y);
+            if ( valid1 || valid2
               || this.swaps[i].status === 'reject'
             ) {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
@@ -339,45 +340,9 @@ Board.prototype.updateSwaps = function () {
 };
 
 Board.prototype.isValidSwapAt = function (x, y) {
-    var leftMatch = 0, rightMatch = 0, upMatch = 0, downMatch = 0;
-    var sh = this.getShape(x, y);
-    if (!this.debug.allowIllegalMove && !sh.canMatch()) {
-        return false;
-    }
-    var type = sh.type;
-    while (x - leftMatch > 0) {
-        sh = this.getShape(x - (leftMatch + 1), y);
-        if (sh.canMatch() && sh.type === type) {
-            leftMatch++;
-        }
-        else break;
-    }
-    while (x + rightMatch < this.width - 1) {
-        sh = this.getShape(x + (rightMatch + 1), y);
-        if (sh.canMatch() && sh.type === type) {
-            rightMatch++;
-        }
-        else break;
-    }
-    while (y - upMatch > 0) {
-        sh = this.getShape(x, y - (upMatch + 1));
-        if (sh.canMatch() && sh.type === type) {
-            upMatch++;
-        }
-        else break;
-    }
-    while (y + downMatch < this.height - 1) {
-        sh = this.getShape(x, y + (downMatch + 1));
-        if (sh.canMatch() && sh.type === type) {
-            downMatch++;
-        }
-        else break;
-    }
-    if (upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2) {
-        if (!this.debug.disableMatching)
-            this.matchFinder.findAndClearMatch(this);
-    }
-    return this.debug.allowIllegalMove || upMatch + downMatch >= 2 || leftMatch + rightMatch >= 2;
+    if (this.debug.disableMatching) return true;
+    var valid = this.matchFinder.clearSwapMatch(this, x, y);
+    return this.debug.allowIllegalMove || valid;
 };
 
 Board.forEachPossibleMatch = function (left, top, width, height, callback) {
