@@ -133,6 +133,30 @@ MatchFinder.prototype.findHorizontalMatch = function (board) {
     }
 };
 
+MatchFinder.prototype.putSpecial = function (board, match, special) {
+    var place = [];
+    if (match.type & Match.HORIZONTAL) {
+        for (var j = 0; j < match.hlength; j++) {
+            if (board.getShape(match.hx + j, match.hy).special === 0) {
+                place.push([match.hx + j, match.hy]);
+            }
+        }
+    }
+    if (match.type & Match.VERTICAL) {
+        for (var j = 0; j < match.vlength; j++) {
+            if (board.getShape(match.vx, match.vy + j).special === 0) {
+                place.push([match.vx, match.vy + j]);
+            }
+        }
+    }
+    if (place.length > 0) {
+        var r = place[board.game.rnd.between(0, place.length-1)];
+        special.x = r[0];
+        special.y = r[1];
+        board.setShape(special.x, special.y, special);
+    }
+};
+
 MatchFinder.prototype.clearMatch = function (board) {
     this.matches.sort(this.matchComparator);
     for (var i = 0; i < this.matches.length; i++) {
@@ -151,26 +175,26 @@ MatchFinder.prototype.clearMatch = function (board) {
             my = m.vy + (m.vlength - 1) / 2;
         }
         if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
-            var r = board.game.rnd.between(1,2)+m.hx, sh;
-            sh = new StripedShape(type, r, m.hy, StripedShape.VERTICAL, board);
-            board.setShape(r, m.hy, sh);
+            var r = board.game.rnd.between(1,2), sh;
+            sh = new StripedShape(type, m.hy+1, m.hy, r, board);
+            this.putSpecial(board, m, sh);
         }
         if (m.vlength == 4 && m.type === Match.VERTICAL) {
-            var r = board.game.rnd.between(1,2)+m.vy;
-            sh = new StripedShape(type, m.vx, r, StripedShape.HORIZONTAL, board);
-            board.setShape(m.vx, r, sh);
+            var r = board.game.rnd.between(1,2);
+            sh = new StripedShape(type, m.vx, m.vy+1, r, board);
+            this.putSpecial(board, m, sh);
         }
         if (m.type === Match.CROSS && m.hlength < 5 && m.vlength < 5) {
             sh = new WrappedShape(type, m.vx, m.hy, board);
-            board.setShape(m.vx, m.hy, sh);
+            this.putSpecial(board, m, sh);
         }
         if (m.hlength >= 5) {
             sh = new TaserShape(m.hx+2, m.hy, board);
-            board.setShape(m.hx+2, m.hy, sh);
+            this.putSpecial(board, m, sh);
         }
-        if (m.vlength >= 5) {
+        if (m.vlength >= 5 && m.hlength < 5) {
             sh = new TaserShape(m.vx, m.vy+2, board);
-            board.setShape(m.vx, m.vy+2, sh);
+            this.putSpecial(board, m, sh);
         }
         board.combo++;
         var len = m.hlength + m.vlength - (m.type == Match.HORIZONTAL + Match.VERTICAL ? 1 : 0);

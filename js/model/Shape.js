@@ -12,11 +12,9 @@ function Shape(type, x, y, board) {
     this.tickClear = 10;
     this.tick = 0;
 
-    // is it part of a matching?
-    this.match = null;
-
     // a Shape belongs to exactly one Board
     this.board = board || null;
+    this.special = 0;
 }
 
 Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
