@@ -162,7 +162,10 @@ GameScreen.prototype.updateOnce = function () {
         var me = this;
         if (promptCallback === doesNothing) {
             me.saveScore(me.board.score);
-            alertBox(Translation["Time's up\nYour score: "] + me.board.score + Translation["\nPress OK to replay"], function () {
+            alertBox(
+              Translation["Time's up"] + '\n' +
+              Translation["Your score: "] + me.board.score + '\n' + 
+              Translation["Press OK to replay"], function () {
                 me.state.start('MainMenu');
             });
             if (AppleFools.AutoGame) {
