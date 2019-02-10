@@ -28,6 +28,7 @@ Match.VERTICAL = 2;
 Match.CROSS = 3;
 
 function MatchFinder() {
+    this.swapMatches = [];
     this.matches = [];
     this.vertical = [];
     this.getRankOfMatch = MatchFinder.getRankOfMatch;
@@ -52,6 +53,11 @@ MatchFinder.matchComparator = function (a, b) {
     var by = b.type & Match.HORIZONTAL ? b.hy : b.vy;
     if (ay !== by) return ay - by;
     return ax - bx;
+};
+
+MatchFinder.prototype.clear = function () {
+    this.swapMatches.length = 0;
+    this.matches.length = 0;
 };
 
 MatchFinder.prototype.findAndClearMatch = function (board, disableMatching) {
@@ -205,23 +211,14 @@ MatchFinder.prototype.clearMatch = function (board) {
         board.gainScores.push({x: mx, y: my, type: m.shapeType, score: score});
         board.score += score;
     }
-    // TODO: sound overlapping
-    if (this.matches.length > 0) {
-        var s = game.add.sound('match');
-        var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][Math.min(board.combo - 1, 14)];
-        s.play();
-        if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
-          s._sound.playbackRate.value = Math.pow(2, cn / 12);
-        }
-    }
 };
 
 MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
     // check if swap is valid
-    var sh = board.getShape(x, y);
-    if (!sh.canMatch()) return false;
+    var cur = board.getShape(x, y), sh;
+    if (!cur.canMatch()) return false;
 
-    var type = sh.type;
+    var type = cur.type;
     var leftMatch = 0, rightMatch = 0, upMatch = 0, downMatch = 0;
     while (x - leftMatch > 0) {
         sh = board.getShape(x - (leftMatch + 1), y);
@@ -272,11 +269,13 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
         m.hy = y;
         m.hlength = leftMatch + rightMatch + 1;
         for (var j = 0; j < m.hlength; j++) {
-            board.clearShape(m.hx + j, m.hy);
+            if (m.type != Match.CROSS || m.hx + j != m.vx)
+                board.clearShape(m.hx + j, m.hy);
         }
         mx = m.hx + (m.hlength - 1) / 2;
     }
     if (m.type === 0) return false;
+    this.swapMatches.push(m);
     
     // make special shape
     var spec = null;
@@ -293,7 +292,8 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
         spec = new StripedShape(type, x, y, StripedShape.HORIZONTAL, board);
     }
     if (spec) {
-        if (sh.special === 0) board.setShape(x, y, spec);
+        console.log(cur, cur+'');
+        if (cur.special === 0) board.setShape(x, y, spec);
         else this.putSpecial(board, m, spec);
     }
     
@@ -305,13 +305,13 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
     board.gainScores.push({x: mx, y: my, type: m.shapeType, score: score});
     board.score += score;
     
-    // make sound
-    // TODO: sound overlapping
-    var s = game.add.sound('match');
-    var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][Math.min(board.combo - 1, 14)];
-    s.play();
-    if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
-        s._sound.playbackRate.value = Math.pow(2, cn / 12);
-    }
     return true;
+};
+
+MatchFinder.prototype.makeMatchSound = function (board) {
+    if (this.matches.length > 0 || this.swapMatches.length > 0) {
+        var lv = Math.min(board.combo - 1, 14);
+        var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][lv];
+        board.sounds.push({name: 'match', pitch: Math.pow(2, cn/12)});
+    }
 };

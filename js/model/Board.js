@@ -21,6 +21,7 @@ function Board(game) {
     this.state = Board.PLAYING;
     this.passedTime = 0;
     this.tick = 0;
+    this.sounds = [];
 
     // position of board in the game
     this.x = 0;
@@ -199,6 +200,7 @@ Board.prototype.tileLocked = function (index) {
 };
 
 Board.prototype.update = function () {
+    this.sounds.length = 0;
     if (this.state === Board.SHUFFLING) return this.shuffleUpdate();
     this.debug.autoSwipeTest();
     this.gainScores = [];
@@ -206,12 +208,14 @@ Board.prototype.update = function () {
     this.changed = false;
     this.itemChanged = false;
     this.fall();
+    this.matchFinder.clear();
     this.updateSwaps();
     this.itemClearUpdate();
     this.shapeClearUpdate();
     if (!this.falling && !this.itemChanged) {
         this.matchFinder.findAndClearMatch(this, this.debug.disableMatching);
     }
+    this.matchFinder.makeMatchSound(this);
     this.changed = this.changed || this.itemChanged;
     if (!this.changed && this.matchFinder.matches.length == 0) {
         var hasBomb = false;
@@ -330,7 +334,7 @@ Board.prototype.updateSwaps = function () {
                 --i;
             }
             else {
-                this.game.add.sound('nomatch').play();
+                this.sounds.push({name: 'nomatch'});
                 this.swaps[i].reject();
                 this.swapShape(from, to);
                 from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;

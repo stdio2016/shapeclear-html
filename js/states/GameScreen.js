@@ -16,6 +16,9 @@ function GameScreen() {
     this.lblScore = this.lblTime = null;
     this.effectSprites = [];
     this.runTime = [];
+    this.soundEffects = {
+      match: null, nomatch: null
+    };
 }
 
 GameScreen.prototype.preload = function () {
@@ -45,6 +48,10 @@ GameScreen.prototype.create = function () {
     this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
     this.lblTime = this.createText(Translation["Time"]);
     this.runTime = [0, +new Date(), 0, 0, false, 1/6];
+    for (var name in this.soundEffects) {
+        this.soundEffects[name] = this.game.add.sound(name);
+        this.soundEffects[name].allowMultiple = true;
+    }
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -173,6 +180,7 @@ GameScreen.prototype.updateOnce = function () {
     //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
     this.resizeUI();
     this.updateSelectSprite();
+    this.playSounds();
 };
 
 GameScreen.prototype.updateSelectSprite = function () {
@@ -407,6 +415,9 @@ GameScreen.prototype.shutdown = function () {
     this.scorePopups = [];
     window.board = null;
     this.effectSprites = [];
+    for (var name in this.soundEffects) {
+        this.soundEffects[name].destroy();
+    }
 };
 
 GameScreen.prototype.saveScore = function (score) {
@@ -432,5 +443,17 @@ GameScreen.prototype.redraw = function () {
     this.shapeGroup.children.length = 0;
     this.board.shapes.forEach(function (x) {
         if (x.sprite) x.sprite = null;
+    });
+};
+
+GameScreen.prototype.playSounds = function () {
+    var sndfx = this.soundEffects;
+    this.board.sounds.forEach(function (snd) {
+        var s = sndfx[snd.name];
+        s.play();
+        var pitch = snd.pitch || 1; 
+        if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
+            s._sound.playbackRate.value = pitch;
+        }
     });
 };
