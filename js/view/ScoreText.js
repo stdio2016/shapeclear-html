@@ -25,7 +25,10 @@ ScoreText.charAspectRatio = 36.0 / 48.0; // width/height
 ScoreText.prototype.setScore = function (newScore) {
     var dec = ScoreText.numToString(newScore);
     for (var i = this.digits.length; i < dec.length; i++) {
-        var d = this.charPool.getFirstDead(true, 0, 0, 'number', dec.charAt(i));
+        var ch = dec.charAt(i);
+        if (ch === "∞") ch = "8";
+        if (ch === "-") ch = "minus";
+        var d = this.charPool.getFirstDead(true, 0, 0, 'number', ch);
         d.bringToTop();
         d.anchor.x = 0.5;
         d.anchor.y = 0.5;
@@ -66,6 +69,7 @@ ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
             }
             else {
                 d.angle = 0;
+                if (digit === "-") digit = "minus";
             }
         }
         if (d.frameName !== digit) {
@@ -112,27 +116,15 @@ ScoreText.prototype.kill = function () {
 };
 
 ScoreText.numToString = function (num) {
-    var str = num.toString();
-    if (str.indexOf('e') !== -1) {
-        if (Math.abs(num) > 1) { // number is too big
-            var sign = "", digits = "";
-            if (num < 0) {
-                sign = "-";
-                num = -num;
-            }
-            while (num >= 1) {
-                var d = num%10;
-                digits = (num%10) + digits;
-                num = (num - d) / 10;
-            }
-            return sign + digits;
-        }
-        else { // number is too small
-            return "0";
-        }
-    }
-    if (num === Infinity) {
+    var str = Math.floor(num).toString();
+    if (num >= 1e15) {
         return "∞";
+    }
+    if (num <= -1e15) {
+        return "-∞";
+    }
+    if (num !== num) { // NaN
+        return "---";
     }
     return str;
 };
