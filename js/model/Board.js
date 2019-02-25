@@ -107,7 +107,7 @@ Board.prototype.clearShape = function (x, y, color) {
         //this.shapes[i] = new Shape(0, x, y);
         return sh.crush(this, color);
     }
-    return {score: 0, addition: 0, multiply: 0};
+    return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };
 
 Board.prototype.addSwap = function(from, to) {
@@ -293,20 +293,20 @@ Board.prototype.updateSwaps = function () {
             to.stopSwapping();
             var valid1 = this.isValidSwapAt(from.x, from.y);
             var valid2 = this.isValidSwapAt(to.x, to.y);
-            if ( valid1 || valid2
-              || this.swaps[i].status === 'reject'
-            ) {
-                this.swaps[i] = this.swaps[this.swaps.length - 1];
-                this.swaps.length--;
-                --i;
-            }
-            else if (from.special === TaserShape.SPECIAL || to.special === TaserShape.SPECIAL) {
+            if (from.special === TaserShape.SPECIAL || to.special === TaserShape.SPECIAL) {
                 if (from.special === TaserShape.SPECIAL) {
                     this.clearShape(from.x, from.y, to.type);
                 }
                 if (to.special === TaserShape.SPECIAL) {
                     this.clearShape(to.x, to.y, from.type);
                 }
+                this.swaps[i] = this.swaps[this.swaps.length - 1];
+                this.swaps.length--;
+                --i;
+            }
+            else if ( valid1 || valid2
+              || this.swaps[i].status === 'reject'
+            ) {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;

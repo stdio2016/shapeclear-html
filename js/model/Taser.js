@@ -43,12 +43,12 @@ TaserShape.prototype.crush = function (board, color) {
         this.state = TaserShape.ACTIVE;
         board.addItemToClear(new TaserEffect(board, color, this));
     }
-    return {score: 0, addition: 0, multiply: 0};
+    return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };
 
 function TaserEffect(board, color, taser) {
     this.board = board;
-    this.totalTicks = 2;
+    this.totalTicks = 4;
     this.tick = this.totalTicks;
     this.progress = 0;
     this.type = color || this.board.game.rnd.between(1, AppleFools.COLOR_COUNT);
@@ -79,14 +79,15 @@ TaserEffect.prototype.update = function () {
         if (this.progress < this.count) {
             var sh = this.all[this.progress];
             if (this.board.getShape(sh.x, sh.y) === sh) {
+                var sco = this.board.clearShape(sh.x, sh.y);
+                var score = (sco.score + sco.addition) * this.count + sco.jelly + sco.blocker;
                 this.board.gainScores.push({
                   x: sh.x,
                   y: sh.y,
                   type: this.type,
-                  score: 60 * this.count
+                  score: score
                 });
-                this.board.score += 60 * this.count;
-                this.board.clearShape(sh.x, sh.y);
+                this.board.score += score;
             }
             if (this.progress === this.count-1) {
                 this.taser.state = TaserShape.FINISHED;

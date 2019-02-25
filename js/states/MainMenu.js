@@ -18,7 +18,7 @@
 }
 
 MainMenu.prototype.create = function () {
-    this.game.version = 'v0.6.0';
+    this.game.version = 'v0.6.1';
     this.background = this.add.image(0, 0, 'background');
     this.castle = this.add.image(this.game.width/2, this.game.height * 0.705, 'castle');
     this.castle.anchor.set(0.5, 0.72);

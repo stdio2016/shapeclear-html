@@ -106,7 +106,7 @@ Shape.prototype.toString = function () {
 
 Shape.prototype.crush = function (board) {
     if (this.type > 0) {
-        return {score: 0, addition: 0, multiply: 1};
+        return {score: 60, addition: 0, multiply: 1, jelly: 0, blocker: 0};
     }
-    return {score: 0, addition: 0, multiply: 0};
+    return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };

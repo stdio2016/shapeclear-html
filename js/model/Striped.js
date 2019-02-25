@@ -91,11 +91,11 @@ StripeEffect.prototype.update = function () {
         }
         for (var i = 0; i < scores.length; i++) {
             var c = scores[i].combo;
-            scores[i].score = (c.score + c.addition + 60 * c.multiply) * combo;
+            scores[i].score = (c.score + c.addition) * combo + c.jelly + c.blocker;
             if (scores[i].score !== 0) {
                 this.board.gainScores.push(scores[i]);
                 this.board.score += scores[i].score;
-            }          
+            }
         }
     }
     if (this.direction === StripeEffect.VERTICAL) {

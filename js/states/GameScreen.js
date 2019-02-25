@@ -424,7 +424,7 @@ GameScreen.prototype.shutdown = function () {
 };
 
 GameScreen.prototype.saveScore = function (score) {
-    if (this.board.debug.debugged) return ;
+    if (this.board.debug.debugged || score !== score || score < 0) return ;
     try {
         var xp = +localStorage.ShapeClear_xp;
         if (!xp) xp = 0;

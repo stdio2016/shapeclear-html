@@ -79,10 +79,13 @@ function WrappedEffect(board, x, y, color) {
 
 WrappedEffect.prototype.explode = function () {
     var i, j;
+    var score = 540;
     for (i = Math.max(this.x-1, 0); i <= this.x+1 && i < this.board.width; i++) {
         for (j = Math.min(this.y+1, this.board.height-1); j >= this.y-1 && j >= 0 ; j--) {
-            if (i !== this.x || j !== this.y)
-                this.board.clearShape(i, j);
+            if (i !== this.x || j !== this.y) {
+                var s = this.board.clearShape(i, j);
+                score += s.addition + s.jelly + s.blocker;
+            }
         }
         var sh;
         while (j >= 0) {
@@ -101,9 +104,9 @@ WrappedEffect.prototype.explode = function () {
       x: this.x,
       y: this.y,
       type: this.type,
-      score: 540
+      score: score
     });
-    this.board.score += 540;
+    this.board.score += score;
 };
 
 WrappedEffect.prototype.update = function () {
