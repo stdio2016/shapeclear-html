@@ -48,14 +48,15 @@ StripeEffect.prototype.update = function () {
         this.tick += this.totalTicks;
         work = false;
         this.progress++;
+        var scores = [];
         if (this.direction === StripeEffect.VERTICAL) {
             if (this.y - this.progress >= 0) {
-                this.board.clearShape(this.x, this.y - this.progress);
+                scores.push({x: this.x, y: this.y - this.progress});
                 this.board.lockPosition(this.x, this.y - this.progress, this);
                 work = true;
             }
             if (this.y + this.progress < this.board.height) {
-                this.board.clearShape(this.x, this.y + this.progress);
+                scores.push({x: this.x, y: this.y + this.progress});
                 work = true;
             }
             if (this.y - this.progress + 1 >= 0) {
@@ -69,17 +70,32 @@ StripeEffect.prototype.update = function () {
         }
         else {
             if (this.x - this.progress >= 0) {
-                this.board.clearShape(this.x - this.progress, this.y);
+                scores.push({x: this.x - this.progress, y: this.y});
                 work = true;
             }
             if (this.x + this.progress < this.board.width) {
-                this.board.clearShape(this.x + this.progress, this.y);
+                scores.push({x: this.x + this.progress, y: this.y});
                 work = true;
             }
             if (!work) {
                 this.stillChanging = false;
             }
             work = this.x - this.progress >= -4 || this.x + this.progress < this.board.width + 4;
+        }
+        // score
+        var combo = 0;
+        for (var i = 0; i < scores.length; i++) {
+            scores[i].type = this.board.getShape(scores[i].x, scores[i].y).type;
+            scores[i].combo = this.board.clearShape(scores[i].x, scores[i].y);
+            combo += scores[i].combo.multiply;
+        }
+        for (var i = 0; i < scores.length; i++) {
+            var c = scores[i].combo;
+            scores[i].score = (c.score + c.addition + 60 * c.multiply) * combo;
+            if (scores[i].score !== 0) {
+                this.board.gainScores.push(scores[i]);
+                this.board.score += scores[i].score;
+            }          
         }
     }
     if (this.direction === StripeEffect.VERTICAL) {

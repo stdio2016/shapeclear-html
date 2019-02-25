@@ -107,6 +107,7 @@ Board.prototype.clearShape = function (x, y, color) {
         //this.shapes[i] = new Shape(0, x, y);
         return sh.crush(this, color);
     }
+    return {score: 0, addition: 0, multiply: 0};
 };
 
 Board.prototype.addSwap = function(from, to) {
