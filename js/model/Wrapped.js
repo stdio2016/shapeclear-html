@@ -48,10 +48,23 @@ WrappedShape.prototype.canBeCleared = function () {
 };
 
 WrappedShape.prototype.canCrush = function () {
-    if (Shape.prototype.canBeCleared.call(this)) {
-        return this.state === WrappedShape.NORMAL;
+    if (Shape.prototype.canCrush.call(this)) {
+        return this.state === WrappedShape.NORMAL || this.state === WrappedShape.CAN_CLEAR;
     }
     return false;
+};
+
+WrappedShape.prototype.crush = function (board) {
+    if (this.state === WrappedShape.NORMAL) {
+        this.state = WrappedShape.EXPLODED;
+        var ex = new WrappedEffect(board, this.x, this.y, this.type);
+        board.addItemToClear(ex);
+    }
+    else if (this.state === WrappedShape.CAN_CLEAR) {
+        var ex = new WrappedEffect(board, this.x, this.y, this.type);
+        board.addItemToClear(ex);
+    }
+    return Shape.prototype.crush.call(this, board);
 };
 
 function WrappedEffect(board, x, y, color) {
@@ -61,6 +74,7 @@ function WrappedEffect(board, x, y, color) {
     this.totalTicks = 10;
     this.tick = this.totalTicks;
     this.type = color;
+    this.explode();
 }
 
 WrappedEffect.prototype.explode = function () {
@@ -78,6 +92,7 @@ WrappedEffect.prototype.explode = function () {
                 sh.pos += 0.4;
                 sh.speed -= 0.4;
                 sh.dir.y = +1;
+                sh.bouncing = true;
             }
             j--;
         }
@@ -93,9 +108,6 @@ WrappedEffect.prototype.explode = function () {
 
 WrappedEffect.prototype.update = function () {
     'use strict';
-    if (this.tick === this.totalTicks) {
-        this.explode();
-    }
     this.tick--;
     if (this.stillChanging) {
         this.board.itemChanged = true;

@@ -52,11 +52,11 @@ Shape.prototype.isDeleted = function () {
 };
 
 Shape.prototype.canBeCleared = function () {
-    return !this.swapping && !this.cleared;
+    return this.type > 0 && !this.swapping && !this.cleared;
 }
 
 Shape.prototype.canCrush = function () {
-    return !this.swapping && !this.cleared;
+    return this.type > 0 && !this.swapping && !this.cleared;
 }
 
 Shape.prototype.stopSwapping = function () {
@@ -102,4 +102,11 @@ Shape.prototype.toString = function () {
     this.board = b;
     this.sprite = sp;
     return str;
+};
+
+Shape.prototype.crush = function (board) {
+    if (this.type > 0) {
+        return {score: 0, addition: 0, striped: 60};
+    }
+    return {score: 0, addition: 0, striped: 0};
 };

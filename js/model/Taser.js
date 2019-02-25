@@ -33,9 +33,17 @@ TaserShape.prototype.canBeCleared = function () {
 
 TaserShape.prototype.canCrush = function () {
     if (Shape.prototype.canBeCleared.call(this)) {
-        return this.state === TaserShape.NORMAL;
+        return this.state === TaserShape.NORMAL || this.state === TaserShape.FINISHED;
     }
     return false;
+};
+
+TaserShape.prototype.crush = function (board, color) {
+    if (this.state === TaserShape.NORMAL) {
+        this.state = TaserShape.ACTIVE;
+        board.addItemToClear(new TaserEffect(board, color, this));
+    }
+    return Shape.prototype.crush.call(this, board);
 };
 
 function TaserEffect(board, color, taser) {

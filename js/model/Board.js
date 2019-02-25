@@ -91,7 +91,7 @@ Board.prototype.setShape = function (x, y, sh) {
     }
 };
 
-Board.prototype.clearShape = function (x, y, dir) {
+Board.prototype.clearShape = function (x, y, color) {
     this.changed = true;
     // bound check
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
@@ -99,36 +99,13 @@ Board.prototype.clearShape = function (x, y, dir) {
     // TODO: handle special shapes such as striped or wrapped ones
     var i = x + y * this.width;
     var sh = this.shapes[i];
-    if (sh.type > 0 && !sh.cleared && !sh.swapping) {
+    if (sh.canCrush()) {
         if (sh.canBeCleared()) {
             this.deletedShapes.push(sh);
             sh.cleared = true;
         }
         //this.shapes[i] = new Shape(0, x, y);
-        switch (sh.special) {
-          case StripedShape.HORIZONTAL:
-            this.addItemToClear(new StripeEffect(this, x, y, StripeEffect.HORIZONTAL, sh.type));
-            break;
-          case StripedShape.VERTICAL:
-            this.addItemToClear(new StripeEffect(this, x, y, StripeEffect.VERTICAL, sh.type));
-            break;
-          case WrappedShape.SPECIAL:
-            if (sh.state === WrappedShape.NORMAL) {
-                sh.state = WrappedShape.EXPLODED;
-                this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
-            }
-          case WrappedShape.SPECIAL_WAIT_EXPLODE:
-            if (sh.state === WrappedShape.CAN_CLEAR) {
-                this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
-            }
-            break;
-          case TaserShape.SPECIAL:
-            if (sh.state === TaserShape.NORMAL) {
-                sh.state = TaserShape.ACTIVE;
-                this.addItemToClear(new TaserEffect(this, dir, sh));
-            }
-            break;
-        }
+        return sh.crush(this, color);
     }
 };
 

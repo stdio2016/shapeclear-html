@@ -15,6 +15,13 @@ StripedShape.VERTICAL = 2;
 StripedShape.prototype = new Shape();
 StripedShape.prototype.constructor = StripedShape;
 
+StripedShape.prototype.crush = function (board) {
+    board.addItemToClear(new StripeEffect(
+      board, this.x, this.y, this.stripeDirection, this.type
+    ));
+    return Shape.prototype.crush.call(this, board);
+};
+
 function StripeEffect(board, x, y, direction, color) {
     this.board = board;
     this.x = x;
