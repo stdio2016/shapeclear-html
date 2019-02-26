@@ -291,31 +291,25 @@ Board.prototype.updateSwaps = function () {
         if (this.swaps[i].tick == 0) {
             from.stopSwapping();
             to.stopSwapping();
-            var valid1 = this.isValidSwapAt(from.x, from.y);
-            var valid2 = this.isValidSwapAt(to.x, to.y);
-            if (from.special === TaserShape.SPECIAL || to.special === TaserShape.SPECIAL) {
-                if (from.special === TaserShape.SPECIAL) {
-                    this.clearShape(from.x, from.y, to.type);
-                }
-                if (to.special === TaserShape.SPECIAL) {
-                    this.clearShape(to.x, to.y, from.type);
-                }
+            var sw = this.swaps[i];
+            if (sw.status === 'swap' && sw.specialCombo(this)) {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;
+                continue;
             }
-            else if ( valid1 || valid2
-              || this.swaps[i].status === 'reject'
-            ) {
+            var valid1 = this.isValidSwapAt(from.x, from.y);
+            var valid2 = this.isValidSwapAt(to.x, to.y);
+            if (valid1 || valid2 || sw.status === 'reject') {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;
             }
             else {
                 this.sounds.push({name: 'nomatch'});
-                this.swaps[i].reject();
+                sw.reject();
                 this.swapShape(from, to);
-                from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
+                from.pos = to.pos = sw.interpolatedPos() * 10;
             }
         }
     }
