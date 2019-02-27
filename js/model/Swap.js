@@ -22,13 +22,20 @@ Swap.prototype.specialCombo = function (board) {
     var to = this.to;
     if (from instanceof StripedShape) {
         if (to instanceof StripedShape) {
-            return false;
+            var e = new StripeEffect(board);
+            e.addLine(from.x, from.y, StripeEffect.HORIZONTAL, from.x === to.x ? from.type : to.type);
+            e.addLine(from.x, from.y, StripeEffect.VERTICAL, from.y === to.y ? from.type : to.type);
+            from.stripeDirection = to.stripeDirection = 0;
+            from.special = from.x === to.x ? StripeEffect.HORIZONTAL : StripeEffect.VERTICAL;
+            to.special = from.y === to.y ? StripeEffect.HORIZONTAL : StripeEffect.VERTICAL;
+            board.clearShape(from.x, from.y, to.type);
+            board.addItemToClear(e);
         }
         else if (to instanceof WrappedShape) {
             return false;
         }
         else if (to instanceof TaserShape) {
-            return false;
+            ;
         }
         else return false;
     }
@@ -40,19 +47,19 @@ Swap.prototype.specialCombo = function (board) {
             return false;
         }
         else if (to instanceof TaserShape) {
-            return false;
+            ;
         }
         else return false;
     }
     else if (from instanceof TaserShape) {
         if (to instanceof StripedShape) {
-            return false;
+            ;
         }
         else if (to instanceof WrappedShape) {
-            return false;
+            ;
         }
         else if (to instanceof TaserShape) {
-            return false;
+            ;
         }
         else if (to.canMatch()) {
             board.clearShape(from.x, from.y, to.type);

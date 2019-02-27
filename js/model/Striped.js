@@ -16,31 +16,78 @@ StripedShape.prototype = new Shape();
 StripedShape.prototype.constructor = StripedShape;
 
 StripedShape.prototype.crush = function (board) {
-    board.addItemToClear(new StripeEffect(
-      board, this.x, this.y, this.stripeDirection, this.type
-    ));
+    if (this.stripeDirection === 0) {
+        // overridden
+        return {score: 0, addition: 0, jelly: 0, blocker: 0, multiply: 1};
+    }
+    var e = new StripeEffect(board);
+    e.addLine(this.x, this.y, this.stripeDirection, this.type);
+    board.addItemToClear(e);
     return Shape.prototype.crush.call(this, board);
 };
 
-function StripeEffect(board, x, y, direction, color) {
+function StripeEffect(board, color) {
     this.board = board;
-    this.x = x;
-    this.y = y;
-    this.direction = direction || StripeEffect.HORIZONTAL;
+    this.lines = [];
     this.totalTicks = 2;
     this.tick = this.totalTicks;
     this.progress = 0;
-    this.type = color;
-    this.stillChanging = true;
 }
 
 StripeEffect.HORIZONTAL = 1;
 StripeEffect.VERTICAL = 2;
 
+StripeEffect.prototype.addLine = function (x, y, direction, color) {
+    this.lines.push({x: x, y: y, direction: direction, stillChanging: true, type: color});
+};
+
+StripeEffect.prototype.lineUpdate = function (i, affect, board) {
+    var line = this.lines[i];
+    var work = false;
+    if (line.direction === StripeEffect.VERTICAL) {
+        if (line.y - this.progress >= 0) {
+            affect.push({x: line.x, y: line.y - this.progress});
+            board.lockPosition(line.x, line.y - this.progress, line);
+            work = true;
+        }
+        if (line.y + this.progress < board.height) {
+            affect.push({x: line.x, y: line.y + this.progress});
+            work = true;
+        }
+        if (line.y - this.progress + 1 >= 0) {
+            board.unlockPosition(line.x, line.y - this.progress + 1, line);
+        }
+        if (!work) {
+            board.unlockPosition(line.x, 0, this);
+            line.stillChanging = false;
+        }
+        work = line.y - this.progress >= -4 || line.y + this.progress < board.height + 4;
+    }
+    else {
+        if (line.x - this.progress >= 0) {
+            affect.push({x: line.x - this.progress, y: line.y});
+            work = true;
+        }
+        if (line.x + this.progress < board.width) {
+            affect.push({x: line.x + this.progress, y: line.y});
+            work = true;
+        }
+        if (!work) {
+            line.stillChanging = false;
+        }
+        work = line.x - this.progress >= -4 || line.x + this.progress < board.width + 4;
+    }
+    return work;
+};
+
 StripeEffect.prototype.update = function () {
     'use strict';
     this.tick--;
-    if (this.stillChanging) {
+    var still = false;
+    for (var i = 0; i < this.lines.length; i++) {
+        if (this.lines[i].stillChanging) still = true;
+    }
+    if (still) {
         this.board.itemChanged = true;
     }
     var work = true;
@@ -49,38 +96,8 @@ StripeEffect.prototype.update = function () {
         work = false;
         this.progress++;
         var scores = [];
-        if (this.direction === StripeEffect.VERTICAL) {
-            if (this.y - this.progress >= 0) {
-                scores.push({x: this.x, y: this.y - this.progress});
-                this.board.lockPosition(this.x, this.y - this.progress, this);
-                work = true;
-            }
-            if (this.y + this.progress < this.board.height) {
-                scores.push({x: this.x, y: this.y + this.progress});
-                work = true;
-            }
-            if (this.y - this.progress + 1 >= 0) {
-                this.board.unlockPosition(this.x, this.y - this.progress + 1, this);
-            }
-            if (!work) {
-                this.board.unlockPosition(this.x, 0, this);
-                this.stillChanging = false;
-            }
-            work = this.y - this.progress >= -4 || this.y + this.progress < this.board.height + 4;
-        }
-        else {
-            if (this.x - this.progress >= 0) {
-                scores.push({x: this.x - this.progress, y: this.y});
-                work = true;
-            }
-            if (this.x + this.progress < this.board.width) {
-                scores.push({x: this.x + this.progress, y: this.y});
-                work = true;
-            }
-            if (!work) {
-                this.stillChanging = false;
-            }
-            work = this.x - this.progress >= -4 || this.x + this.progress < this.board.width + 4;
+        for (var i = 0; i < this.lines.length; i++) {
+            if (this.lineUpdate(i, scores, board)) work = true;
         }
         // score
         var combo = 0;
@@ -98,9 +115,12 @@ StripeEffect.prototype.update = function () {
             }
         }
     }
-    if (this.direction === StripeEffect.VERTICAL) {
-        if (this.y - this.progress >= 0) {
-            this.board.lockPosition(this.x, this.y - this.progress, this);
+    for (var i = 0; i < this.lines.length; i++) {
+        var line = this.lines[i];
+        if (line.direction === StripeEffect.VERTICAL) {
+            if (line.y - this.progress >= 0) {
+                this.board.lockPosition(line.x, line.y - this.progress, line);
+            }
         }
     }
     return work;
@@ -109,24 +129,28 @@ StripeEffect.prototype.update = function () {
 // returns array of [x, y, width, height, frameName]'s
 StripeEffect.prototype.getSpritePositions = function () {
     var t = this.progress + 1 - this.tick / this.totalTicks;
-    var sw = 0.6, sh = 0.6, frm = Shape.typeNames[this.type-1];
-    frm += this.direction === StripeEffect.VERTICAL ? "VStripe" : "HStripe";
+    var sw = 0.6, sh = 0.6;
     var arr = [];
-    for (var i = 0; t >= 0 && i < 3; t-=1, i++) {
-        if (this.direction === StripeEffect.VERTICAL) {
-            if (this.y - t > -1) {
-                arr.push([this.x, this.y - t, sw, sh, frm]);
+    for (var n = 0; n < this.lines.length; n++) {
+        var line = this.lines[n];
+        var frm = Shape.typeNames[line.type-1];
+        frm += line.direction === StripeEffect.VERTICAL ? "VStripe" : "HStripe";
+        for (var i = 0; t >= 0 && i < 3; t-=1, i++) {
+            if (line.direction === StripeEffect.VERTICAL) {
+                if (line.y - t > -1) {
+                    arr.push([line.x, line.y - t, sw, sh, frm]);
+                }
+                if (line.y + t < this.board.height) {
+                    arr.push([line.x, line.y + t, sw, sh, frm]);
+                }
             }
-            if (this.y + t < this.board.height) {
-                arr.push([this.x, this.y + t, sw, sh, frm]);
-            }
-        }
-        else {
-            if (this.x - t > -1) {
-                arr.push([this.x - t, this.y, sw, sh, frm]);
-            }
-            if (this.x + t < this.board.width) {
-                arr.push([this.x + t, this.y, sw, sh, frm]);
+            else {
+                if (line.x - t > -1) {
+                    arr.push([line.x - t, line.y, sw, sh, frm]);
+                }
+                if (line.x + t < this.board.width) {
+                    arr.push([line.x + t, line.y, sw, sh, frm]);
+                }
             }
         }
     }
