@@ -66,6 +66,7 @@ Board.prototype.generateSimple = function () {
             this.tileLocks.push([]);
         }
     }
+    this.setShape(4, 4, new TaserShape(this));
 };
 
 Board.prototype.getShape = function (x, y) {
@@ -80,8 +81,10 @@ Board.prototype.setShape = function (x, y, sh) {
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
     if (y >= this.height || y < 0) return RangeError('y out of bound');
     if (sh instanceof Shape) {
-        if (sh.board !== this) throw TypeError("this Shape comes from different Board");
+        if (sh.board !== this) sh.board = this;
         this.shapes[x + y * this.width] = sh;
+        sh.x = x;
+        sh.y = y;
     }
     else if (typeof sh === "number") {
         var sp = this.shapes[x + y * this.width];
@@ -91,7 +94,8 @@ Board.prototype.setShape = function (x, y, sh) {
     }
 };
 
-Board.prototype.clearShape = function (x, y, color) {
+Board.prototype.clearShape = function (x, y, color, setting) {
+    setting = setting || {};
     this.changed = true;
     // bound check
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
@@ -193,6 +197,7 @@ Board.prototype.update = function () {
     if (!this.falling && !this.itemChanged) {
         this.matchFinder.findAndClearMatch(this, this.debug.disableMatching);
     }
+    this.shapeUpdate();
     this.matchFinder.makeMatchSound(this);
     this.changed = this.changed || this.itemChanged;
     if (!this.changed && this.matchFinder.matches.length == 0) {
@@ -276,6 +281,9 @@ Board.prototype.shapeClearUpdate = function () {
         this.changed = true;
     }
     this.deletedShapes = newDelShapes;
+};
+
+Board.prototype.shapeUpdate = function () {
     for (var i = 0; i < this.shapes.length; i++) {
         if (!this.shapes[i].cleared)
             this.shapes[i].update();

@@ -17,11 +17,6 @@ TaserShape.prototype.update = function () {
     if (this.state === TaserShape.ACTIVE) {
         this.state = TaserShape.DISCHARGING;
     }
-    if (this.state === TaserShape.FINISHED) {
-        if (this.board.getShape(this.x, this.y) === this) {
-            this.board.clearShape(this.x, this.y);
-        }
-    }
 };
 
 TaserShape.prototype.canBeCleared = function () {
@@ -57,6 +52,7 @@ function TaserEffect(board, color, taser) {
     this.all = [];
     this.clearing = [];
     this.count = 0;
+    this.done = false;
 }
 
 TaserEffect.prototype.elcShape = function (type) {
@@ -90,21 +86,28 @@ TaserEffect.prototype.update = function () {
                 this.board.score += score;
             }
             if (this.progress === this.count-1) {
-                this.taser.state = TaserShape.FINISHED;
+                this.done = true;
             }
         }
         //  taser has no target!
         if (this.count === 0) {
-            this.taser.state = TaserShape.FINISHED;
+            this.done = true;
         }
     }
-    if (this.progress < this.count-1 || this.tick === this.totalTicks) {
+    if (this.progress < this.count-1 || this.tick > 0) {
         this.board.itemChanged = true;
     }
     this.tick--;
     if (this.tick <= 0) {
         this.tick = this.totalTicks;
         this.progress++;
+    }
+    if (this.done) {
+        this.taser.state = TaserShape.FINISHED;
+        this.board.clearShape(this.taser.x, this.taser.y, 0, {});
+        if (!this.taser.cleared) {
+            return true;
+        }
     }
     return this.progress < this.count+2;
 };

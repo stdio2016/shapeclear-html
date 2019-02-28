@@ -31,34 +31,34 @@ Swap.prototype.specialCombo = function (board) {
             board.clearShape(from.x, from.y, to.type);
             board.addItemToClear(e);
         }
-        else if (to instanceof WrappedShape) {
+        else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
             return false;
         }
-        else if (to instanceof TaserShape) {
+        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
             ;
         }
         else return false;
     }
-    else if (from instanceof WrappedShape) {
+    else if (from instanceof WrappedShape && from.state === WrappedShape.NORMAL) {
         if (to instanceof StripedShape) {
             return false;
         }
-        else if (to instanceof WrappedShape) {
+        else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
             return false;
         }
-        else if (to instanceof TaserShape) {
+        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
             ;
         }
         else return false;
     }
-    else if (from instanceof TaserShape) {
+    else if (from instanceof TaserShape && from.state === TaserShape.NORMAL) {
         if (to instanceof StripedShape) {
             ;
         }
-        else if (to instanceof WrappedShape) {
+        else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
             ;
         }
-        else if (to instanceof TaserShape) {
+        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
             ;
         }
         else if (to.canMatch()) {
@@ -66,7 +66,7 @@ Swap.prototype.specialCombo = function (board) {
         }
         else return false;
     }
-    else if (to instanceof TaserShape) {
+    else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
         if (from.canMatch()) {
             board.clearShape(to.x, to.y, from.type);
         }

@@ -24,7 +24,7 @@ WrappedShape.prototype.update = function () {
     this.tick--;
     if (this.tick <= 0 && this.state === WrappedShape.WAIT_EXPLODE_AGAIN) {
         this.state = WrappedShape.CAN_CLEAR;
-        this.board.clearShape(this.x, this.y);
+        this.board.clearShape(this.x, this.y, 0, {special: true});
         // sometimes the shape might fail to explode
         if (!this.cleared) {
             this.state = WrappedShape.WAIT_EXPLODE_AGAIN;
@@ -60,11 +60,15 @@ WrappedShape.prototype.crush = function (board) {
         var ex = new WrappedEffect(board, this.x, this.y, this.type);
         board.addItemToClear(ex);
     }
-    else if (this.state === WrappedShape.CAN_CLEAR) {
-        var ex = new WrappedEffect(board, this.x, this.y, this.type);
-        board.addItemToClear(ex);
-    }
     return Shape.prototype.crush.call(this, board);
+};
+
+WrappedShape.prototype.deleteUpdate = function () {
+    if (this.tickClear === 10) {
+        var ex = new WrappedEffect(this.board, this.x, this.y, this.type);
+        this.board.addItemToClear(ex);
+    }
+    return Shape.prototype.deleteUpdate.call(this);
 };
 
 function WrappedEffect(board, x, y, color) {
