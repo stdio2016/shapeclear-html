@@ -104,9 +104,11 @@ TaserEffect.prototype.update = function () {
     }
     if (this.done) {
         this.taser.state = TaserShape.FINISHED;
-        this.board.clearShape(this.taser.x, this.taser.y, 0, {});
         if (!this.taser.cleared) {
-            return true;
+            this.board.clearShape(this.taser.x, this.taser.y);
+            if (!this.taser.cleared) {
+                return true;
+            }
         }
     }
     return this.progress < this.count+2;
