@@ -66,7 +66,6 @@ Board.prototype.generateSimple = function () {
             this.tileLocks.push([]);
         }
     }
-    this.setShape(4, 4, new TaserShape(this));
 };
 
 Board.prototype.getShape = function (x, y) {
