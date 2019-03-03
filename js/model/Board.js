@@ -22,6 +22,7 @@ function Board(game) {
     this.passedTime = 0;
     this.tick = 0;
     this.sounds = [];
+    this.randomColors = [1,2,3,4,5,6];
 
     // position of board in the game
     this.x = 0;
@@ -35,6 +36,11 @@ Board.BONUS_TIME = 3;
 Board.ENDED = 4;
 
 Board.prototype.generateSimple = function () {
+    this.randomColors = [1,2,3,4,5,6];
+    for (var i = 0; i < 6-AppleFools.DROP_COLOR_COUNT; i++) {
+        var r = this.game.rnd.between(0, this.randomColors.length);
+        this.randomColors.splice(r, 1);
+    }
     this.shapes = new Array(this.height * this.width);
     var arr = this.shapes;
     var height = this.height;
@@ -56,7 +62,7 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
+                r = this.randomColors[this.game.rnd.between(0, AppleFools.COLOR_COUNT-1)];
             } while ((r1 == r || r2 == r) && AppleFools.COLOR_COUNT > 2) ;
             if (Debug.testDiagonalFall && this.game.rnd.between(1, 10)  == 1) r = -1;
             var sh = new Shape(r, j, i, this);
@@ -65,6 +71,10 @@ Board.prototype.generateSimple = function () {
             this.tiles.push({sprite: null});
             this.tileLocks.push([]);
         }
+    }
+    if (AppleFools.DROP_COLOR_COUNT==4) {
+        this.setShape(5, 1, new TaserShape());
+        this.setShape(4, 4, -1);
     }
 };
 
@@ -478,8 +488,8 @@ Board.prototype.fall = function () {
         var dsh = this.shapes[i + this.width];
         if (this.shapes[i].isEmpty() && !this.tileLocked(i)) {
             this.falling = true;
-            var r = this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT);
-            var sh = new Shape(r, i, 0, this);
+            var r = this.game.rnd.between(0, AppleFools.DROP_COLOR_COUNT-1);
+            var sh = new Shape(this.randomColors[r], i, 0, this);
             this.shapes[i] = sh;
             sh.dir = {x: 0, y: 1};
             if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {

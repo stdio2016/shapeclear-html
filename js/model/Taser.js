@@ -46,7 +46,7 @@ function TaserEffect(board, color, taser) {
     this.totalTicks = 4;
     this.tick = this.totalTicks;
     this.progress = 0;
-    this.type = color || this.board.game.rnd.between(1, AppleFools.COLOR_COUNT);
+    this.type = color || board.randomColors[this.board.game.rnd.between(0, AppleFools.COLOR_COUNT-1)];
     this.taser = taser;
     // shapes to clear
     this.all = [];

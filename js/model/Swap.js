@@ -35,7 +35,7 @@ Swap.prototype.specialCombo = function (board) {
             return false;
         }
         else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
-            ;
+            board.clearShape(to.x, to.y, from.type);
         }
         else return false;
     }
@@ -47,16 +47,16 @@ Swap.prototype.specialCombo = function (board) {
             return false;
         }
         else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
-            ;
+            board.clearShape(to.x, to.y, from.type);
         }
         else return false;
     }
     else if (from instanceof TaserShape && from.state === TaserShape.NORMAL) {
         if (to instanceof StripedShape) {
-            ;
+            board.clearShape(from.x, from.y, to.type);
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
-            ;
+            board.clearShape(from.x, from.y, to.type);
         }
         else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
             ;
