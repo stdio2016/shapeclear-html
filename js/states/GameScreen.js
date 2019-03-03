@@ -95,6 +95,10 @@ GameScreen.prototype.resumed = function () {
 }
 
 GameScreen.prototype.update = function () {
+    if (this.board.state === 3) {
+        var r = this.game.time.slowMotion;
+        this.game.time.slowMotion = 1 / (1/r + 0.001);
+    }
     this.fixTime();
     var runTime = this.runTime;
     runTime[3] = Math.min(runTime[3] + runTime[5]/10 * 60, 5);
@@ -159,6 +163,7 @@ GameScreen.prototype.updateOnce = function () {
     this.timeText.setScore(Math.ceil(remainingTime / 60));
     if (this.board.remainingTime == 0 && !this.board.changed && this.board.swaps.length == 0) {
         if (this.board.state == Board.ENDED) {
+            this.game.time.slowMotion = 1;
         var me = this;
         if (promptCallback === doesNothing) {
             me.saveScore(me.board.score);
