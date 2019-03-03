@@ -138,16 +138,17 @@ MainMenu.prototype.move = function(pointer, x, y){
 MainMenu.prototype.playGame = function (btn) {
     if (/Pressed/.test(btn.frameName)) {
         if (btn === this.btnPlay) {
+            Debug.testDiagonalFall = false;
             AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
             this.state.start("GameScreen");
         }
         else if (btn === this.btnHelp) {
-          this.state.start("GameScreen");
+            Debug.testDiagonalFall = true;
             AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
             this.state.start("GameScreen");
         }
         else if (btn === this.btnEasy) {
-          this.state.start("GameScreen");
+            Debug.testDiagonalFall = false;
             AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 4;
             this.state.start("GameScreen");
         }

@@ -35,7 +35,9 @@ Swap.prototype.specialCombo = function (board) {
             return false;
         }
         else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
-            board.clearShape(to.x, to.y, from.type);
+            board.setShape(to.x, to.y, 0);
+            var e = new TaserComboEffect(board, to, from);
+            board.addItemToClear(e);
         }
         else return false;
     }
@@ -53,7 +55,9 @@ Swap.prototype.specialCombo = function (board) {
     }
     else if (from instanceof TaserShape && from.state === TaserShape.NORMAL) {
         if (to instanceof StripedShape) {
-            board.clearShape(from.x, from.y, to.type);
+            board.setShape(from.x, from.y, 0);
+            var e = new TaserComboEffect(board, from, to);
+            board.addItemToClear(e);
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
             board.clearShape(from.x, from.y, to.type);

@@ -134,3 +134,96 @@ TaserEffect.prototype.getSpritePositions = function () {
     }
     return ans;
 };
+
+function TaserComboEffect(board, taser, shape) {
+    this.totalTicks = 15;
+    this.initialDelay = 30;
+    this.tick = 0;
+    this.taser = taser;
+    this.shape = shape;
+    this.color = shape.type;
+    this.type = shape.special;
+    this.phase = 0;
+    this.progress = 0;
+    this.all = [];
+    board.lockPosition(taser.x, taser.y, this);
+}
+
+TaserComboEffect.prototype.elcShape = function (board, type) {
+    var shapes = board.shapes;
+    for (var i = 0; i < shapes.length; i++) {
+        if (shapes[i].type == type && shapes[i].canCrush()) {
+            var s = shapes[i];
+            var x = s.x, y = s.y;
+            if (this.type === StripedShape.HORIZONTAL) {
+                s = new StripedShape(type, s.x, s.y, StripedShape.HORIZONTAL, board);
+                this.type = StripedShape.VERTICAL;
+            }
+            else if (this.type === StripedShape.VERTICAL) {
+                s = new StripedShape(type, s.x, s.y, StripedShape.VERTICAL, board);
+                this.type = StripedShape.HORIZONTAL;
+            }
+            else if (this.type === WrappedShape.SPECIAL) {
+                s = new WrappedShape(type);
+            }
+            board.setShape(x, y, s);
+            this.all.push(s);
+        }
+    }
+};
+
+TaserComboEffect.prototype.update = function (board) {
+    this.tick++;
+    if (this.phase === 0) {
+        if (this.tick === 1) {
+            this.elcShape(board, this.color);
+        }
+        if (this.tick === this.initialDelay) {
+            this.phase = 1;
+            this.tick = 0;
+        }
+        board.itemChanged = true;
+    }
+    else if (this.phase === 1) {
+        board.unlockPosition(this.taser.x, this.taser.y, this);
+        board.clearShape(this.shape.x, this.shape.y);
+        if (this.tick === this.totalTicks) {
+            this.tick = 0;
+            while (this.progress < this.all.length && this.all[this.progress].cleared) {
+                this.progress++;
+            }
+            if (this.progress < this.all.length) {
+                var sh = this.all[this.progress];
+                board.clearShape(sh.x, sh.y);
+                this.progress++;
+            }
+        }
+        if (this.progress < this.all.length)
+            board.itemChanged = true;
+        else
+            this.phase = 2;
+    }
+    else return false;
+    
+    return true;
+};
+
+TaserComboEffect.prototype.getSpritePositions = function () {
+    var ans = [];
+    var tz = this.taser;
+    var tzx = (tz.x + tz.dir.x * tz.pos / 10);
+    var tzy = (tz.y + tz.dir.y * tz.pos / 10);
+    var sw = 0.6, sh = 0.6;
+    if (this.phase === 0 && this.tick <= 12) {
+        for (var i = 0; i < this.all.length; i++) {
+            var t = this.tick / 12;
+            var s = this.all[i];
+            ans.push([
+              (s.x + s.dir.x * s.pos / 10) * t + tzx * (1-t),
+              (s.y + s.dir.y * s.pos / 10) * t + tzy * (1-t),
+              sw, sh, "taser"
+            ]);
+        }
+    }
+    return ans;
+};

@@ -37,8 +37,8 @@ Board.ENDED = 4;
 
 Board.prototype.generateSimple = function () {
     this.randomColors = [1,2,3,4,5,6];
-    for (var i = 0; i < 6-AppleFools.DROP_COLOR_COUNT; i++) {
-        var r = this.game.rnd.between(0, this.randomColors.length);
+    for (var i = 0; i < 6 - AppleFools.DROP_COLOR_COUNT; i++) {
+        var r = this.game.rnd.between(0, this.randomColors.length - 1);
         this.randomColors.splice(r, 1);
     }
     this.shapes = new Array(this.height * this.width);
@@ -271,7 +271,7 @@ Board.prototype.itemClearUpdate = function () {
     this.runningItems = [];
     this.stoppedItems = [];
     for (var i = 0; i < itemsToUpdate.length; i++) {
-        var alive = itemsToUpdate[i].update();
+        var alive = itemsToUpdate[i].update(this);
         if (alive) {
             this.runningItems.push(itemsToUpdate[i]);
         }
