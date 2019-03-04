@@ -120,15 +120,15 @@ TaserEffect.prototype.getSpritePositions = function () {
     var ub = Math.min(this.count, this.progress + 1);
     var ans = [];
     var tz = this.taser;
-    var tzx = (tz.x + tz.dir.x * tz.pos / 10);
-    var tzy = (tz.y + tz.dir.y * tz.pos / 10);
+    var tzx = (tz.x - tz.dir.x * tz.pos / 10);
+    var tzy = (tz.y - tz.dir.y * tz.pos / 10);
     var sw = 0.6, sh = 0.6;
     for (var i = lb; i < ub; i++) {
         var t = (this.progress-i + 1 - this.tick / this.totalTicks) / 3;
         var s = this.all[i];
         ans.push([
-          (s.x + s.dir.x * s.pos / 10) * t + tzx * (1-t),
-          (s.y + s.dir.y * s.pos / 10) * t + tzy * (1-t),
+          (s.x - s.dir.x * s.pos / 10) * t + tzx * (1-t),
+          (s.y - s.dir.y * s.pos / 10) * t + tzy * (1-t),
           sw, sh, "taser"
         ]);
     }
@@ -215,16 +215,16 @@ TaserComboEffect.prototype.update = function (board) {
 TaserComboEffect.prototype.getSpritePositions = function () {
     var ans = [];
     var tz = this.taser;
-    var tzx = (tz.x + tz.dir.x * tz.pos / 10);
-    var tzy = (tz.y + tz.dir.y * tz.pos / 10);
+    var tzx = (tz.x - tz.dir.x * tz.pos / 10);
+    var tzy = (tz.y - tz.dir.y * tz.pos / 10);
     var sw = 0.6, sh = 0.6;
     if (this.phase === 0 && this.tick <= 12) {
         for (var i = 0; i < this.all.length; i++) {
             var t = this.tick / 12;
             var s = this.all[i];
             ans.push([
-              (s.x + s.dir.x * s.pos / 10) * t + tzx * (1-t),
-              (s.y + s.dir.y * s.pos / 10) * t + tzy * (1-t),
+              (s.x - s.dir.x * s.pos / 10) * t + tzx * (1-t),
+              (s.y - s.dir.y * s.pos / 10) * t + tzy * (1-t),
               sw, sh, "taser"
             ]);
         }
