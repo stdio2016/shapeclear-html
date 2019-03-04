@@ -136,7 +136,7 @@ TaserEffect.prototype.getSpritePositions = function () {
 };
 
 function TaserComboEffect(board, taser, shape) {
-    this.totalTicks = 15;
+    this.totalTicks = 10;
     this.initialDelay = 30;
     this.tick = 0;
     this.taser = taser;
@@ -189,8 +189,12 @@ TaserComboEffect.prototype.update = function (board) {
         board.clearShape(this.shape.x, this.shape.y);
         if (this.tick === this.totalTicks) {
             this.tick = 0;
-            while (this.progress < this.all.length && this.all[this.progress].cleared) {
-                this.progress++;
+            while (this.progress < this.all.length) {
+                var sh = this.all[this.progress];
+                if (sh.cleared
+                  || (sh instanceof WrappedShape && sh.state !== WrappedShape.NORMAL))
+                    this.progress++;
+                else break;
             }
             if (this.progress < this.all.length) {
                 var sh = this.all[this.progress];
