@@ -2,6 +2,7 @@ function WrappedShape(type, x, y, board) {
     Shape.call(this, type, x, y, board);
     this.state = WrappedShape.NORMAL;
     this.special = WrappedShape.SPECIAL;
+    this.bombSize = 1;
 }
 
 WrappedShape.NORMAL = 0;
@@ -57,7 +58,7 @@ WrappedShape.prototype.canCrush = function () {
 WrappedShape.prototype.crush = function (board) {
     if (this.state === WrappedShape.NORMAL) {
         this.state = WrappedShape.EXPLODED;
-        var ex = new WrappedEffect(board, this.x, this.y, this.type);
+        var ex = new WrappedEffect(board, this.x, this.y, this.type, this.bombSize);
         board.addItemToClear(ex);
     }
     return Shape.prototype.crush.call(this, board);
@@ -65,28 +66,32 @@ WrappedShape.prototype.crush = function (board) {
 
 WrappedShape.prototype.deleteUpdate = function () {
     if (this.tickClear === 10) {
-        var ex = new WrappedEffect(this.board, this.x, this.y, this.type);
+        var ex = new WrappedEffect(this.board, this.x, this.y, this.type, this.bombSize);
         this.board.addItemToClear(ex);
     }
     return Shape.prototype.deleteUpdate.call(this);
 };
 
-function WrappedEffect(board, x, y, color) {
+function WrappedEffect(board, x, y, color, bombSize) {
     this.board = board;
     this.x = x;
     this.y = y;
     this.totalTicks = 10;
     this.tick = this.totalTicks;
     this.type = color;
+    this.size = bombSize || 1;
     this.explode();
 }
 
 WrappedEffect.prototype.explode = function () {
     var i, j;
-    var score = 540;
-    for (i = Math.max(this.x-1, 0); i <= this.x+1 && i < this.board.width; i++) {
-        for (j = Math.min(this.y+1, this.board.height-1); j >= this.y-1 && j >= 0 ; j--) {
+    var size = this.size;
+    var score = size > 1 ? 0 : 540;
+    var x = this.x, y = this.y;
+    for (i = Math.max(x - size, 0); i <= x + size && i < this.board.width; i++) {
+        for (j = Math.min(y + size, this.board.height - 1); j >= y - size && j >= 0 ; j--) {
             if (i !== this.x || j !== this.y) {
+                if (size > 1) score += 60;
                 var s = this.board.clearShape(i, j);
                 score += s.addition + s.jelly + s.blocker;
             }
@@ -98,6 +103,7 @@ WrappedEffect.prototype.explode = function () {
                 // explosion pull force
                 sh.pos += 0.4;
                 sh.speed -= 0.4;
+                if (sh.speed < -10) sh.speed = -10;
                 sh.dir.y = +1;
                 sh.bouncing = true;
             }

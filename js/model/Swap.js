@@ -46,7 +46,9 @@ Swap.prototype.specialCombo = function (board) {
             return false;
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
-            return false;
+            from.bombSize = to.bombSize = 2;
+            board.clearShape(from.x, from.y);
+            board.clearShape(to.x, to.y);
         }
         else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
             board.setShape(to.x, to.y, 0);
