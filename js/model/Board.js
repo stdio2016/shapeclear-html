@@ -435,7 +435,7 @@ Board.prototype.fall = function () {
     for (var i = this.shapes.length - 1; i >= 0; i--) {
         var sh = this.shapes[i], dsh = this.shapes[i + this.width];
         if (sh.isMoving()) {
-            sh.speed += 0.07; // gravity acceleration
+            sh.speed += 0.1; // gravity acceleration
             if(sh.speed > 10) { // maximum speed
                 sh.speed = 10;
             }
