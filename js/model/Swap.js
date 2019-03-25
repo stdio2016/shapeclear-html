@@ -69,7 +69,8 @@ Swap.prototype.specialCombo = function (board) {
             board.addItemToClear(e);
         }
         else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
-            ;
+            var e = new DoubleTaserEffect(board, from, to);
+            board.addItemToClear(e);
         }
         else if (to.canMatch()) {
             board.clearShape(from.x, from.y, to.type);

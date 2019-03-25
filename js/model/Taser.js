@@ -231,3 +231,73 @@ TaserComboEffect.prototype.getSpritePositions = function () {
     }
     return ans;
 };
+
+function DoubleTaserEffect(board, taser1, taser2) {
+    this.board = board;
+    this.progress = 0;
+    this.tick = 0;
+    this.totalTicks = 2;
+    this.showTime = 12;
+    this.taser1 = taser1;
+    this.taser2 = taser2;
+    this.done = false;
+    // HACK: to make electricshock devices immovable
+    taser1.swapping = true;
+    taser2.swapping = true;
+}
+
+DoubleTaserEffect.prototype.update = function (board) {
+    board.changed = true;
+    this.tick++;
+    if (this.tick >= this.totalTicks) {
+        if (this.progress >= this.showTime) {
+            var p = this.progress - this.showTime;
+            var x = p / this.board.width | 0;
+            var y = p % this.board.width;
+            var sh = board.getShape(x, y);
+            var sco = board.clearShape(x, y);
+            var score = (sco.score + sco.addition) + sco.jelly + sco.blocker;
+            if (score !== 0) {
+                board.gainScores.push({
+                  x: x, y: y, type: sh.type, score: score
+                });
+                board.score += score;
+            }
+            if (p >= board.width * board.height - 1) {
+                this.taser1.swapping = false;
+                this.taser2.swapping = false;
+                board.setShape(this.taser1.x, this.taser1.y, 0);
+                board.setShape(this.taser2.x, this.taser2.y, 0);
+                return false;
+            }
+        }
+        this.progress++;
+        this.tick = 0;
+    }
+    this.board.itemChanged = true;
+    return true;
+};
+
+DoubleTaserEffect.prototype.getSpritePositions = function () {
+    var ans = [];
+    var tz = this.taser1;
+    var tzx = (tz.x - tz.dir.x * tz.pos / 10);
+    var tzy = (tz.y - tz.dir.y * tz.pos / 10);
+    var tz2 = this.taser2;
+    var tz2x = (tz2.x - tz2.dir.x * tz2.pos / 10);
+    var tz2y = (tz2.y - tz2.dir.y * tz2.pos / 10);
+    var sw = 0.6, sh = 0.6;
+    for (var i = 0; i < this.showTime; i++) {
+        var p = this.progress - i;
+        if (p < 0 || p >= this.board.width * this.board.height) continue;
+        var t = (i + (this.tick+1) / this.totalTicks) / this.showTime;
+        var x = p / this.board.width | 0;
+        var y = p % this.board.width;
+        ans.push([
+          x * t + (tzx + tz2x) * 0.5 * (1-t),
+          y * t + (tzy + tz2y) * 0.5 * (1-t),
+          sw, sh, "taser"
+        ]);
+    }
+    return ans;
+};
