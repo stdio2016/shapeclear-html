@@ -254,29 +254,35 @@ DoubleTaserEffect.prototype.update = function (board) {
     board.changed = true;
     this.tick++;
     if (this.tick >= this.totalTicks) {
+        this.tick = 0;
         if (this.progress >= this.showTime) {
             var p = this.progress - this.showTime;
             var x = p / this.board.width | 0;
             var y = p % this.board.width;
-            var sh = board.getShape(x, y);
-            var sco = board.clearShape(x, y);
-            var score = (sco.score + sco.addition) + sco.jelly + sco.blocker;
-            if (score !== 0) {
-                board.gainScores.push({
-                  x: x, y: y, type: sh.type, score: score
-                });
-                board.score += score;
+            if (p <= board.width * board.height - 1) {
+                var sh = board.getShape(x, y);
+                var sco = board.clearShape(x, y);
+                var score = (sco.score + sco.addition) + sco.jelly + sco.blocker;
+                if (score !== 0) {
+                    board.gainScores.push({
+                      x: x, y: y, type: sh.type, score: score
+                    });
+                    board.score += score;
+                }
             }
             if (p >= board.width * board.height - 1) {
                 this.taser1.state = TaserShape.FINISHED;
                 this.taser2.state = TaserShape.FINISHED;
                 board.clearShape(this.taser1.x, this.taser1.y);
                 board.clearShape(this.taser2.x, this.taser2.y);
-                return false;
+                if (this.taser1.cleared && this.taser2.cleared)
+                    return false;
+                else { // try again
+                    this.tick = this.totalTicks;
+                }
             }
         }
         this.progress++;
-        this.tick = 0;
     }
     this.board.itemChanged = true;
     return true;

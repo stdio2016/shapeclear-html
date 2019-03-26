@@ -203,7 +203,7 @@ Board.prototype.update = function () {
     this.updateSwaps();
     this.itemClearUpdate();
     this.shapeClearUpdate();
-    if (!this.falling && !this.itemChanged) {
+    if (this.state === Board.BONUS_TIME || !this.falling && !this.itemChanged) {
         this.matchFinder.findAndClearMatch(this, this.debug.disableMatching);
     }
     this.shapeUpdate();
