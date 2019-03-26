@@ -41,6 +41,10 @@ TaserShape.prototype.crush = function (board, color) {
     return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };
 
+TaserShape.prototype.canFall = function () {
+    return Shape.prototype.canFall.call(this) && this.state !== TaserShape.DISCHARGING;
+};
+
 function TaserEffect(board, color, taser) {
     this.board = board;
     this.totalTicks = 3;
@@ -53,7 +57,7 @@ function TaserEffect(board, color, taser) {
     this.clearing = [];
     this.count = 0;
     this.done = false;
-    taser.swapping = true;
+    taser.state = TaserShape.DISCHARGING;
 }
 
 TaserEffect.prototype.elcShape = function (type) {
@@ -106,7 +110,6 @@ TaserEffect.prototype.update = function () {
     if (this.done) {
         this.taser.state = TaserShape.FINISHED;
         if (!this.taser.cleared) {
-            this.taser.swapping = false;
             this.board.clearShape(this.taser.x, this.taser.y);
             if (!this.taser.cleared) {
                 return true;
@@ -179,6 +182,7 @@ TaserComboEffect.prototype.update = function (board) {
     if (this.phase === 0) {
         if (this.tick === 1) {
             this.elcShape(board, this.color);
+            board.clearShape(this.shape.x, this.shape.y);
         }
         if (this.tick === this.initialDelay) {
             this.phase = 1;
@@ -188,7 +192,6 @@ TaserComboEffect.prototype.update = function (board) {
     }
     else if (this.phase === 1) {
         board.unlockPosition(this.taser.x, this.taser.y, this);
-        board.clearShape(this.shape.x, this.shape.y);
         if (this.tick === this.totalTicks) {
             this.tick = 0;
             while (this.progress < this.all.length) {
@@ -243,9 +246,8 @@ function DoubleTaserEffect(board, taser1, taser2) {
     this.taser1 = taser1;
     this.taser2 = taser2;
     this.done = false;
-    // HACK: to make electricshock devices immovable
-    taser1.swapping = true;
-    taser2.swapping = true;
+    taser1.state = TaserShape.DISCHARGING;
+    taser2.state = TaserShape.DISCHARGING;
 }
 
 DoubleTaserEffect.prototype.update = function (board) {
@@ -266,10 +268,10 @@ DoubleTaserEffect.prototype.update = function (board) {
                 board.score += score;
             }
             if (p >= board.width * board.height - 1) {
-                this.taser1.swapping = false;
-                this.taser2.swapping = false;
-                board.setShape(this.taser1.x, this.taser1.y, 0);
-                board.setShape(this.taser2.x, this.taser2.y, 0);
+                this.taser1.state = TaserShape.FINISHED;
+                this.taser2.state = TaserShape.FINISHED;
+                board.clearShape(this.taser1.x, this.taser1.y);
+                board.clearShape(this.taser2.x, this.taser2.y);
                 return false;
             }
         }
