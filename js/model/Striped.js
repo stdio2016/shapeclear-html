@@ -26,7 +26,7 @@ StripedShape.prototype.crush = function (board) {
     return Shape.prototype.crush.call(this, board);
 };
 
-function StripeEffect(board, color) {
+function StripeEffect(board) {
     this.board = board;
     this.lines = [];
     this.totalTicks = 2;
@@ -128,13 +128,14 @@ StripeEffect.prototype.update = function () {
 
 // returns array of [x, y, width, height, frameName]'s
 StripeEffect.prototype.getSpritePositions = function () {
-    var t = this.progress + 1 - this.tick / this.totalTicks;
+    var t2 = this.progress + 1 - this.tick / this.totalTicks;
     var sw = 0.6, sh = 0.6;
     var arr = [];
     for (var n = 0; n < this.lines.length; n++) {
         var line = this.lines[n];
         var frm = Shape.typeNames[line.type-1];
         frm += line.direction === StripeEffect.VERTICAL ? "VStripe" : "HStripe";
+        var t = t2;
         for (var i = 0; t >= 0 && i < 3; t-=1, i++) {
             if (line.direction === StripeEffect.VERTICAL) {
                 if (line.y - t > -1) {
@@ -155,4 +156,71 @@ StripeEffect.prototype.getSpritePositions = function () {
         }
     }
     return arr;
+};
+
+function BigStripeEffect(board, from, to) {
+    this.board = board;
+    this.totalTicks = 30;
+    this.tick = this.totalTicks;
+    this.progress = 0;
+    this.color = from instanceof StripedShape ? from.type : to.type;
+    this.x = from.x;
+    this.y = from.y;
+    board.setShape(from.x, from.y, 0);
+    board.setShape(to.x, to.y, 0);
+    for (var i = Math.max(this.x-1, 0); i <= this.x+1 && i < board.width; i++) {
+        board.lockPosition(i, Math.max(this.y-1, 0));
+    }
+    for (var i = Math.max(this.x-1, 0); i <= this.x+1 && i < board.width; i++) {
+        for (var j = this.y-1; j <= this.y+1; j++) {
+            if (i < 0 || j < 0) continue;
+            if (i >= board.width || j >= board.height) continue;
+            var sh = board.getShape(i, j);
+            if (sh.type > 0) {
+                board.clearShape(i, j);
+            }
+        }
+    }
+}
+
+BigStripeEffect.prototype.update = function (board) {
+    this.tick--;
+    board.changed = true;
+    if (this.tick === 0) {
+        if (this.progress === 0) {
+            var e = new StripeEffect(board);
+            for (var i = this.y-1; i <= this.y+1; i++) {
+                if (i >= 0 && i < board.height)
+                    e.addLine(this.x, i, StripeEffect.HORIZONTAL, this.color);
+            }
+            board.addItemToClear(e);
+        }
+        else if (this.progress === 2) {
+            for (var i = Math.max(this.x-1, 0); i <= this.x+1 && i < board.width; i++) {
+                board.unlockPosition(i, Math.max(this.y-1, 0));
+            }
+            var e = new StripeEffect(board);
+            for (var i = this.x-1; i <= this.x+1; i++) {
+                if (i >= 0 && i < board.width)
+                    e.addLine(i, this.y, StripeEffect.VERTICAL, this.color);
+            }
+            board.addItemToClear(e);
+        }
+        else if (this.progress === 3) {
+            return false;
+        }
+        this.tick = this.totalTicks;
+        this.progress++;
+    }
+    return true;
+};
+
+BigStripeEffect.prototype.getSpritePositions = function () {
+    var size = 2;
+    if (this.progress === 0 && (this.totalTicks - this.tick) < 10) {
+        size = 1 + (this.totalTicks - this.tick) / 10;
+    }
+    var frm = Shape.typeNames[this.color-1];
+    frm += this.progress >= 2 ? "VStripe" : "HStripe";
+    return [[this.x, this.y, size, size, frm]];
 };

@@ -32,7 +32,8 @@ Swap.prototype.specialCombo = function (board) {
             board.addItemToClear(e);
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
-            return false;
+            var e = new BigStripeEffect(board, from, to);
+            board.addItemToClear(e);
         }
         else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
             board.setShape(to.x, to.y, 0);
@@ -43,7 +44,8 @@ Swap.prototype.specialCombo = function (board) {
     }
     else if (from instanceof WrappedShape && from.state === WrappedShape.NORMAL) {
         if (to instanceof StripedShape) {
-            return false;
+            var e = new BigStripeEffect(board, from, to);
+            board.addItemToClear(e);
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
             from.bombSize = to.bombSize = 2;
