@@ -22,6 +22,7 @@ function Board(game) {
     this.passedTime = 0;
     this.tick = 0;
     this.sounds = [];
+    this.randomColors = [1,2,3,4,5,6];
 
     // position of board in the game
     this.x = 0;
@@ -35,6 +36,11 @@ Board.BONUS_TIME = 3;
 Board.ENDED = 4;
 
 Board.prototype.generateSimple = function () {
+    this.randomColors = [1,2,3,4,5,6];
+    for (var i = 0; i < 6 - AppleFools.DROP_COLOR_COUNT; i++) {
+        var r = this.game.rnd.between(0, this.randomColors.length - 1);
+        this.randomColors.splice(r, 1);
+    }
     this.shapes = new Array(this.height * this.width);
     var arr = this.shapes;
     var height = this.height;
@@ -56,7 +62,7 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.game.rnd.between(1, AppleFools.COLOR_COUNT);
+                r = this.randomColors[this.game.rnd.between(0, AppleFools.COLOR_COUNT-1)];
             } while ((r1 == r || r2 == r) && AppleFools.COLOR_COUNT > 2) ;
             if (Debug.testDiagonalFall && this.game.rnd.between(1, 10)  == 1) r = -1;
             var sh = new Shape(r, j, i, this);
@@ -65,6 +71,10 @@ Board.prototype.generateSimple = function () {
             this.tiles.push({sprite: null});
             this.tileLocks.push([]);
         }
+    }
+    if (AppleFools.DROP_COLOR_COUNT==4) {
+        this.setShape(5, 1, new TaserShape());
+        this.setShape(4, 4, -1);
     }
 };
 
@@ -80,8 +90,10 @@ Board.prototype.setShape = function (x, y, sh) {
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
     if (y >= this.height || y < 0) return RangeError('y out of bound');
     if (sh instanceof Shape) {
-        if (sh.board !== this) throw TypeError("this Shape comes from different Board");
+        if (sh.board !== this) sh.board = this;
         this.shapes[x + y * this.width] = sh;
+        sh.x = x;
+        sh.y = y;
     }
     else if (typeof sh === "number") {
         var sp = this.shapes[x + y * this.width];
@@ -91,7 +103,8 @@ Board.prototype.setShape = function (x, y, sh) {
     }
 };
 
-Board.prototype.clearShape = function (x, y, dir) {
+Board.prototype.clearShape = function (x, y, color, setting) {
+    setting = setting || {};
     this.changed = true;
     // bound check
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
@@ -99,37 +112,15 @@ Board.prototype.clearShape = function (x, y, dir) {
     // TODO: handle special shapes such as striped or wrapped ones
     var i = x + y * this.width;
     var sh = this.shapes[i];
-    if (sh.type > 0 && !sh.cleared && !sh.swapping) {
+    if (sh.canCrush()) {
         if (sh.canBeCleared()) {
             this.deletedShapes.push(sh);
             sh.cleared = true;
         }
         //this.shapes[i] = new Shape(0, x, y);
-        switch (sh.special) {
-          case StripedShape.HORIZONTAL:
-            this.addItemToClear(new StripeEffect(this, x, y, StripeEffect.HORIZONTAL, sh.type));
-            break;
-          case StripedShape.VERTICAL:
-            this.addItemToClear(new StripeEffect(this, x, y, StripeEffect.VERTICAL, sh.type));
-            break;
-          case WrappedShape.SPECIAL:
-            if (sh.state === WrappedShape.NORMAL) {
-                sh.state = WrappedShape.EXPLODED;
-                this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
-            }
-          case WrappedShape.SPECIAL_WAIT_EXPLODE:
-            if (sh.state === WrappedShape.CAN_CLEAR) {
-                this.addItemToClear(new WrappedEffect(this, x, y, sh.type));
-            }
-            break;
-          case TaserShape.SPECIAL:
-            if (sh.state === TaserShape.NORMAL) {
-                sh.state = TaserShape.ACTIVE;
-                this.addItemToClear(new TaserEffect(this, dir, sh));
-            }
-            break;
-        }
+        return sh.crush(this, color);
     }
+    return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };
 
 Board.prototype.addSwap = function(from, to) {
@@ -212,9 +203,10 @@ Board.prototype.update = function () {
     this.updateSwaps();
     this.itemClearUpdate();
     this.shapeClearUpdate();
-    if (!this.falling && !this.itemChanged) {
+    if (this.state === Board.BONUS_TIME || !this.falling && !this.itemChanged) {
         this.matchFinder.findAndClearMatch(this, this.debug.disableMatching);
     }
+    this.shapeUpdate();
     this.matchFinder.makeMatchSound(this);
     this.changed = this.changed || this.itemChanged;
     if (!this.changed && this.matchFinder.matches.length == 0) {
@@ -279,7 +271,7 @@ Board.prototype.itemClearUpdate = function () {
     this.runningItems = [];
     this.stoppedItems = [];
     for (var i = 0; i < itemsToUpdate.length; i++) {
-        var alive = itemsToUpdate[i].update();
+        var alive = itemsToUpdate[i].update(this);
         if (alive) {
             this.runningItems.push(itemsToUpdate[i]);
         }
@@ -298,6 +290,9 @@ Board.prototype.shapeClearUpdate = function () {
         this.changed = true;
     }
     this.deletedShapes = newDelShapes;
+};
+
+Board.prototype.shapeUpdate = function () {
     for (var i = 0; i < this.shapes.length; i++) {
         if (!this.shapes[i].cleared)
             this.shapes[i].update();
@@ -313,31 +308,25 @@ Board.prototype.updateSwaps = function () {
         if (this.swaps[i].tick == 0) {
             from.stopSwapping();
             to.stopSwapping();
-            var valid1 = this.isValidSwapAt(from.x, from.y);
-            var valid2 = this.isValidSwapAt(to.x, to.y);
-            if ( valid1 || valid2
-              || this.swaps[i].status === 'reject'
-            ) {
+            var sw = this.swaps[i];
+            if (sw.status === 'swap' && sw.specialCombo(this)) {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;
+                continue;
             }
-            else if (from.special === TaserShape.SPECIAL || to.special === TaserShape.SPECIAL) {
-                if (from.special === TaserShape.SPECIAL) {
-                    this.clearShape(from.x, from.y, to.type);
-                }
-                if (to.special === TaserShape.SPECIAL) {
-                    this.clearShape(to.x, to.y, from.type);
-                }
+            var valid1 = this.isValidSwapAt(from.x, from.y);
+            var valid2 = this.isValidSwapAt(to.x, to.y);
+            if (valid1 || valid2 || sw.status === 'reject') {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;
             }
             else {
                 this.sounds.push({name: 'nomatch'});
-                this.swaps[i].reject();
+                sw.reject();
                 this.swapShape(from, to);
-                from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
+                from.pos = to.pos = sw.interpolatedPos() * 10;
             }
         }
     }
@@ -446,7 +435,7 @@ Board.prototype.fall = function () {
     for (var i = this.shapes.length - 1; i >= 0; i--) {
         var sh = this.shapes[i], dsh = this.shapes[i + this.width];
         if (sh.isMoving()) {
-            sh.speed += 0.07; // gravity acceleration
+            sh.speed += 0.1; // gravity acceleration
             if(sh.speed > 10) { // maximum speed
                 sh.speed = 10;
             }
@@ -499,8 +488,8 @@ Board.prototype.fall = function () {
         var dsh = this.shapes[i + this.width];
         if (this.shapes[i].isEmpty() && !this.tileLocked(i)) {
             this.falling = true;
-            var r = this.game.rnd.between(1, AppleFools.DROP_COLOR_COUNT);
-            var sh = new Shape(r, i, 0, this);
+            var r = this.game.rnd.between(0, AppleFools.DROP_COLOR_COUNT-1);
+            var sh = new Shape(this.randomColors[r], i, 0, this);
             this.shapes[i] = sh;
             sh.dir = {x: 0, y: 1};
             if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {

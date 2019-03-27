@@ -13,12 +13,14 @@
     this.lblPlay = null;
     this.btnHelp = null;
     this.lblHelp = null;
+    this.btnEasy = null;
+    this.lblEasy = null;
     this.lblVersion = null;
     this.ball1 = this.ball2 = null; // Ball to test animation
 }
 
 MainMenu.prototype.create = function () {
-    this.game.version = 'v0.6.0';
+    this.game.version = 'v0.6.1';
     this.background = this.add.image(0, 0, 'background');
     this.castle = this.add.image(this.game.width/2, this.game.height * 0.705, 'castle');
     this.castle.anchor.set(0.5, 0.72);
@@ -62,6 +64,11 @@ MainMenu.prototype.create = function () {
     this.btnHelp.tint = 0xffff00;
     this.lblHelp = this.add.text(-1000, -1000, Translation['Board with holes']);
     this.lblHelp.anchor.set(0.5, 0.5);
+    this.btnEasy = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
+    this.btnEasy.anchor.set(0.5, 0.5);
+    this.btnEasy.tint = 0xffff00;
+    this.lblEasy = this.add.text(-1000, -1000, Translation['Easy mode']);
+    this.lblEasy.anchor.set(0.5, 0.5);
     this.lblVersion = this.add.text(-1000, -1000, this.game.version);
     this.lblVersion.anchor.set(1, 1);
     this.game.bounceTime = 0;
@@ -93,16 +100,19 @@ MainMenu.prototype.update = function () {
     this.title.fontSize = dim / 10;
     this.lblPlay.fontSize = dim / 18;
     this.lblHelp.fontSize = dim / 25;
+    this.lblEasy.fontSize = dim / 25;
     this.lblVersion.fontSize = dim / 25;
     if (gw > gh) {
         this.title.position.set(gw / 2, gh * 0.2);
         this.btnPlay.position.set(gw / 2, gh * 0.5);
-        this.btnHelp.position.set(gw / 2, gh * 0.7);
+        this.btnHelp.position.set(gw / 2, gh * 0.65);
+        this.btnEasy.position.set(gw / 2, gh * 0.8);
     }
     else {
         this.title.position.set(gw / 2, gh * 0.5 - gw * 0.3);
         this.btnPlay.position.set(gw / 2, gh * 0.5);
-        this.btnHelp.position.set(gw / 2, gh * 0.5 + gw * 0.2);
+        this.btnHelp.position.set(gw / 2, gh * 0.5 + gw * 0.15);
+        this.btnEasy.position.set(gw / 2, gh * 0.5 + gw * 0.3);
     }
     this.lblPlay.position.copyFrom(this.btnPlay.position);
     this.lblPlay.y += window.devicePixelRatio || 1;
@@ -110,6 +120,9 @@ MainMenu.prototype.update = function () {
     this.lblHelp.position.copyFrom(this.btnHelp.position);
     this.lblHelp.y += window.devicePixelRatio || 1;
     this.btnHelp.scale.setTo(dim / this.btnPlay.texture.frame.width * (125/360));
+    this.lblEasy.position.copyFrom(this.btnEasy.position);
+    this.lblEasy.y += window.devicePixelRatio || 1;
+    this.btnEasy.scale.setTo(dim / this.btnEasy.texture.frame.width * (125/360));
     this.lblVersion.position.set(gw, gh);
     this.lblVersion.text = this.game.version + '.' + this.game.bounceTime;
 };
@@ -126,11 +139,17 @@ MainMenu.prototype.playGame = function (btn) {
     if (/Pressed/.test(btn.frameName)) {
         if (btn === this.btnPlay) {
             Debug.testDiagonalFall = false;
+            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
             this.state.start("GameScreen");
         }
         else if (btn === this.btnHelp) {
-          this.state.start("GameScreen");
             Debug.testDiagonalFall = true;
+            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
+            this.state.start("GameScreen");
+        }
+        else if (btn === this.btnEasy) {
+            Debug.testDiagonalFall = false;
+            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 4;
             this.state.start("GameScreen");
         }
     }

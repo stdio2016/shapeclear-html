@@ -43,7 +43,7 @@ Shape.prototype.isEmpty = function () {
 };
 
 Shape.prototype.canFall = function () {
-    return !this.swapping && this.type > 0 && !this.cleared &&
+    return !this.swapping && this.type > 0 &&
      (this.isStopped() || this.pos <= 0 || this.bouncing);
 };
 
@@ -52,12 +52,12 @@ Shape.prototype.isDeleted = function () {
 };
 
 Shape.prototype.canBeCleared = function () {
-    return !this.swapping && !this.cleared;
-}
+    return this.type > 0 && !this.swapping && !this.cleared;
+};
 
 Shape.prototype.canCrush = function () {
-    return !this.swapping && !this.cleared;
-}
+    return this.type > 0 && !this.swapping && !this.cleared;
+};
 
 Shape.prototype.stopSwapping = function () {
     this.swapping = false;
@@ -67,7 +67,7 @@ Shape.prototype.stopSwapping = function () {
 Shape.prototype.stopFalling = function () {
     if (this.speed > 1 && this.dir.x * this.dir.y === 0) {
         this.pos += this.speed;
-        this.speed = -0.2;
+        this.speed = -0.1;
         this.bouncing = true;
     }
     else {
@@ -102,4 +102,11 @@ Shape.prototype.toString = function () {
     this.board = b;
     this.sprite = sp;
     return str;
+};
+
+Shape.prototype.crush = function (board) {
+    if (this.type > 0) {
+        return {score: 60, addition: 0, multiply: 1, jelly: 0, blocker: 0};
+    }
+    return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };
