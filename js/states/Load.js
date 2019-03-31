@@ -13,6 +13,9 @@ Load.shouldLoadAudio = function () {
 };
 
 Load.prototype.preload = function () {
+    // Apple fools joke!
+    game.smoothed = false;
+
     var r = this.game.resolution;
     game.canvas.oncontextmenu = function (e) {
         e.preventDefault();
