@@ -289,7 +289,7 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
         spec = new StripedShape(type, StripedShape.VERTICAL, x, y, board);
     }
     else if (m.type === Match.VERTICAL && m.vlength === 4) {
-        spec = new StripedShape(type, StripedShape.VERTICAL, x, y, board);
+        spec = new StripedShape(type, StripedShape.HORIZONTAL, x, y, board);
     }
     if (spec) {
         console.log(cur, cur+'');
