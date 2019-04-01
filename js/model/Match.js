@@ -184,12 +184,12 @@ MatchFinder.prototype.clearMatch = function (board) {
         }
         if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
             var r = board.game.rnd.between(1,2), sh;
-            sh = new StripedShape(type, m.hy+1, m.hy, r, board);
+            sh = new StripedShape(type, r, m.hy+1, m.hy, board);
             this.putSpecial(board, m, sh);
         }
         if (m.vlength == 4 && m.type === Match.VERTICAL) {
             var r = board.game.rnd.between(1,2);
-            sh = new StripedShape(type, m.vx, m.vy+1, r, board);
+            sh = new StripedShape(type, r, m.vx, m.vy+1, board);
             this.putSpecial(board, m, sh);
         }
         if (m.type === Match.CROSS && m.hlength < 5 && m.vlength < 5) {
@@ -286,10 +286,10 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
         spec = new WrappedShape(type, x, y, board);
     }
     else if (m.type === Match.HORIZONTAL && m.hlength === 4) {
-        spec = new StripedShape(type, x, y, StripedShape.VERTICAL, board);
+        spec = new StripedShape(type, StripedShape.VERTICAL, x, y, board);
     }
     else if (m.type === Match.VERTICAL && m.vlength === 4) {
-        spec = new StripedShape(type, x, y, StripedShape.HORIZONTAL, board);
+        spec = new StripedShape(type, StripedShape.VERTICAL, x, y, board);
     }
     if (spec) {
         console.log(cur, cur+'');

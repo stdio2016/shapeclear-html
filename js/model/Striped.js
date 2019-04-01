@@ -1,4 +1,4 @@
-function StripedShape(type, x, y, dir, board) {
+function StripedShape(type, dir, x, y, board) {
     Shape.call(this, type, x, y, board);
     this.stripeDirection = dir;
     if (dir === StripedShape.HORIZONTAL) {
@@ -164,8 +164,8 @@ function BigStripeEffect(board, from, to) {
     this.tick = this.totalTicks;
     this.progress = 0;
     this.color = from instanceof StripedShape ? from.type : to.type;
-    this.x = from.x;
-    this.y = from.y;
+    this.x = to.x;
+    this.y = to.y;
     board.setShape(from.x, from.y, 0);
     board.setShape(to.x, to.y, 0);
     for (var i = Math.max(this.x-1, 0); i <= this.x+1 && i < board.width; i++) {

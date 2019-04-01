@@ -18,17 +18,17 @@ Swap.prototype.reject = function() {
 
 Swap.prototype.specialCombo = function (board) {
     // many "return false"'s are unimplemented special combo
-    var from = this.from;
-    var to = this.to;
+    var from = board.getShape(this.from.x, this.from.y);
+    var to = board.getShape(this.to.x, this.to.y);
     if (from instanceof StripedShape) {
         if (to instanceof StripedShape) {
             var e = new StripeEffect(board);
-            e.addLine(from.x, from.y, StripeEffect.HORIZONTAL, from.x === to.x ? from.type : to.type);
-            e.addLine(from.x, from.y, StripeEffect.VERTICAL, from.y === to.y ? from.type : to.type);
+            e.addLine(to.x, to.y, StripeEffect.HORIZONTAL, from.x === to.x ? to.type : from.type);
+            e.addLine(to.x, to.y, StripeEffect.VERTICAL, from.y === to.y ? to.type : from.type);
             from.stripeDirection = to.stripeDirection = 0;
-            from.special = from.x === to.x ? StripeEffect.HORIZONTAL : StripeEffect.VERTICAL;
-            to.special = from.y === to.y ? StripeEffect.HORIZONTAL : StripeEffect.VERTICAL;
-            board.clearShape(from.x, from.y, to.type);
+            from.special = from.x === to.x ? StripeEffect.VERTICAL : StripeEffect.HORIZONTAL;
+            to.special = from.y === to.y ? StripeEffect.VERTICAL : StripeEffect.HORIZONTAL;
+            board.clearShape(to.x, to.y);
             board.addItemToClear(e);
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {

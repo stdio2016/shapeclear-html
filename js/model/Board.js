@@ -109,7 +109,6 @@ Board.prototype.clearShape = function (x, y, color, setting) {
     // bound check
     if (x >= this.width || x < 0) throw RangeError('x out of bound');
     if (y >= this.height || y < 0) return RangeError('y out of bound');
-    // TODO: handle special shapes such as striped or wrapped ones
     var i = x + y * this.width;
     var sh = this.shapes[i];
     if (sh.canCrush()) {
@@ -136,7 +135,7 @@ Board.prototype.addSwap = function(from, to) {
     // NOTE: to fix empty tile position
     if (sh1.type === 0) sh1 = new Shape(0, from.x, from.y, this);
     if (sh2.type === 0) sh2 = new Shape(0, to.x, to.y, this);
-    this.swaps.push(new Swap(sh1, sh2, 10));
+    this.swaps.push(new Swap({x: from.x, y: from.y}, {x: to.x, y: to.y}, 10));
     this.swapShape(sh1, sh2);
 };
 
@@ -302,7 +301,9 @@ Board.prototype.shapeUpdate = function () {
 Board.prototype.updateSwaps = function () {
     for (var i = 0; i < this.swaps.length; i++) {
         var from = this.swaps[i].from;
+        from = this.getShape(from.x, from.y);
         var to = this.swaps[i].to;
+        to = this.getShape(to.x, to.y);
         this.swaps[i].tick--;
         from.pos = to.pos = this.swaps[i].interpolatedPos() * 10;
         if (this.swaps[i].tick == 0) {
@@ -571,7 +572,7 @@ Board.prototype.fall = function () {
         var sh = this.shapes[i];
         // TODO: add support for other gravity direction
         if (sh.isMoving() && sh.pos <= 0) {
-            if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty() || this.tileLocked(i + this.width)) {
+            if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty() || this.tileLocked(i + this.width) || !sh.canFall()) {
                 // stop the shape from falling
                 sh.stopFalling();
                 this.changed = true;
