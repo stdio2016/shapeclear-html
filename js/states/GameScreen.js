@@ -342,10 +342,12 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             st.kill();
         }
         else {
+            st.setDepth(i);
             aliveScoreTexts.push(st);
         }
     }
     this.scorePopups = aliveScoreTexts;
+    this.digitGroup.sort('z', Phaser.Group.SORT_DESCENDING);
     var sc = 0;
     for (var i = 0; i < this.board.runningItems.length; i++) {
         var it = this.board.runningItems[i];

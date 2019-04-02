@@ -29,7 +29,6 @@ ScoreText.prototype.setScore = function (newScore) {
         if (ch === "∞") ch = "8";
         if (ch === "-") ch = "minus";
         var d = this.charPool.getFirstDead(true, 0, 0, 'number', ch);
-        d.bringToTop();
         d.anchor.x = 0.5;
         d.anchor.y = 0.5;
         d.tint = ScoreText.colorPalette[this.color];
@@ -127,4 +126,10 @@ ScoreText.numToString = function (num) {
         return "---";
     }
     return str;
+};
+
+ScoreText.prototype.setDepth = function (d) {
+    for (var i = 0; i < this.digits.length; i++) {
+        this.digits[i].z = d;
+    }
 };
