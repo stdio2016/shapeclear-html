@@ -161,11 +161,11 @@ TaserComboEffect.prototype.elcShape = function (board, type) {
             var s = shapes[i];
             var x = s.x, y = s.y;
             if (this.type === StripedShape.HORIZONTAL) {
-                s = new StripedShape(type, s.x, s.y, StripedShape.HORIZONTAL, board);
+                s = new StripedShape(type, StripedShape.HORIZONTAL, board, s.x, s.y);
                 this.type = StripedShape.VERTICAL;
             }
             else if (this.type === StripedShape.VERTICAL) {
-                s = new StripedShape(type, s.x, s.y, StripedShape.VERTICAL, board);
+                s = new StripedShape(type, StripedShape.VERTICAL, board, s.x, s.y);
                 this.type = StripedShape.HORIZONTAL;
             }
             else if (this.type === WrappedShape.SPECIAL) {
