@@ -1,0 +1,95 @@
+{"frames": [
+{
+	"filename": "0",
+	"frame": {"x":1,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "1",
+	"frame": {"x":235,"y":9,"w":6,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":6,"w":6,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "2",
+	"frame": {"x":27,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "3",
+	"frame": {"x":53,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "4",
+	"frame": {"x":79,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "5",
+	"frame": {"x":105,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "6",
+	"frame": {"x":131,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "7",
+	"frame": {"x":157,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "8",
+	"frame": {"x":183,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "9",
+	"frame": {"x":209,"y":9,"w":24,"h":36},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":36},
+	"sourceSize": {"w":36,"h":48}
+}
+,{
+	"filename": "minus",
+	"frame": {"x":1,"y":1,"w":24,"h":6},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":18,"w":24,"h":6},
+	"sourceSize": {"w":36,"h":48}
+}
+],
+	"meta": {
+		"app": "atlasConvert.py and LibGDX texture packer",
+		"version": "0.1"
+	}
+}

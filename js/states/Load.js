@@ -42,13 +42,13 @@ Load.prototype.preload = function () {
     if (Math.min(screen.width, screen.height) > 750) {
         this.gridPx = 72;
         game.load.atlasJSONArray('shapes', 'img/shapes_big.png', 'img/shapes_big.json');
-        game.load.atlasJSONArray('number', 'img/number_big.png', 'img/number_big.json');
+        game.load.atlasJSONArray('number', 'img/number8bit_big.png', 'img/number8bit_big.json');
         game.load.atlasJSONArray('ui', 'img/ui_big.png', 'img/ui_big.json');
     }
     else {
         this.gridPx = 36;
         game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
-        game.load.atlasJSONArray('number', 'img/number_small.png', 'img/number_small.json');
+        game.load.atlasJSONArray('number', 'img/number8bit_small.png', 'img/number8bit_small.json');
         game.load.atlasJSONArray('ui', 'img/ui_small.png', 'img/ui_small.json');
     }
     game.load.image('background', 'assets/background.png');
