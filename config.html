@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<script src='js/swLoader.js'></script>
 </head>
 <body>
 <p id='detectRenderer'>Unable to detect Phaser renderer ;-(</p>
@@ -27,8 +28,8 @@
 </form>
 <p>Test HTML5 audio tag<br>
 <audio controls=controls loop=loop>
-  <source src="assets/sound/music.mp3" type="audio/mpeg">
   <source src="assets/sound/music.ogg" type="audio/ogg">
+  <source src="assets/sound/music.mp3" type="audio/mpeg">
 </audio></p>
 <script>
 localStorage.removeItem('ShapeClear.renderer');

@@ -61,7 +61,7 @@ Load.prototype.preload = function () {
     }
     Translation = {};
     game.load.json('text', 'lang/en.json');
-    var lang = navigator.languages;
+    var lang = navigator.languages || [navigator.language];
     var supportedLanguage = {
       "en": 1, "zh-TW": 1
     };
