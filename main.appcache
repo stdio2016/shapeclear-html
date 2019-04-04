@@ -1,8 +1,0 @@
-CACHE MANIFEST
-# v0.04 2016-11-16
-
-NETWORK:
-# Anything that requires network
-
-FALLBACK:
-/ offline.html
