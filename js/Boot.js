@@ -222,7 +222,7 @@ function preventLeave(event) {
         event.returnValue = "Your game is not finished. Do you want to leave?";
         return event.returnValue;
     }
-    return "";
+    return void 0;
 }
 window.addEventListener('beforeunload', preventLeave);
 
