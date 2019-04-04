@@ -1,8 +1,7 @@
 var CACHENAME = 'shapeclear';
 
 self.addEventListener('fetch', function(event) {
-    event.respondWith(fromCache(event.request));
-    event.waitUntil(updateCache(event.request));
+    event.respondWith(fromCache(event.request, event));
 });
 
 addEventListener('install', function (event) {
@@ -26,6 +25,7 @@ function preLoad() {
           './game.html',
           './index.html',
           './',
+          './404.html',
           './config.html'
         ]); 
     }).catch(function (x) {
@@ -33,11 +33,15 @@ function preLoad() {
     });
 }
 
-function fromCache(req) {
+function fromCache(req, event) {
     var nocache = false;
+    var c;
     return caches.open(CACHENAME).then(function (cache) {
-        return cache.match(req).then(function (result) {
-            if (result) return result;
+        c = cache;
+        return c.match(req).then(function (result) {
+            if (result) {
+                return result;
+            }
             nocache = true;
             return Promise.reject("cache miss");
         });
@@ -45,19 +49,22 @@ function fromCache(req) {
         if (!nocache) {
             console.log(x);
         }
-        // to prevent network error
         return fetch(req);
-    });
-}
-
-function updateCache(req) {
-    return caches.open(CACHENAME).then(function (cache) {
-        return fetch(req).then(function (result) {
-            if (result.ok) {
-                return cache.put(req, result);
-            }
-        });
-    }).catch(function (x) {
-        console.log(x);
+    }).then(function (result) {
+        // save to cache
+        if (event && result.ok) {
+            event.waitUntil(c.put(req, result.clone()));
+        }
+        return result;
+    }).catch(function () {
+        return c.match('404.html');
+    }).catch(function () {
+        return new Response(
+          '<!DOCTYPE html><html><head>\n' +
+          '<meta charset="UTF-8">\n' +
+          '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+          '<title>File not found</title></head>\n' +
+          '<body><h1>File not found</h1></body></html>'
+        , {status: 404, headers: {'Content-Type': 'text/html'}});
     });
 }
