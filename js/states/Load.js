@@ -41,13 +41,13 @@ Load.prototype.preload = function () {
     game.load.image('ball', 'assets/ball.png');
     if (Math.min(screen.width, screen.height) > 750) {
         this.gridPx = 72;
-        game.load.atlasJSONArray('shapes', 'img/shapes_big.png', 'img/shapes_big.json');
+        game.load.atlasJSONArray('shapes', 'img/shapes8bit_big.png', 'img/shapes8bit_big.json');
         game.load.atlasJSONArray('number', 'img/number8bit_big.png', 'img/number8bit_big.json');
         game.load.atlasJSONArray('ui', 'img/ui_big.png', 'img/ui_big.json');
     }
     else {
         this.gridPx = 36;
-        game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
+        game.load.atlasJSONArray('shapes', 'img/shapes8bit_small.png', 'img/shapes8bit_small.json');
         game.load.atlasJSONArray('number', 'img/number8bit_small.png', 'img/number8bit_small.json');
         game.load.atlasJSONArray('ui', 'img/ui_small.png', 'img/ui_small.json');
     }
@@ -90,6 +90,7 @@ Load.prototype.preload = function () {
 Load.prototype.loadUpdate = function () {
     var r = this.game.resolution;
     // HACK to get the text size
+    this.loadBar.text = 'Loading assets... ' + this.load.progress + '%';
     this.loadBar.x = this.game.width / 2 - this.loadBar.width / (2 * r);
     this.loadBar.y = this.game.height / 2 - this.loadBar.height / (2 * r);
 };
