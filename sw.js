@@ -1,7 +1,10 @@
 var CACHENAME = 'shapeclear';
 
 self.addEventListener('fetch', function(event) {
-    event.respondWith(fromCache(event.request, event));
+    if (event.request) {
+        console.log('fetching %s' ,event.request.url);
+        event.respondWith(fromCache(event.request, event));
+    }
 });
 
 addEventListener('install', function (event) {
@@ -28,7 +31,7 @@ function preLoad() {
           './404.html',
           './config.html'
         ]); 
-    }).catch(function (x) {
+    })['catch'](function (x) {
         console.log(x);
     });
 }
@@ -38,27 +41,29 @@ function fromCache(req, event) {
     var c;
     return caches.open(CACHENAME).then(function (cache) {
         c = cache;
-        return c.match(req).then(function (result) {
+        return c.match(req, {ignoreSearch: true}).then(function (result) {
             if (result) {
+                // update cache
+                if (event) event.waitUntil(updateCache(req, cache));
                 return result;
             }
             nocache = true;
             return Promise.reject("cache miss");
         });
-    }).catch(function (x) {
+    })['catch'](function (x) {
         if (!nocache) {
             console.log(x);
         }
         return fetch(req);
     }).then(function (result) {
-        // save to cache
-        if (event && result.ok) {
+        // add to cache
+        if (nocache && event && result.ok) {
             event.waitUntil(c.put(req, result.clone()));
         }
         return result;
-    }).catch(function () {
+    })['catch'](function () {
         return c.match('404.html');
-    }).catch(function () {
+    })['catch'](function () {
         return new Response(
           '<!DOCTYPE html><html><head>\n' +
           '<meta charset="UTF-8">\n' +
@@ -66,5 +71,15 @@ function fromCache(req, event) {
           '<title>File not found</title></head>\n' +
           '<body><h1>File not found</h1></body></html>'
         , {status: 404, headers: {'Content-Type': 'text/html'}});
+    });
+}
+
+function updateCache(req, cache) {
+    return fetch(req).then(function (result) {
+        if (result.ok) {
+            return cache.put(req, result);
+        }
+    })['catch'](function (x) {
+        console.log(x);
     });
 }
