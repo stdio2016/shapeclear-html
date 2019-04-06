@@ -1,4 +1,7 @@
 var CACHENAME = 'shapeclear';
+var VERSION = 'v0.7af';
+var myPath = location.origin + location.pathname;
+myPath = myPath.match(/(.*\/)/)[1];
 
 self.addEventListener('fetch', function(event) {
     if (event.request) {
@@ -18,19 +21,34 @@ addEventListener('activate', function (event) {
 
 // with help from https://serviceworke.rs/strategy-cache-and-update_service-worker_doc.html
 function preLoad() {
+    var mustDownload = [
+      'js/swLoader.js',
+      'js/GameLoader.js',
+      'js/alertbox.js',
+      'css/fullscreen.css',
+      'css/alertbox.css',
+      'game.html',
+      'index.html',
+      '',
+      '404.html',
+      'config.html'
+    ];
+    for (var i = 0; i < mustDownload.length; i++) {
+        mustDownload[i] = myPath + mustDownload[i];
+    }
+    var c, names = [], must = new Set(mustDownload);
     return caches.open(CACHENAME).then(function (cache) {
-        return cache.addAll([
-          './js/swLoader.js',
-          './js/GameLoader.js',
-          './js/alertbox.js',
-          './css/fullscreen.css',
-          './css/alertbox.css',
-          './game.html',
-          './index.html',
-          './',
-          './404.html',
-          './config.html'
-        ]); 
+        c = cache;
+        return c.keys().then(function (keys) {
+            names = keys;
+            return cache.addAll(mustDownload);
+        });
+    }).then(function () {
+        names.forEach(function (name) {
+            if (!must.has(name)) {
+                c['delete'](name);
+            }
+        });
     })['catch'](function (x) {
         console.log(x);
     });
@@ -63,7 +81,8 @@ function fromCache(req, event) {
         return result;
     })['catch'](function () {
         return c.match('404.html');
-    })['catch'](function () {
+    }).then(function (result) {
+        if (result) return result;
         return new Response(
           '<!DOCTYPE html><html><head>\n' +
           '<meta charset="UTF-8">\n' +
