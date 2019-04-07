@@ -21,6 +21,9 @@ function cacheSettings(url, event) {
         event.respondWith(new Response('ok'));
         console.log('cache cleared');
     }
+    else if (url === 'version') {
+        event.respondWith(new Response(VERSION));
+    }
     else {
         event.respondWith(noPage()); // need to get a promise
     }
