@@ -292,7 +292,6 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
         spec = new StripedShape(type, StripedShape.HORIZONTAL, x, y, board);
     }
     if (spec) {
-        console.log(cur, cur+'');
         if (cur.special === 0) board.setShape(x, y, spec);
         else this.putSpecial(board, m, spec);
     }

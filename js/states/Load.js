@@ -2,6 +2,7 @@ function Load () {
     this.loadBar = null;
     this.playButton = null;
     this.background = null;
+    this.failed = false;
 }
 
 Load.shouldLoadAudio = function () {
@@ -38,6 +39,7 @@ Load.prototype.preload = function () {
     game.stage.backgroundColor = '#0080ff';
 
     // load assets
+    game.load.onFileError.add(this.fileError, this);
     game.load.image('ball', 'assets/ball.png');
     if (Math.min(screen.width, screen.height) > 750) {
         this.gridPx = 72;
@@ -61,7 +63,7 @@ Load.prototype.preload = function () {
     }
     Translation = {};
     game.load.json('text', 'lang/en.json');
-    var lang = navigator.languages || [navigator.language];
+    var lang = navigator.languages || [navigator.language || navigator.browserLanguage];
     var supportedLanguage = {
       "en": 1, "zh-TW": 1
     };
@@ -87,15 +89,27 @@ Load.prototype.preload = function () {
     });
 };
 
+Load.prototype.fileError = function (fileKey, file) {
+    // translation is optional
+    if (fileKey === "translation") return;
+    var r = this.game.resolution;
+    this.failed = true;
+    this.loadBar.text = 'Fail to load asset "' + fileKey + '"';
+    this.loadBar.x = this.game.width / 2 - this.loadBar.width / (2 * r);
+    this.loadBar.y = this.game.height / 2 - this.loadBar.height / (2 * r);
+};
+
 Load.prototype.loadUpdate = function () {
     var r = this.game.resolution;
     // HACK to get the text size
-    this.loadBar.text = 'Loading assets... ' + this.load.progress + '%';
+    if (!this.failed)
+        this.loadBar.text = 'Loading assets... ' + this.load.progress + '%';
     this.loadBar.x = this.game.width / 2 - this.loadBar.width / (2 * r);
     this.loadBar.y = this.game.height / 2 - this.loadBar.height / (2 * r);
 };
 
 Load.prototype.create = function() {
+    if (this.failed) return;
     Translation = this.game.cache.getJSON('text') || {};
     Object.assign(Translation, this.game.cache.getJSON('translation'));
     this.game.clearBeforeRender = false;
@@ -112,6 +126,10 @@ Load.prototype.create = function() {
 };
 
 Load.prototype.update = function () {
+    if (this.failed) {
+        this.loadUpdate();
+        return;
+    }
     var w = this.game.width;
     var h = this.game.height;
     var r = this.game.resolution;

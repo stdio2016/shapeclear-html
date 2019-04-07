@@ -4,7 +4,7 @@ function loadScript(src, progressCallback, callback) {
         return void callback('error');
     }
     xhr.onload = function () {
-        if (xhr.status != 200) return void callback('error');
+        if (xhr.status != 200) return void callback('network-error');
         var result = xhr.response;
         var script = document.createElement('script');
         if (result) {
@@ -51,6 +51,10 @@ loadScript('lib/phaser.js', function (e) {
         loadProgress.max = 3272160;
     }
 }, function (e) {
+    if (e === 'network-error') {
+        loadingInfo.innerHTML = 'Unable to load Phaser.js (network error)';
+        return;
+    }
     if (e) {
         loadingInfo.innerHTML = 'Unable to load Phaser.js';
         return;
@@ -84,8 +88,9 @@ loadScript('lib/phaser.js', function (e) {
             addScriptTag('js/Boot.js');
         }
     }
-    function onerror() {
-        loading.innerHTML = 'Unable to load my program';
+    function onerror(e) {
+        window.onerror = null;
+        loading.innerHTML = 'Unable to load my program (network error)';
     }
     for (var i = 0; i < srcs.length; i++) {
         addScriptTag(srcs[i], onload, onerror);

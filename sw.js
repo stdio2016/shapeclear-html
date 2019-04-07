@@ -5,10 +5,26 @@ myPath = myPath.match(/(.*\/)/)[1];
 
 self.addEventListener('fetch', function(event) {
     if (event.request) {
-        console.log('fetching %s' ,event.request.url);
-        event.respondWith(fromCache(event.request, event));
+        var url = event.request.url;
+        if (url.startsWith(myPath + 'cache/')) {
+            cacheSettings(url.substring(myPath.length + 6), event);
+        }
+        else {
+            event.respondWith(fromCache(event.request, event));
+        }
     }
 });
+
+function cacheSettings(url, event) {
+    if (url === 'delete') {
+        event.waitUntil(preLoad());
+        event.respondWith(new Response('ok'));
+        console.log('cache cleared');
+    }
+    else {
+        event.respondWith(noPage()); // need to get a promise
+    }
+}
 
 addEventListener('install', function (event) {
     event.waitUntil(preLoad());
@@ -45,10 +61,12 @@ function preLoad() {
         });
     }).then(function () {
         names.forEach(function (name) {
-            if (!must.has(name)) {
+            if (!must.has(name.url)) {
+                console.log("delete " + name.url);
                 c['delete'](name);
             }
         });
+        console.log('preloaded');
     })['catch'](function (x) {
         console.log(x);
     });
@@ -79,18 +97,7 @@ function fromCache(req, event) {
             event.waitUntil(c.put(req, result.clone()));
         }
         return result;
-    })['catch'](function () {
-        return c.match('404.html');
-    }).then(function (result) {
-        if (result) return result;
-        return new Response(
-          '<!DOCTYPE html><html><head>\n' +
-          '<meta charset="UTF-8">\n' +
-          '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-          '<title>File not found</title></head>\n' +
-          '<body><h1>File not found</h1></body></html>'
-        , {status: 404, headers: {'Content-Type': 'text/html'}});
-    });
+    })['catch'](noPage);
 }
 
 function updateCache(req, cache) {
@@ -100,5 +107,19 @@ function updateCache(req, cache) {
         }
     })['catch'](function (x) {
         console.log(x);
+    });
+}
+
+function noPage() {
+    return caches.match('404.html').then(function (result) {
+        if (result) return new Response(result.body, {status: 404});
+        return new Response(
+          '<!DOCTYPE html><html><head>\n' +
+          '<meta charset="UTF-8">\n' +
+          '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+          '<title>File not found</title></head>\n' +
+          '<body><h1>File not found</h1></body></html>'
+        , {status: 404, headers: {'Content-Type': 'text/html'}}
+        );
     });
 }
