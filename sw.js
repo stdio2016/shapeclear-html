@@ -77,7 +77,10 @@ function fromCache(req, event) {
     var c;
     return caches.open(CACHENAME).then(function (cache) {
         c = cache;
-        return c.match(req, {ignoreSearch: true}).then(function (result) {
+        // manually strip search string to make Chrome faster
+        var i = req.url.indexOf('?');
+        if (i !== -1) req = req.url.substring(0, i);
+        return c.match(req).then(function (result) {
             if (result) {
                 // update cache
                 if (event) event.waitUntil(updateCache(req, cache));
