@@ -1,8 +1,9 @@
 // get help from  https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register
 var hasServiceWorker = false;
 var swRegistration = null;
+var insecureContext = !window.isSecureContext;
 if (navigator.serviceWorker) {
-    navigator.serviceWorker.register('sw.js').then(function(reg) {
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
         console.log('Registration succeeded. Scope is ' + reg.scope);
         
         // get help from https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker
@@ -20,10 +21,22 @@ if (navigator.serviceWorker) {
         }
     })['catch'](function (x) {
         console.log('Registration failed with ' + x);
+        if (x.name === "SecurityError") {
+            insecureContext = true;
+        }
     });
     navigator.serviceWorker.addEventListener('controllerchange', function (e) {
-        location.reload();
+        if (NotPlayingGame()) {
+            location.reload();
+        }
     });
+}
+
+function NotPlayingGame() {
+    if (!window.game) {
+        return true;
+    }
+    return game.state.current === "Load";
 }
 
 function updateByUser() {
@@ -42,6 +55,9 @@ function updateByUser() {
         })['catch'](function () {
             alert('沒有網路，無法更新遊戲');
         });
+    }
+    else if (insecureContext) {
+        alert('網站使用不安全的傳輸協定，無法提供離線瀏覽功能');
     }
     else if (navigator.serviceWorker) {
         alert('網頁尚未載入完成，請稍候');
