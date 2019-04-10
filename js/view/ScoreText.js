@@ -26,7 +26,7 @@ ScoreText.prototype.setScore = function (newScore) {
     var dec = ScoreText.numToString(newScore);
     for (var i = this.digits.length; i < dec.length; i++) {
         var ch = dec.charAt(i);
-        if (ch === "∞") ch = "8";
+        if (ch === "I") ch = "8";
         if (ch === "-") ch = "minus";
         var d = this.charPool.getFirstDead(true, 0, 0, 'number', ch);
         d.bringToTop();
@@ -63,7 +63,7 @@ ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
             else {
                 digit = dec.charAt(dec.length - this.digits.length + i);
             }
-            if (digit === "∞") {
+            if (digit === "I") {
                 digit = "8";
                 d.angle = 90;
             }
@@ -119,10 +119,10 @@ ScoreText.prototype.kill = function () {
 ScoreText.numToString = function (num) {
     var str = Math.floor(num).toString();
     if (num >= 1e15) {
-        return "∞";
+        return "I";
     }
     if (num <= -1e15) {
-        return "-∞";
+        return "-I";
     }
     if (num !== num) { // NaN
         return "---";
