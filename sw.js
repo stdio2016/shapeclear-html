@@ -9,6 +9,10 @@ self.addEventListener('fetch', function(event) {
         if (url.startsWith(myPath + 'cache/')) {
             cacheSettings(url.substring(myPath.length + 6), event);
         }
+        else if (!url.startsWith(myPath) && url.indexOf('?') !== -1) {
+            // don't cache hit counter!!
+            event.respondWith(fetch(event.request));
+        }
         else {
             event.respondWith(fromCache(event.request, event));
         }
