@@ -278,9 +278,6 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             var spr = shape.sprite;
             if (spr !== null) {
                 var pos = shape.pos;
-                if (!shape.swapping && shape.dir.x !== 0) { // diagonal fall looks faster
-                    pos = Math.max(shape.pos * 2 - 10, 0);
-                }
                 var frameName = Shape.typeNames[shape.type - 1];
                 if (shape.special == 1) frameName += "HStripe";
                 if (shape.special == 2) frameName += "VStripe";

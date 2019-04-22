@@ -65,9 +65,9 @@ Shape.prototype.stopSwapping = function () {
 };
 
 Shape.prototype.stopFalling = function () {
-    if (this.speed > 1 && this.dir.x * this.dir.y === 0) {
-        this.pos += this.speed;
-        this.speed = -0.1;
+    if (this.speed > 1 && this.dir.x === 0) {
+        this.speed = -0.3;
+        this.pos = 0.3;
         this.bouncing = true;
     }
     else {
