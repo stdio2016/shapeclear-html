@@ -54,7 +54,8 @@ function preLoad() {
       'index.html',
       '',
       '404.html',
-      'config.html'
+      'config.html',
+      'LICENSE'
     ];
     for (var i = 0; i < mustDownload.length; i++) {
         mustDownload[i] = myPath + mustDownload[i];
