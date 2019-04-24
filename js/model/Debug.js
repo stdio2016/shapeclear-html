@@ -84,7 +84,7 @@ Debug.prototype.runSetCommand = function (cmd) {
     }
     if (name[0] == 'slow') {
         console.log(name[1]);
-        this.board.game.time.slowMotion = Math.max(name[1] * 1 || 1, 0);
+        gameScreen.speedup = Math.max(1 / name[1] || 1, 0);
     }
 };
 

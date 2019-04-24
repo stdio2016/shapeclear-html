@@ -19,6 +19,7 @@ function GameScreen() {
     this.soundEffects = {
       match: null, nomatch: null
     };
+    this.speedup = 1;
 }
 
 GameScreen.prototype.preload = function () {
@@ -95,16 +96,16 @@ GameScreen.prototype.resumed = function () {
 }
 
 GameScreen.prototype.update = function () {
-    if (this.board.state === 3) {
-        var r = this.game.time.slowMotion;
-        this.game.time.slowMotion = 1 / (1/r + 0.001);
+    if (this.board.state === 3 && this.speedup >= 1) {
+        this.speedup += 0.001;
     }
     this.fixTime();
+    this.touchDetector.update();
     var runTime = this.runTime;
     runTime[3] = Math.min(runTime[3] + runTime[5]/10 * 60, 5);
     while (runTime[3] > 0) {
         this.updateOnce();
-        runTime[3] -= Math.max(this.game.time.slowMotion, 0.001);
+        runTime[3] -= Math.max(1 / this.speedup, 0.001);
     }
 };
 
@@ -125,7 +126,6 @@ GameScreen.prototype.fixTime = function () {
 };
 
 GameScreen.prototype.updateOnce = function () {
-    this.touchDetector.update();
     // Only need this if you want to speed up 1000x
     /*
     for (var i = 0; i < this.board.shapes.length; i++) {
@@ -163,7 +163,7 @@ GameScreen.prototype.updateOnce = function () {
     this.timeText.setScore(Math.ceil(remainingTime / 60));
     if (this.board.remainingTime == 0 && !this.board.changed && this.board.swaps.length == 0) {
         if (this.board.state == Board.ENDED) {
-            this.game.time.slowMotion = 1;
+            this.speedup = 1;
         var me = this;
         if (promptCallback === doesNothing) {
             me.saveScore(me.board.score);
