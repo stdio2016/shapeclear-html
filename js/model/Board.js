@@ -441,6 +441,8 @@ Board.prototype.fall = function () {
     for (var i = this.shapes.length - 1; i >= 0; i--) {
         var sh = this.shapes[i], dsh = this.shapes[i + this.width];
         if (sh.isMoving()) {
+            // diagonal fall is constant velocity
+            // even increasing the speed to 1.2 breaks the simulation
             if (sh.dir.x) sh.speed = 1.1;
             else sh.speed += 0.15; // gravity acceleration
             if(sh.speed > 10) { // maximum speed
@@ -451,12 +453,6 @@ Board.prototype.fall = function () {
                 this.falling = true;
             }
             this.changed = true;
-            if (dsh != null && !dsh.isEmpty() && dsh.pos > sh.pos && !dsh.swapping) {
-                sh.pos = dsh.pos;
-                if (dsh.isMoving()) {
-                    sh.speed = dsh.speed;
-                }
-            }
         }
         wd.push(false);
     }
@@ -519,7 +515,16 @@ Board.prototype.fall = function () {
             } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
         }
     }
-    //for (var y = this.height-2; y >= 0; y--) {
+    for (var i = 0; i < this.shapes.length; i++) {
+        var sh = this.shapes[i];
+        if (sh.isMoving() && sh.pos <= 0) {
+            if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty() || this.tileLocked(i + this.width) || !sh.canFall()) {
+                // stop the shape from falling
+                sh.stopFalling();
+                this.changed = true;
+            }
+        }
+    }
     for (var y = 0; y < this.height - 1; y++) {
         for (var x = 0; x < this.width; x++) {
             var pos = y * this.width + x;
@@ -547,6 +552,15 @@ Board.prototype.fall = function () {
             }
             if (diagonal) {
                 this.falling = true;
+                pos -= this.width;
+                sh = this.shapes[pos];
+                while (pos >= 0 && sh.canFall()) {
+                    if (sh.bouncing) {
+                        sh.stopFalling();
+                    }
+                    pos -= this.width;
+                    sh = this.shapes[pos];
+                }
                 var j = dpos;
                 do {
                     wd[j] = true;
@@ -558,17 +572,6 @@ Board.prototype.fall = function () {
                     }
                     sh = this.shapes[j];
                 } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
-            }
-        }
-    }
-    for (var i = 0; i < this.shapes.length; i++) {
-        var sh = this.shapes[i];
-        // TODO: add support for other gravity direction
-        if (sh.isMoving() && sh.pos <= 0) {
-            if (i >= (this.height-1) * this.width || !this.shapes[i + this.width].isEmpty() || this.tileLocked(i + this.width) || !sh.canFall()) {
-                // stop the shape from falling
-                sh.stopFalling();
-                this.changed = true;
             }
         }
     }
