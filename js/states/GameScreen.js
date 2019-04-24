@@ -164,21 +164,21 @@ GameScreen.prototype.updateOnce = function () {
     if (this.board.remainingTime == 0 && !this.board.changed && this.board.swaps.length == 0) {
         if (this.board.state == Board.ENDED) {
             this.speedup = 1;
-        var me = this;
-        if (promptCallback === doesNothing) {
-            me.saveScore(me.board.score);
-            alertBox(
-              Translation["Time's up"] + '\n' +
-              Translation["Your score: "] + me.board.score + '\n' + 
-              Translation["Press OK to replay"], function () {
-                me.state.start('MainMenu');
-            });
-            if (AppleFools.AutoGame) {
-                setTimeout(function () {
-                    promptOK.onclick();
-                }, 1000);
+            var me = this;
+            if (promptCallback === doesNothing) {
+                me.saveScore(me.board.score);
+                alertBox(
+                  Translation["Time's up"] + '\n' +
+                  Translation["Your score: "] + me.board.score + '\n' + 
+                  Translation["Press OK to replay"], function () {
+                    me.state.start('MainMenu');
+                });
+                if (AppleFools.AutoGame) {
+                    setTimeout(function () {
+                        promptOK.onclick();
+                    }, 1000);
+                }
             }
-        }
         }
         else {
             this.board.state = Board.BONUS_TIME;

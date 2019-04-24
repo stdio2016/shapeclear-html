@@ -105,7 +105,6 @@ WrappedEffect.prototype.explode = function () {
                 sh.speed -= 0.4;
                 if (sh.speed < -10) sh.speed = -10;
                 sh.dir.y = +1;
-                sh.bouncing = true;
             }
             j--;
         }
