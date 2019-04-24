@@ -441,7 +441,8 @@ Board.prototype.fall = function () {
     for (var i = this.shapes.length - 1; i >= 0; i--) {
         var sh = this.shapes[i], dsh = this.shapes[i + this.width];
         if (sh.isMoving()) {
-            sh.speed += 0.15; // gravity acceleration
+            if (sh.dir.x) sh.speed = 1.1;
+            else sh.speed += 0.15; // gravity acceleration
             if(sh.speed > 10) { // maximum speed
                 sh.speed = 10;
             }
@@ -457,7 +458,6 @@ Board.prototype.fall = function () {
                 }
             }
         }
-        // end of HACK
         wd.push(false);
     }
     for (var x = 0; x < this.width; x++) {
