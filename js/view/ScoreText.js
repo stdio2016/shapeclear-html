@@ -5,7 +5,7 @@ function ScoreText(score, color, x, y, charPool) {
     this.x = x;
     this.y = y;
     this.charPool = charPool;
-    this.lifetime = 60;
+    this.lifetime = 100;
     this.setScore(score);
 }
 
@@ -78,8 +78,7 @@ ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
         d.width = charWidth;
         d.height = charHeight;
         //d.tint = ScoreText.colorPalette[this.color];
-        // Apple Fools! no semi-transparent
-        //d.alpha = this.lifetime / 100;
+        d.alpha = Math.min(1, this.lifetime / 60);
     }
 };
 

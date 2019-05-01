@@ -14,9 +14,6 @@ Load.shouldLoadAudio = function () {
 };
 
 Load.prototype.preload = function () {
-    // Apple fools joke!
-    game.stage.smoothed = false;
-
     var r = this.game.resolution;
     game.canvas.oncontextmenu = function (e) {
         e.preventDefault();
@@ -43,21 +40,21 @@ Load.prototype.preload = function () {
     game.load.image('ball', 'assets/ball.png');
     if (Math.min(screen.width, screen.height) > 750) {
         this.gridPx = 72;
-        game.load.atlasJSONArray('shapes', 'img/shapes8bit_big.png', 'img/shapes8bit_big.json');
-        game.load.atlasJSONArray('number', 'img/number8bit_big.png', 'img/number8bit_big.json');
+        game.load.atlasJSONArray('shapes', 'img/shapes_big.png', 'img/shapes_big.json');
+        game.load.atlasJSONArray('number', 'img/number_big.png', 'img/number_big.json');
         game.load.atlasJSONArray('ui', 'img/ui_big.png', 'img/ui_big.json');
     }
     else {
         this.gridPx = 36;
-        game.load.atlasJSONArray('shapes', 'img/shapes8bit_small.png', 'img/shapes8bit_small.json');
-        game.load.atlasJSONArray('number', 'img/number8bit_small.png', 'img/number8bit_small.json');
+        game.load.atlasJSONArray('shapes', 'img/shapes_small.png', 'img/shapes_small.json');
+        game.load.atlasJSONArray('number', 'img/number_small.png', 'img/number_small.json');
         game.load.atlasJSONArray('ui', 'img/ui_small.png', 'img/ui_small.json');
     }
     game.load.image('background', 'assets/background.png');
     game.load.image('castle', 'assets/background-castle.png');
     if (Load.shouldLoadAudio()) {
-        game.load.audio('music', ['assets/special/brainwash.ogg', 'assets/special/brainwash.mp3']);
-        game.load.audio('music2', ['assets/special/brainwash2.ogg', 'assets/special/brainwash2.mp3']);
+        game.load.audio('music', ['assets/sound/music.ogg', 'assets/sound/music.m4a', 'assets/sound/music.mp3']);
+        game.load.audio('music2', ['assets/sound/music2.ogg', 'assets/sound/music2.m4a', 'assets/sound/music2.mp3']);
         game.load.audio('match', ['assets/sound/match.wav', 'assets/sound/match.mp3']);
         game.load.audio('nomatch', ['assets/sound/nomatch.wav', 'assets/sound/nomatch.mp3']);
     }

@@ -1,5 +1,5 @@
 var CACHENAME = 'shapeclear';
-var VERSION = 'v0.7af';
+var VERSION = 'v0.7.0';
 var myPath = location.origin + location.pathname;
 myPath = myPath.match(/(.*\/)/)[1];
 
