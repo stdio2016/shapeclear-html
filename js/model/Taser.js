@@ -65,6 +65,7 @@ TaserEffect.prototype.elcShape = function (type) {
     for (var i = 0; i < shapes.length; i++) {
         if (shapes[i].type == type && shapes[i].canCrush()) {
             this.count++;
+            shapes[i].cleared = true;
             this.all.push(shapes[i]);
         }
     }
@@ -80,14 +81,17 @@ TaserEffect.prototype.update = function () {
         if (this.progress < this.count) {
             var sh = this.all[this.progress];
             if (this.board.getShape(sh.x, sh.y) === sh) {
+                sh.cleared = false;
                 var sco = this.board.clearShape(sh.x, sh.y);
                 var score = (sco.score + sco.addition) * this.count + sco.jelly + sco.blocker;
-                this.board.gainScores.push({
-                  x: sh.x,
-                  y: sh.y,
-                  type: this.type,
-                  score: score
-                });
+                if (score != 0) {
+                    this.board.gainScores.push({
+                      x: sh.x,
+                      y: sh.y,
+                      type: this.type,
+                      score: score
+                    });
+                }
                 this.board.score += score;
             }
             if (this.progress === this.count-1) {
