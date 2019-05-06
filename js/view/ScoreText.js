@@ -20,7 +20,7 @@ ScoreText.colorPalette = [
   0x000000
 ];
 
-ScoreText.charAspectRatio = 36.0 / 48.0; // width/height
+ScoreText.charAspectRatio = 34.0 / 48.0; // width/height
 
 ScoreText.prototype.setScore = function (newScore) {
     var dec = ScoreText.numToString(newScore);
