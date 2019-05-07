@@ -54,7 +54,17 @@ GameScreen.prototype.create = function () {
         this.soundEffects[name] = this.game.add.sound(name);
         this.soundEffects[name].allowMultiple = true;
     }
+    
     this.mask = this.game.add.graphics(0, 0);
+    this.mask.beginFill(0xffffff);
+    var board = this.board;
+    for (var y = 0; y < board.height; y++) {
+        for (var x = 0; x < board.width; x++) {
+            if (board.shapes[y * board.width + x].type > -1)
+                this.mask.drawRect(x*36, y*36, 36, 36);
+        }
+    }
+    this.mask.endFill();
     this.shapeGroup.mask = this.mask;
 };
 
@@ -266,11 +276,12 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var board = this.board;
     var boardSize = 9;
     var gridSize = size / boardSize;
+    this.mask.x = leftX;
+    this.mask.y = topY;
+    this.mask.scale.set(gridSize / 36, gridSize / 36);
     var scale = gridSize / this.game.state.states.Load.gridPx;
     var startX = leftX + (boardSize - board.width) / 2 * gridSize;
     var startY = topY + (boardSize - board.height) / 2 * gridSize;
-    this.mask.clear();
-    this.mask.beginFill(0xffffff);
     for (var y = 0; y < board.height; y++){
         for (var x = 0; x < board.width; x++){
             var shape = board.shapes[y * board.width + x];
@@ -305,10 +316,8 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             tile.scale.x = scale;
             tile.scale.y = scale;
             tile.visible = shape.type >= 0;
-            this.mask.drawRect(tile.x, tile.y, gridSize, gridSize);
         }
     }
-    this.mask.endFill();
     board.x = startX;
     board.y = startY;
     board.gridSize = size / boardSize;
