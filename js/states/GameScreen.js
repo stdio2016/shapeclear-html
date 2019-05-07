@@ -289,7 +289,10 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                 if (spr.frameName !== frameName)
                     spr.frameName = frameName;
                 if (shape.special == 4) {
-                    spr.tint = 0x010101 * Math.round(shape.tick % 60 * 255 / 60);
+                    var t = shape.tick % 30 / 30;
+                    if (t < 0.5) t = t * 2;
+                    else t = (1 - t) * 2;
+                    spr.tint = 0x010101 * Math.round(t * 95 + 160);
                 }
                 else spr.tint = 0xffffff;
                 spr.x = startX + (x - shape.dir.x * pos/10 + 0.5) * gridSize;
