@@ -466,21 +466,6 @@ Board.prototype.fall = function () {
             }
         }
     }
-    // HACK way to simulate Candy Crush
-    for (var y = 0; y < this.height; y++) {
-        for (var x = 0; x < this.width; x++) {
-            this.unlockPosition(x, y, this.fall);
-        }
-    }
-    for (var y = 1; y < this.height; y++) {
-        for (var x = 0; x < this.width; x++) {
-            var sh = this.getShape(x, y);
-            if (sh.pos >= 5 && sh.dir.x == 0) {
-                this.lockPosition(x-sh.dir.x, y-sh.dir.y, this.fall);
-            }
-        }
-    }
-    // end of HACK
     for (var i = 0; i < this.width; i++) {
         var dsh = this.shapes[i + this.width];
         if (this.shapes[i].isEmpty() && !this.tileLocked(i)) {
@@ -499,6 +484,21 @@ Board.prototype.fall = function () {
             }
         }
     }
+    // HACK way to simulate Candy Crush
+    for (var y = 0; y < this.height; y++) {
+        for (var x = 0; x < this.width; x++) {
+            this.unlockPosition(x, y, this.fall);
+        }
+    }
+    for (var y = 1; y < this.height; y++) {
+        for (var x = 0; x < this.width; x++) {
+            var sh = this.getShape(x, y);
+            if (sh.pos >= 5 && sh.dir.x == 0) {
+                this.lockPosition(x-sh.dir.x, y-sh.dir.y, this.fall);
+            }
+        }
+    }
+    // end of HACK
     for (var i = 0; i < this.shapes.length; i++) {
         var j = i;
         var sh = this.shapes[i];
