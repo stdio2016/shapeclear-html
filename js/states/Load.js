@@ -38,6 +38,7 @@ Load.prototype.preload = function () {
     // load assets
     game.load.onFileError.add(this.fileError, this);
     game.load.image('ball', 'assets/ball.png');
+    game.load.shader('bright', 'assets/bright.txt');
     if (Math.min(screen.width, screen.height) > 750) {
         this.gridPx = 72;
         game.load.atlasJSONArray('shapes', 'img/shapes_big.png', 'img/shapes_big.json');

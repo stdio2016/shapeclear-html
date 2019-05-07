@@ -9,7 +9,6 @@ function GameScreen() {
     this.effectGroup = null;
     this.shapeGroup = null;
     this.boardGroup = null;
-    this.mask = null;
     this.scoreText = null;
     this.scorePopups = [];
     this.digitGroup = null;
@@ -21,6 +20,7 @@ function GameScreen() {
       match: null, nomatch: null
     };
     this.speedup = 1;
+    this.brightShader = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -54,18 +54,7 @@ GameScreen.prototype.create = function () {
         this.soundEffects[name] = this.game.add.sound(name);
         this.soundEffects[name].allowMultiple = true;
     }
-    
-    this.mask = this.game.add.graphics(0, 0);
-    this.mask.beginFill(0xffffff);
-    var board = this.board;
-    for (var y = 0; y < board.height; y++) {
-        for (var x = 0; x < board.width; x++) {
-            if (board.shapes[y * board.width + x].type > -1)
-                this.mask.drawRect(x*36, y*36, 36, 36);
-        }
-    }
-    this.mask.endFill();
-    this.shapeGroup.mask = this.mask;
+    this.brightShader = new Phaser.Filter(game, null, game.cache.getShader('bright'));
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -276,9 +265,6 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var board = this.board;
     var boardSize = 9;
     var gridSize = size / boardSize;
-    this.mask.x = leftX;
-    this.mask.y = topY;
-    this.mask.scale.set(gridSize / 36, gridSize / 36);
     var scale = gridSize / this.game.state.states.Load.gridPx;
     var startX = leftX + (boardSize - board.width) / 2 * gridSize;
     var startY = topY + (boardSize - board.height) / 2 * gridSize;
@@ -287,6 +273,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             var shape = board.shapes[y * board.width + x];
             if (shape.sprite === null && shape.type > 0) {
                 shape.sprite = this.shapeGroup.getFirstDead(true, 100, 100, 'shapes', Shape.typeNames[shape.type - 1]);
+                shape.sprite.shader = this.brightShader;
                 shape.sprite.alpha = 1;
                 shape.sprite.anchor = new Phaser.Point(0.5, 0.5);
                 shape.sprite.data = shape;
@@ -301,6 +288,10 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                 if (shape.special === 5) frameName = "taser";
                 if (spr.frameName !== frameName)
                     spr.frameName = frameName;
+                if (shape.special == 4) {
+                    spr.tint = 0x010101 * Math.round(shape.tick % 60 * 255 / 60);
+                }
+                else spr.tint = 0xffffff;
                 spr.x = startX + (x - shape.dir.x * pos/10 + 0.5) * gridSize;
                 spr.y = startY + (y - shape.dir.y * pos/10 + 0.5) * gridSize;
                 spr.scale.x = scale * spr.alpha;
@@ -309,6 +300,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             var tile = board.tiles[y * board.width + x];
             if (!tile.sprite) {
                 tile.sprite = this.boardGroup.create(0, 0, 'shapes', 'board');
+                tile.sprite.shader = this.brightShader;
             }
             tile = tile.sprite;
             tile.x = startX + x * gridSize;
@@ -368,6 +360,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             var frameName = pos[j][4];
             if (!sp) {
                 sp = this.effectGroup.getFirstDead(true, 100, 100, 'shapes', frameName);
+                sp.shader = this.brightShader;
                 sp.alpha = 1;
                 sp.anchor = new Phaser.Point(0.5, 0.5);
                 this.effectSprites.push(sp);

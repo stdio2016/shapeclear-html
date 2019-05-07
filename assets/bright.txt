@@ -1,0 +1,10 @@
+precision lowp float;
+varying vec2 vTextureCoord;
+varying vec4 vColor;
+uniform sampler2D uSampler;
+
+void main() {
+    vec4 color = texture2D(uSampler, vTextureCoord);
+    vec3 invs = (vec3(1.0, 1.0, 1.0) * vColor.a - vColor.rgb) * color.a;
+    gl_FragColor = vec4(color.rgb * vColor.rgb + invs, color.a * vColor.a);
+}
