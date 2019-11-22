@@ -62,6 +62,7 @@ loadScript('lib/phaser.js', function (e) {
     loadingInfo.innerHTML = 'Loading my program';
     var srcs = [
       'js/model/Board.js',
+      'js/model/BoardGen.js',
       'js/model/Shape.js',
       'js/model/Swap.js',
       'js/model/Match.js',

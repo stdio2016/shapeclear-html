@@ -33,8 +33,71 @@ GameScreen.prototype.create = function () {
     this.castle = this.add.image(this.game.width/2, this.game.height * 0.705, 'castle');
     this.castle.anchor.set(0.5, 0.72);
     this.addDebugText();
-    window.board = this.board = new Board(this.game);
-    this.board.generateSimple();
+    if (Debug.testDiagonalFall) {
+        var tiles = [];
+        for (var i = 0; i < 9; i++) {
+            tiles.push([]);
+            for (var j = 0; j < 9; j++) {
+                tiles[i].push(Math.random() < 0.1 ? -1 : 1);
+            }
+        }
+        window.board = this.board = BoardGen.generateBoard({
+            "width": 9,
+            "height": 9,
+            "tiles": tiles
+        });
+    }
+    else if ("hard" == "level") {
+        window.board = this.board = BoardGen.generateBoard({
+            "width": 9,
+            "height": 9,
+            "tiles": [
+              [ 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [-1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [ 1, 1, 1, 1,-1,-1,-1,-1,-1],
+              [ 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [-1,-1,-1,-1,-1, 1, 1, 1, 1],
+              [-1, 1, 1, 1,-1, 1, 1, 1,-1],
+              [-1, 1, 1, 1, 1, 1, 1, 1,-1],
+              [-1,-1, 1, 1, 1, 1, 1,-1,-1],
+              [-1,-1,-1, 1, 1, 1, 1,-1,-1]
+            ]
+        });
+    }
+    else if (AppleFools.DROP_COLOR_COUNT === 6) {
+        window.board = this.board = BoardGen.generateBoard({
+            "width": 9,
+            "height": 9,
+            "tiles": [
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1]
+            ]
+        });
+    }
+    else {
+        window.board = this.board = BoardGen.generateBoard({
+            "width": 9,
+            "height": 9,
+            "tiles": [
+              [1, 1, 1, 1,  1,  1, 1, 1, 1],
+              [1, 1, 1, 1,  1,"t", 1, 1, 1],
+              [1, 1, 1, 1,  1,  1, 1, 1, 1],
+              [1, 1, 1, 1,  1,  1, 1, 1, 1],
+              [1, 1, 1, 1, -1,  1, 1, 1, 1],
+              [1, 1, 1, 1,  1,  1, 1, 1, 1],
+              [1, 1, 1, 1,  1,  1, 1, 1, 1],
+              [1, 1, 1, 1,  1,  1, 1, 1, 1],
+              [1, 1, 1, 1,  1,  1, 1, 1, 1]
+            ]
+        });
+    }
     this.boardGroup = this.add.group();
     this.boardGroup.alpha = 0.8;
     this.shapeGroup = this.add.group();

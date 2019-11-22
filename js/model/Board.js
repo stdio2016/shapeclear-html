@@ -1,8 +1,8 @@
-function Board(game) {
+function Board(game, width, height) {
     this.shapes = [];
     this.tiles = [];
-    this.height = 9;
-    this.width = 9;
+    this.height = height || 9;
+    this.width = width || 9;
     this.game = game;
     this.swaps = [];
     this.matchFinder = new MatchFinder();
@@ -98,8 +98,13 @@ Board.prototype.setShape = function (x, y, sh) {
     else if (typeof sh === "number") {
         var sp = this.shapes[x + y * this.width];
         if (sp.sprite) sp.sprite.kill();
-        sp.type = sh;
-        sp.sprite = null;
+        if (sh === 0) {
+            this.shapes[x + y * this.width] = new Shape(0, x, y, this);
+        }
+        else {
+            sp.type = sh;
+            sp.sprite = null;
+        }
     }
 };
 
@@ -459,10 +464,17 @@ Board.prototype.fall = function () {
     for (var x = 0; x < this.width; x++) {
         for (var y = this.height - 2; y >= 0; y--) {
             var pos = y * this.width + x;
-            var sh = this.shapes[pos], dsh = this.shapes[pos + this.width];
-            if (sh.canFall() && dsh.isEmpty() && !this.tileLocked(pos + this.width)) {
-                this.moveShape(sh, 0, +1);
-                this.falling = true;
+            var sh = this.shapes[pos];
+            if (sh.canFall()) {
+                // move down more than 1 block
+                var dwn = pos + this.width;
+                while (dwn < this.shapes.length && this.shapes[dwn].type === -1) {
+                    dwn += this.width;
+                }
+                if (dwn < this.shapes.length && !this.tileLocked(dwn) && this.shapes[dwn].isEmpty()) {
+                    this.moveShape(sh, 0, (dwn - pos) / this.width);
+                    this.falling = true;
+                }
             }
         }
     }

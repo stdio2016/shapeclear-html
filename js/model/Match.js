@@ -167,19 +167,28 @@ MatchFinder.prototype.putSpecial = function (board, match, special) {
 
 MatchFinder.prototype.clearMatch = function (board) {
     this.matches.sort(this.matchComparator);
+    // first remove matched shapes
     for (var i = 0; i < this.matches.length; i++) {
         var m = this.matches[i];
-        var mx = m.vx, my = m.hy, type = m.shapeType;
         if (m.type & Match.HORIZONTAL) {
             for (var j = 0; j < m.hlength; j++) {
                 board.clearShape(m.hx + j, m.hy);
             }
-            mx = m.hx + (m.hlength - 1) / 2;
         }
         if (m.type & Match.VERTICAL) {
             for (var j = 0; j < m.vlength; j++) {
                 board.clearShape(m.vx, m.vy + j);
             }
+        }
+    }
+    // then create special shapes
+    for (var i = 0; i < this.matches.length; i++) {
+        var m = this.matches[i];
+        var mx = m.vx, my = m.hy, type = m.shapeType;
+        if (m.type & Match.HORIZONTAL) {
+            mx = m.hx + (m.hlength - 1) / 2;
+        }
+        if (m.type & Match.VERTICAL) {
             my = m.vy + (m.vlength - 1) / 2;
         }
         if (m.hlength == 4 && m.type === Match.HORIZONTAL) {
