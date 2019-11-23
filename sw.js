@@ -1,6 +1,15 @@
 var CACHENAME = 'shapeclear';
 var VERSION = 'v0.7.0';
 var myPath = location.origin + location.pathname;
+var cacheEnableTest = 
+    caches.open(CACHENAME).then(function (cache) {
+        return cache.match(myPath + "cache/no");
+    }).then(function (result) {
+        return result == null;
+    })['catch'](function () {
+        return true;
+    });
+
 myPath = myPath.match(/(.*\/)/)[1];
 
 self.addEventListener('fetch', function(event) {
@@ -27,6 +36,20 @@ function cacheSettings(url, event) {
     }
     else if (url === 'version') {
         event.respondWith(new Response(VERSION));
+    }
+    else if (url === "disable") {
+        event.waitUntil(caches.open(CACHENAME).then(function (c) {
+            c.put(new Request("cache/no"), new Response('yes', {'status':200}));
+        }));
+        cacheEnableTest = Promise.resolve(false);
+        event.respondWith(new Response('ok'));
+    }
+    else if (url === "enable") {
+        event.waitUntil(caches.open(CACHENAME).then(function (c) {
+            c.delete(new Request("cache/no"));
+        }));
+        cacheEnableTest = Promise.resolve(true);
+        event.respondWith(new Response('ok'));
     }
     else {
         event.respondWith(noPage()); // need to get a promise
@@ -83,7 +106,10 @@ function preLoad() {
 function fromCache(req, event) {
     var nocache = false;
     var c;
-    return caches.open(CACHENAME).then(function (cache) {
+    return cacheEnableTest.then(function (yes) {
+        if (!yes) return Promise.reject("cache disabled");
+        return caches.open(CACHENAME);
+    }).then(function (cache) {
         c = cache;
         // manually strip search string to make Chrome faster
         var i = req.url.indexOf('?');
