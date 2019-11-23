@@ -144,7 +144,7 @@ MainMenu.prototype.playGame = function (btn) {
         }
         else if (btn === this.btnHelp) {
             Debug.testDiagonalFall = true;
-            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
+            AppleFools.DROP_COLOR_COUNT = 0; AppleFools.COLOR_COUNT = 6;
             this.state.start("GameScreen");
         }
         else if (btn === this.btnEasy) {

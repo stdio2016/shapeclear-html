@@ -37,7 +37,7 @@ Board.ENDED = 4;
 
 Board.prototype.generateSimple = function () {
     this.randomColors = [1,2,3,4,5,6];
-    for (var i = 0; i < 6 - AppleFools.DROP_COLOR_COUNT; i++) {
+    for (var i = 0; i < 6 - AppleFools.COLOR_COUNT; i++) {
         var r = this.game.rnd.between(0, this.randomColors.length - 1);
         this.randomColors.splice(r, 1);
     }
@@ -131,6 +131,7 @@ Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
     //if (this.changed || this.swaps.length > 0) return;
     if (this.state === Board.SHUFFLING) return ;
+    if (AppleFools.DROP_COLOR_COUNT == 0) return ;
     if (this.remainingTime <= 0 && !this.debug.allowIllegalMove) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
@@ -654,4 +655,19 @@ Board.prototype.hintMoves = function () {
         }
     });
     return swipes;
+};
+
+Board.prototype.addClick = function (aa) {
+    if (AppleFools.DROP_COLOR_COUNT == 0) {
+        if (this.getShape(aa.x, aa.y).type == -1) {
+            this.setShape(aa.x, aa.y, this.randomColors[0|Math.random() * AppleFools.COLOR_COUNT]);
+        }
+        else this.setShape(aa.x, aa.y, -1);
+        var aa = [];
+        for (var i = 0; i < this.shapes.length; i++) {
+            aa.push(this.shapes[i].type == -1 ? -1 : 1);
+        }
+        localStorage.ShapeClear_board = JSON.stringify(aa);
+        return true;
+    }
 };

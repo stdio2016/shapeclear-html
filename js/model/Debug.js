@@ -116,5 +116,7 @@ Debug.prototype.autoSwipeTest = function () {
 };
 
 Debug.prototype.getDebugMessage = function () {
+    if (AppleFools.DROP_COLOR_COUNT == 0)
+        return "Level edit mode!";
     return this.board.game.time.fps;
 };

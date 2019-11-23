@@ -64,6 +64,10 @@ TouchDetector.prototype.process = function (index, pointer) {
                         this.lastPointed = null;
                     }
                 }
+                else {
+                    if (this.board.addClick(myPoint))
+                        myPoint.tracking = false;
+                }
             }
         }
     }

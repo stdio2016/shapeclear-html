@@ -118,6 +118,11 @@ GameScreen.prototype.create = function () {
         this.soundEffects[name].allowMultiple = true;
     }
     this.brightShader = new Phaser.Filter(game, null, game.cache.getShader('bright'));
+    
+    this.lblTime.inputEnabled = true;
+    this.lblTime.events.onInputUp.add(function () {
+        AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT;
+    }, this);
 };
 
 GameScreen.prototype.addDebugText = function () {
@@ -201,6 +206,7 @@ GameScreen.prototype.updateOnce = function () {
     }
     for (var i = 0; i < 1; i++) {
     */
+    if (AppleFools.DROP_COLOR_COUNT != 0)
         this.board.update();
     /*
     }
