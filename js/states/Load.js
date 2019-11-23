@@ -14,7 +14,7 @@ Load.shouldLoadAudio = function () {
 };
 
 Load.prototype.preload = function () {
-    var r = this.game.resolution;
+    var r = Phaser.VERSION.startsWith("2.6.") ? this.game.resolution : 1.0;
     game.canvas.oncontextmenu = function (e) {
         e.preventDefault();
     };
@@ -98,7 +98,7 @@ Load.prototype.fileError = function (fileKey, file) {
 };
 
 Load.prototype.loadUpdate = function () {
-    var r = this.game.resolution;
+    var r = Phaser.VERSION.startsWith("2.6.") ? this.game.resolution : 1.0;
     // HACK to get the text size
     if (!this.failed)
         this.loadBar.text = 'Loading assets... ' + this.load.progress + '%';
@@ -130,7 +130,7 @@ Load.prototype.update = function () {
     }
     var w = this.game.width;
     var h = this.game.height;
-    var r = this.game.resolution;
+    var r = Phaser.VERSION.startsWith("2.6.") ? this.game.resolution : 1.0;
     // HACK to get the text size
     this.loadBar.x = w / 2 - this.loadBar.width / (2 * r);
     this.loadBar.y = h / 2 - this.loadBar.height / (2 * r);

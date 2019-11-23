@@ -12,6 +12,10 @@
     removeResolutionFromCode(Phaser.Cache.prototype, "addBitmapFont");
     removeResolutionFromCode(Phaser.Cache.prototype, "addSpriteSheet");
     removeResolutionFromCode(Phaser.Cache.prototype, "addTextureAtlas");
+}());
+// patch applicable only for old version of Phaser
+if (Phaser.VERSION.startsWith("2.6."))
+(function () {
     var code = Phaser.Loader.prototype.loadImageTag.toString();
     // fix Firefox black texture issue
     // More info here: https://github.com/photonstorm/phaser/issues/2534

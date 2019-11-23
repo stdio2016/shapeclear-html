@@ -318,7 +318,7 @@ GameScreen.prototype.resizeUI = function(){
 };
 
 GameScreen.prototype.showWithBounds = function (lbl, txt, x, y, width, height) {
-    var r = this.game.resolution;
+    var r = Phaser.VERSION.startsWith("2.6.") ? this.game.resolution : 1.0;
     txt.showWithBounds(x, y, width, height);
     lbl.x = x - lbl.width / (2 * r);
     lbl.y = y - lbl.height / (2 * r) - height;

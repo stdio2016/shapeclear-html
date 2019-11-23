@@ -41,7 +41,7 @@ function addScriptTag(src, onload, onerror) {
 var loadProgress = document.getElementById('loadProgress');
 var loadingInfo = document.getElementById('loadingInfo');
 loadingInfo.innerHTML = 'Loading phaser.js';
-loadScript('lib/phaser.js', function (e) {
+loadScript('lib/phaser2.13.3.js', function (e) {
     if (e.lengthComputable) {
         loadProgress.value = e.loaded;
         loadProgress.max = e.total;
@@ -112,4 +112,9 @@ Object.assign = Object.assign || function (target, sources) {
         }
     }
     return to;
+};
+
+String.prototype.startsWith = String.prototype.startsWith || function (some, from) {
+    var pos = from > 0 ? from|0 : 0;
+    return this.substring(pos, pos + some.length) === some;
 };
