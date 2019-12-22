@@ -118,3 +118,10 @@ String.prototype.startsWith = String.prototype.startsWith || function (some, fro
     var pos = from > 0 ? from|0 : 0;
     return this.substring(pos, pos + some.length) === some;
 };
+
+function ChristmasIsComing() {
+    var date = new Date();
+    if (date.getMonth() == 11) return true;
+    if (date.getMonth() == 0) return data.getDate() <= 15;
+    return false;
+}

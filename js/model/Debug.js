@@ -118,5 +118,9 @@ Debug.prototype.autoSwipeTest = function () {
 Debug.prototype.getDebugMessage = function () {
     if (AppleFools.DROP_COLOR_COUNT == 0)
         return "Level edit mode!";
+    if (ChristmasIsComing()) {
+        if ((new Date()).getMonth() == 11) return "Merry Xmas!";
+        return "Happy New Year!";
+    }
     return this.board.game.time.fps;
 };
