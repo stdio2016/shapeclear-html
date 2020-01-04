@@ -1,5 +1,5 @@
 var CACHENAME = 'shapeclear';
-var VERSION = 'v0.7.0xmas';
+var VERSION = 'v0.7.0xmas2';
 var myPath = location.origin + location.pathname;
 var cacheEnableTest = 
     caches.open(CACHENAME).then(function (cache) {

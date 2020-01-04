@@ -122,6 +122,6 @@ String.prototype.startsWith = String.prototype.startsWith || function (some, fro
 function ChristmasIsComing() {
     var date = new Date();
     if (date.getMonth() == 11) return true;
-    if (date.getMonth() == 0) return data.getDate() <= 15;
+    if (date.getMonth() == 0) return date.getDate() <= 15;
     return false;
 }
