@@ -21,6 +21,7 @@ function GameScreen() {
     };
     this.speedup = 1;
     this.brightShader = null;
+    this.cachedHint = null;
 }
 
 GameScreen.prototype.preload = function () {
@@ -211,6 +212,14 @@ GameScreen.prototype.updateOnce = function () {
     /*
     }
     */
+    if (this.board.combo > 0 || this.board.state != Board.PLAYING)
+        this.cachedHint = null;
+    else if (!this.cachedHint) {
+        var hint = this.board.hintMoves();
+        if (hint.length > 0) {
+            this.cachedHint = hint[Math.floor(hint.length*Math.random())];
+        }
+    }
     var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
     this.lblTime.fontSize = fontSize;
     this.lblScore.fontSize = fontSize;
@@ -363,7 +372,16 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                     else t = (1 - t) * 2;
                     spr.tint = 0x010101 * Math.round(t * 95 + 160);
                 }
-                else spr.tint = 0xffffff;
+                else {
+                    var isHint = false;
+                    if (this.board.swaps.length == 0 && this.cachedHint) {
+                        this.cachedHint.forEach(function (h) {
+                            if (shape.x == h.x && shape.y == h.y)
+                                isHint = true;
+                        });
+                    }
+                    spr.tint = isHint ? 0x7f7f7f : 0xffffff;
+                }
                 spr.x = startX + (x - shape.dir.x * pos/10 + 0.5) * gridSize;
                 spr.y = startY + (y - shape.dir.y * pos/10 + 0.5) * gridSize;
                 spr.scale.x = scale * spr.alpha;
