@@ -453,7 +453,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
 GameScreen.prototype.render = function (game) {
     if (!this.board.debug.showMatching) return;
     var colors = [0x7f0000, 0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0xff7fff, 0xc0c0c0, 0xffffff, 0x000000];
-    var matches = this.board.matchFinder.matches;
+    var matches = this.board.matchFinder.matches.concat(this.board.matchFinder.swapMatches);
     var x, y, width, height, line;
     var j = 0;
     var spr;
@@ -462,7 +462,7 @@ GameScreen.prototype.render = function (game) {
             spr = this.showMatches[j];
         }
         else {
-            spr = this.add.sprite(0, 0, 'whiteSquare');
+            spr = this.add.sprite(0, 0, 'number', '0');
             this.showMatches.push(spr);
         }
         spr.visible = true;

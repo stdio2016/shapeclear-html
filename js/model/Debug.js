@@ -26,7 +26,7 @@ Debug.prototype.runCommand = function (cmd) {
         return ;
     }
     this.debugged = true;
-    switch (cmd) {
+    switch (cmd.toLowerCase()) {
       case 'allow illegal move':
         this.allowIllegalMove = true; return ;
       case 'disallow illegal move':
