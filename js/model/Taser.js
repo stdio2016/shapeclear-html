@@ -78,8 +78,8 @@ TaserEffect.prototype.update = function () {
             this.elcShape(this.type);
         }
         
-        if (this.progress < this.count) {
-            var sh = this.all[this.progress];
+        if (this.progress < this.count+2 && this.progress > 1) {
+            var sh = this.all[this.progress-2];
             if (this.board.getShape(sh.x, sh.y) === sh) {
                 sh.cleared = false;
                 var sco = this.board.clearShape(sh.x, sh.y);
@@ -94,7 +94,7 @@ TaserEffect.prototype.update = function () {
                 }
                 this.board.score += score;
             }
-            if (this.progress === this.count-1) {
+            if (this.progress === this.count+1) {
                 this.done = true;
             }
         }
@@ -103,7 +103,7 @@ TaserEffect.prototype.update = function () {
             this.done = true;
         }
     }
-    if (this.progress < this.count-1 || this.tick > 0) {
+    if (this.progress < this.count+1 || this.tick > 0) {
         this.board.itemChanged = true;
     }
     this.tick--;
@@ -120,7 +120,7 @@ TaserEffect.prototype.update = function () {
             }
         }
     }
-    return this.progress < this.count+2;
+    return this.progress < this.count+4;
 };
 
 // returns array of [x, y, width, height, frameName]'s
