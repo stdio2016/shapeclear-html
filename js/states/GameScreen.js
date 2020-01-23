@@ -207,19 +207,21 @@ GameScreen.prototype.updateOnce = function () {
     }
     for (var i = 0; i < 1; i++) {
     */
+    var prevMoves = this.board.remainingMoves;
     if (AppleFools.DROP_COLOR_COUNT != 0)
         this.board.update();
     /*
     }
     */
-    if (this.board.combo > 0 || this.board.state != Board.PLAYING)
+    if (this.board.remainingMoves < prevMoves || this.board.state != Board.PLAYING)
         this.cachedHint = null;
-    else if (!this.cachedHint) {
+    else if (!this.cachedHint && !this.board.changed) {
         var hint = this.board.hintMoves();
         if (hint.length > 0) {
-            this.cachedHint = hint[Math.floor(hint.length*Math.random())];
+            this.cachedHint = hint[Math.floor(hint.length*Math.random())][2];
         }
     }
+    if (AppleFools.DROP_COLOR_COUNT == 0) this.cachedHint = null; // level editor
     var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
     this.lblTime.fontSize = fontSize;
     this.lblScore.fontSize = fontSize;

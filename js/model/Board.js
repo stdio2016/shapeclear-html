@@ -15,6 +15,7 @@ function Board(game, width, height) {
     this.combo = 0;
     this.gainScores = [];
     this.remainingTime = 3600;
+    this.remainingMoves = -1;
     this.score = 0;
     this.tileLocks = [];
     this.itemChanged = false;
@@ -319,6 +320,7 @@ Board.prototype.updateSwaps = function () {
             if (sw.status === 'swap' && sw.specialCombo(this)) {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
+                this.remainingMoves -= 1;
                 --i;
                 continue;
             }
@@ -328,6 +330,9 @@ Board.prototype.updateSwaps = function () {
                 this.swaps[i] = this.swaps[this.swaps.length - 1];
                 this.swaps.length--;
                 --i;
+                if (sw.status === 'swap') {
+                    this.remainingMoves -= 1;
+                }
             }
             else {
                 this.sounds.push({name: 'nomatch'});
@@ -634,6 +639,7 @@ Board.prototype.shuffleUpdate = function () {
         }
         if (this.tick === 60) {
             this.state = Board.PLAYING;
+            this.changed = true;
             this.tick = 0;
         }
     }
@@ -649,7 +655,7 @@ Board.prototype.hintMoves = function () {
         if (s3.canSwap() && s4.canSwap()) {
             if (s1.canMatch() && s2.canMatch() && s3.canMatch()) {
                 if (s1.type == s2.type && s1.type == s3.type) {
-                    swipes.push([{x: x3, y: y3}, {x: x4, y: y4}]);
+                    swipes.push([{x: x3, y: y3}, {x: x4, y: y4}, [s1,s2,s3]]);
                 }
             }
         }

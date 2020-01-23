@@ -49,6 +49,8 @@ Debug.prototype.runCommand = function (cmd) {
         game.sound.mute = !game.sound.mute; return;
       case 'redraw':
         gameScreen.redraw(); return;
+      case 'shuffle':
+        this.board.state = Board.SHUFFLING; return;
     }
     if (/^get /.test(cmd)) {
         return this.runGetCommand(cmd.substr(4));
