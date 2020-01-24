@@ -22,6 +22,7 @@ function GameScreen() {
     this.speedup = 1;
     this.brightShader = null;
     this.cachedHint = null;
+    this.hintTimer = 0;
 }
 
 GameScreen.prototype.preload = function () {
@@ -213,6 +214,8 @@ GameScreen.prototype.updateOnce = function () {
     /*
     }
     */
+    this.hintTimer += 1;
+    if (this.hintTimer == 240) this.hintTimer = 0;
     if (this.board.remainingMoves < prevMoves || this.board.state != Board.PLAYING)
         this.cachedHint = null;
     else if (!this.cachedHint && !this.board.changed) {
@@ -221,6 +224,7 @@ GameScreen.prototype.updateOnce = function () {
             this.cachedHint = hint[Math.floor(hint.length*Math.random())][2];
         }
     }
+    if (this.board.swaps.length > 0 || !this.cachedHint) this.hintTimer = 0;
     if (AppleFools.DROP_COLOR_COUNT == 0) this.cachedHint = null; // level editor
     var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
     this.lblTime.fontSize = fontSize;
@@ -362,6 +366,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
             if (spr !== null) {
                 var pos = shape.pos;
                 var frameName = Shape.typeNames[shape.type - 1];
+                var adjX = 0.5, adjY = 0.5;
                 if (shape.special == 1) frameName += "HStripe";
                 if (shape.special == 2) frameName += "VStripe";
                 if (shape.special == 3) frameName += "Wrapped";
@@ -376,16 +381,24 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                 }
                 else {
                     var isHint = false;
-                    if (this.board.swaps.length == 0 && this.cachedHint) {
+                    if (this.cachedHint) {
                         this.cachedHint.forEach(function (h) {
                             if (shape.x == h.x && shape.y == h.y)
                                 isHint = true;
                         });
                     }
-                    spr.tint = isHint ? 0x7f7f7f : 0xffffff;
+                    if (isHint && this.hintTimer > 180) {
+                        var t = (this.hintTimer - 180) % 30 / 30;
+                        if (t < 0.5) t = t * 2;
+                        else t = (1 - t) * 2;
+                        spr.tint = 0x010101 * Math.round((1-t) * 95 + 160);
+                        adjY -= t * 0.1;
+                    }
+                    else
+                        spr.tint = 0xffffff;
                 }
-                spr.x = startX + (x - shape.dir.x * pos/10 + 0.5) * gridSize;
-                spr.y = startY + (y - shape.dir.y * pos/10 + 0.5) * gridSize;
+                spr.x = startX + (x - shape.dir.x * pos/10 + adjX) * gridSize;
+                spr.y = startY + (y - shape.dir.y * pos/10 + adjY) * gridSize;
                 spr.scale.x = scale * spr.alpha;
                 spr.scale.y = scale * spr.alpha;
             }
