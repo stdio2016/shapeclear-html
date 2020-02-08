@@ -486,7 +486,6 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     }
     this.anncs.x = startX + this.board.width * gridSize / 2;
     this.anncs.y = startY + this.board.height * gridSize / 2;
-    this.anncs.scale.set(size / 240, size / 240);
 };
 
 GameScreen.prototype.render = function (game) {
@@ -597,6 +596,7 @@ GameScreen.prototype.onEndChain = function (args) {
         this.anncs.add(t);
         t.update = function () {
             var delta = t.game.time.elapsed;
+            t.fontSize = Math.round(Math.min(t.game.width, t.game.height) * 0.05) * 2.5;
             t.y -= delta * 0.01;
             t.t += delta;
             if (t.t < 167) t.scale.set(t.t/167, t.t/167);
