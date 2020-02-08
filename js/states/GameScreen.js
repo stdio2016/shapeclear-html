@@ -14,6 +14,7 @@ function GameScreen() {
     this.digitGroup = null;
     this.timeText = null;
     this.lblScore = this.lblTime = null;
+    this.anncs = null;
     this.effectSprites = [];
     this.runTime = [];
     this.soundEffects = {
@@ -100,6 +101,7 @@ GameScreen.prototype.create = function () {
             ]
         });
     }
+    this.board.addHook(this, this.onBoardEvent);
     this.boardGroup = this.add.group();
     this.boardGroup.alpha = 0.8;
     this.shapeGroup = this.add.group();
@@ -114,6 +116,7 @@ GameScreen.prototype.create = function () {
     this.lblScore = this.createText(Translation["Score"]);
     this.timeText = new ScoreText(3600, 0, 0, 0, this.digitGroup);
     this.lblTime = this.createText(Translation["Time"]);
+    this.anncs = this.game.add.group();
     this.runTime = [0, +new Date(), 0, 0, false, 1/6];
     for (var name in this.soundEffects) {
         this.soundEffects[name] = this.game.add.sound(name);
@@ -248,7 +251,7 @@ GameScreen.prototype.updateOnce = function () {
     }
     this.timeText.setScore(Math.ceil(remainingTime / 60));
     if (this.board.remainingTime == 0 && !this.board.changed && this.board.swaps.length == 0) {
-        if (this.board.state == Board.ENDED) {
+        if (this.board.state == Board.ENDED && this.anncs.length == 0) {
             this.speedup = 1;
             var me = this;
             if (promptCallback === doesNothing) {
@@ -423,7 +426,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         var sh = delSh[i];
         // some shapes have no sprites attached
         if (sh.sprite) {
-            sh.sprite.alpha -= 0.1;
+            sh.sprite.alpha = sh.tickClear / sh.tickClearTotal;
         }
         if (sh.tickClear == 1) {
             if (sh.sprite) {
@@ -481,6 +484,9 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     while (sc < this.effectSprites.length) {
         this.effectSprites.pop().kill();
     }
+    this.anncs.x = startX + this.board.width * gridSize / 2;
+    this.anncs.y = startY + this.board.height * gridSize / 2;
+    this.anncs.scale.set(size / 240, size / 240);
 };
 
 GameScreen.prototype.render = function (game) {
@@ -575,4 +581,35 @@ GameScreen.prototype.playSounds = function () {
             s._sound.playbackRate.value = pitch;
         }
     });
+};
+
+GameScreen.prototype.onEndChain = function (args) {
+    var goodness = args.goodness;
+    var txt = '';
+    if (goodness >= 12) txt = 'Awesome';
+    else if (goodness >= 9) txt = 'Excellent';
+    else if (goodness >= 6) txt = 'Great';
+    else if (goodness >= 4) txt = 'Nice';
+    if (txt) {
+        var t = this.createText(txt);
+        t.anchor.set(0.5, 0.5);
+        t.t = 0;
+        this.anncs.add(t);
+        t.update = function () {
+            var delta = t.game.time.elapsed;
+            t.y -= delta * 0.01;
+            t.t += delta;
+            if (t.t < 167) t.scale.set(t.t/167, t.t/167);
+            else t.scale.set(1, 1);
+            if (t.t > 1667) t.destroy();
+            else if (t.t > 667) t.alpha = (1667 - t.t) / 1000;
+        };
+    }
+};
+
+GameScreen.prototype.onBoardEvent = function (evt, args) {
+    if (evt == 'endChain') {
+        this.onEndChain(args);
+        return;
+    }
 };

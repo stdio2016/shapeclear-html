@@ -24,6 +24,8 @@ function Board(game, width, height) {
     this.tick = 0;
     this.sounds = [];
     this.randomColors = [1,2,3,4,5,6];
+    this.goodCount = 0;
+    this.hooks = [];
 
     // position of board in the game
     this.x = 0;
@@ -146,6 +148,16 @@ Board.prototype.addSwap = function(from, to) {
     this.swapShape(sh1, sh2);
 };
 
+Board.prototype.addHook = function (obj, method) {
+    this.hooks.push([obj, method]);
+};
+
+Board.prototype.emitSignal = function (evt, args) {
+    this.hooks.forEach(function (hook) {
+        hook[1].call(hook[0], evt, args);
+    });
+};
+
 Board.prototype.swapShape = function (sh1, sh2) {
     this.shapes[sh1.x + sh1.y * this.width] = sh2;
     this.shapes[sh2.x + sh2.y * this.width] = sh1;
@@ -229,7 +241,9 @@ Board.prototype.update = function () {
             this.changed = true;
         }
         else {
-            this.combo = 0;
+            var goodness = this.combo + this.goodCount;
+            if (goodness > 0) this.emitSignal('endChain', {goodness: goodness});
+            this.combo = this.goodCount = 0;
             if (this.swaps.length === 0 && this.state === Board.PLAYING) {
                 var hints = this.hintMoves();
                 if (hints.length === 0) {

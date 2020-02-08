@@ -9,7 +9,8 @@ function Shape(type, x, y, board) {
     this.bouncing = false;
     this.swapping = false;
     this.cleared = false;
-    this.tickClear = 10;
+    this.tickClearTotal = 10;
+    this.tickClear = this.tickClearTotal;
     this.tick = 0;
 
     // a Shape belongs to exactly one Board

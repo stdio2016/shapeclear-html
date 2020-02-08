@@ -37,6 +37,7 @@ TaserShape.prototype.crush = function (board, color) {
     if (this.state === TaserShape.NORMAL) {
         this.state = TaserShape.ACTIVE;
         board.addItemToClear(new TaserEffect(board, color, this));
+        board.goodCount += 1;
     }
     return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };

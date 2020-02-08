@@ -65,7 +65,7 @@ WrappedShape.prototype.crush = function (board) {
 };
 
 WrappedShape.prototype.deleteUpdate = function () {
-    if (this.tickClear === 10) {
+    if (this.tickClear === this.tickClearTotal) {
         var ex = new WrappedEffect(this.board, this.x, this.y, this.type, this.bombSize);
         this.board.addItemToClear(ex);
     }
@@ -116,6 +116,7 @@ WrappedEffect.prototype.explode = function () {
       score: score
     });
     this.board.score += score;
+    this.board.goodCount += 1;
 };
 
 WrappedEffect.prototype.update = function () {

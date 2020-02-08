@@ -28,6 +28,7 @@ StripedShape.prototype.crush = function (board) {
 
 function StripeEffect(board) {
     this.board = board;
+    board.goodCount += 1;
     this.lines = [];
     this.totalTicks = 2;
     this.tick = this.totalTicks;

@@ -29,6 +29,7 @@ Swap.prototype.specialCombo = function (board) {
             from.special = from.x === to.x ? StripeEffect.VERTICAL : StripeEffect.HORIZONTAL;
             to.special = from.y === to.y ? StripeEffect.VERTICAL : StripeEffect.HORIZONTAL;
             board.clearShape(to.x, to.y);
+            board.goodCount += 1;
             board.addItemToClear(e);
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
