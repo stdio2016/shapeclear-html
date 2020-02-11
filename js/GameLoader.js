@@ -18,7 +18,7 @@ function loadScript(src, progressCallback, callback) {
         document.head.appendChild(script);
         if (callback) callback();
     };
-    xhr.onerror = function() { callback('error'); };
+    xhr.onerror = function() { callback('network-error'); };
     xhr.onprogress = progressCallback || null;
     xhr.open('get', src);
     xhr.responseType = 'text';
@@ -26,9 +26,6 @@ function loadScript(src, progressCallback, callback) {
 }
 
 function addScriptTag(src, onload, onerror) {
-    if (location.hostname.indexOf('nctu') !== -1) {
-        src += '?v=' + gameInternalVersion;
-    }
     var script = document.createElement('script');
     script.src = src;
     script.async = false;
@@ -48,7 +45,7 @@ loadScript('lib/phaser2.13.3.js', function (e) {
     }
     else {
         loadProgress.value = e.loaded;
-        loadProgress.max = 3272160;
+        loadProgress.max = 3594509;
     }
 }, function (e) {
     if (e === 'network-error') {
