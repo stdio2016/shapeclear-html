@@ -22,7 +22,6 @@ function Board(game, width, height) {
     this.state = Board.PLAYING;
     this.passedTime = 0;
     this.tick = 0;
-    this.sounds = [];
     this.randomColors = [1,2,3,4,5,6];
     this.goodCount = 0;
     this.hooks = [];
@@ -209,7 +208,6 @@ Board.prototype.tileLocked = function (index) {
 };
 
 Board.prototype.update = function () {
-    this.sounds.length = 0;
     if (this.state === Board.SHUFFLING) return this.shuffleUpdate();
     this.debug.autoSwipeTest();
     this.gainScores = [];
@@ -349,7 +347,7 @@ Board.prototype.updateSwaps = function () {
                 }
             }
             else {
-                this.sounds.push({name: 'nomatch'});
+                this.emitSignal('playSound', {name: 'nomatch'});
                 sw.reject();
                 this.swapShape(from, to);
                 from.pos = to.pos = sw.interpolatedPos() * 10;
@@ -643,6 +641,7 @@ Board.prototype.shuffleUpdate = function () {
     this.swaps.length = 0;
     this.runningItems.length = 0;
     this.stoppedItems.length = 0;
+    if (this.tick === 0) this.emitSignal('shuffle');
     this.tick++;
     if (this.tick < 30) {
         ;

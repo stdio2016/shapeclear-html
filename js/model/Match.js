@@ -320,6 +320,6 @@ MatchFinder.prototype.makeMatchSound = function (board) {
     if (this.matches.length > 0 || this.swapMatches.length > 0) {
         var lv = Math.min(board.combo - 1, 14);
         var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][lv];
-        board.sounds.push({name: 'match', pitch: Math.pow(2, cn/12)});
+        board.emitSignal('playSound', {name: 'match', pitch: Math.pow(2, cn/12)});
     }
 };

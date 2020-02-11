@@ -277,7 +277,6 @@ GameScreen.prototype.updateOnce = function () {
     //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
     this.resizeUI();
     this.updateSelectSprite();
-    this.playSounds();
 };
 
 GameScreen.prototype.updateSelectSprite = function () {
@@ -570,16 +569,30 @@ GameScreen.prototype.redraw = function () {
     });
 };
 
-GameScreen.prototype.playSounds = function () {
-    var sndfx = this.soundEffects;
-    this.board.sounds.forEach(function (snd) {
-        var s = sndfx[snd.name];
-        s.play();
-        var pitch = snd.pitch || 1; 
-        if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
-            s._sound.playbackRate.value = pitch;
-        }
-    });
+GameScreen.prototype.playSound = function (name, pitch) {
+    var s = this.soundEffects[name];
+    s.play();
+    pitch = pitch || 1; 
+    if (s._sound && s._sound.playbackRate && s._sound.playbackRate.value) {
+        s._sound.playbackRate.value = pitch;
+    }
+};
+
+GameScreen.prototype.addAnncs = function addAnncs(txt) {
+    var t = this.createText(txt);
+    t.anchor.set(0.5, 0.5);
+    t.t = 0;
+    this.anncs.add(t);
+    t.update = function () {
+        var delta = t.game.time.elapsed;
+        t.fontSize = Math.round(Math.min(t.game.width, t.game.height) * 0.05) * 2.5;
+        t.y -= delta * 0.01;
+        t.t += delta;
+        if (t.t < 167) t.scale.set(t.t/167, t.t/167);
+        else t.scale.set(1, 1);
+        if (t.t > 1000) t.destroy();
+        else if (t.t > 667) t.alpha = (1000 - t.t) / 333;
+    };
 };
 
 GameScreen.prototype.onEndChain = function (args) {
@@ -589,27 +602,20 @@ GameScreen.prototype.onEndChain = function (args) {
     else if (goodness >= 9) txt = 'Excellent';
     else if (goodness >= 6) txt = 'Great';
     else if (goodness >= 4) txt = 'Nice';
-    if (txt) {
-        var t = this.createText(txt);
-        t.anchor.set(0.5, 0.5);
-        t.t = 0;
-        this.anncs.add(t);
-        t.update = function () {
-            var delta = t.game.time.elapsed;
-            t.fontSize = Math.round(Math.min(t.game.width, t.game.height) * 0.05) * 2.5;
-            t.y -= delta * 0.01;
-            t.t += delta;
-            if (t.t < 167) t.scale.set(t.t/167, t.t/167);
-            else t.scale.set(1, 1);
-            if (t.t > 1667) t.destroy();
-            else if (t.t > 667) t.alpha = (1667 - t.t) / 1000;
-        };
-    }
+    if (txt) this.addAnncs(txt);
 };
 
 GameScreen.prototype.onBoardEvent = function (evt, args) {
     if (evt == 'endChain') {
         this.onEndChain(args);
+        return;
+    }
+    if (evt == 'playSound') {
+        this.playSound(args.name, args.pitch);
+        return;
+    }
+    if (evt == 'shuffle') {
+        this.addAnncs('Shuffling...');
         return;
     }
 };
