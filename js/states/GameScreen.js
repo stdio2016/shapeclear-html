@@ -223,8 +223,19 @@ GameScreen.prototype.updateOnce = function () {
         this.cachedHint = null;
     else if (!this.cachedHint && !this.board.changed) {
         var hint = this.board.hintMoves();
+        var betterHint = [];
+        hint.forEach(function (h) {
+            var sh1 = h[2][0], sh2 = h[2][1];
+            if (h[2].length == 2 && sh1.special != 0 && sh2.special != 0) {
+                betterHint.push(h);
+            }
+        });
         if (hint.length > 0) {
-            this.cachedHint = hint[Math.floor(hint.length*Math.random())][2];
+            if (betterHint.length > 0) {
+                this.cachedHint = betterHint[Math.floor(betterHint.length*Math.random())][2];
+            }
+            else
+                this.cachedHint = hint[Math.floor(hint.length*Math.random())][2];
         }
     }
     if (this.board.swaps.length > 0 || !this.cachedHint) this.hintTimer = 0;

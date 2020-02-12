@@ -674,6 +674,23 @@ Board.prototype.hintMoves = function () {
             }
         }
     });
+    var w = this.width;
+    for (var i = 0; i < this.height; i++) {
+        for (var j = 0; j < w; j++) {
+            var idx = i * w + j;
+            var sh1 = this.shapes[idx], sh2;
+            if (j > 0) {
+                sh2 = this.shapes[idx-1];
+                if (Swap.isSpecialCombo(sh1, sh2))
+                    swipes.push([{x:j-1,y:i}, {x:j,y:i}, [sh1,sh2]]);
+            }
+            if (i > 0) {
+                sh2 = this.shapes[idx-w];
+                if (Swap.isSpecialCombo(sh1, sh2))
+                    swipes.push([{x:j,y:i-1}, {x:j,y:i}, [sh1,sh2]]);
+            }
+        }
+    }
     return swipes;
 };
 

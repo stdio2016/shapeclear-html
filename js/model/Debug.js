@@ -96,21 +96,8 @@ Debug.prototype.autoSwipeTest = function () {
     this.autoSwipeLoop++;
     if (this.autoSwipeLoop < 30) return ;
     this.autoSwipeLoop = 0;
-    var swipes = [];
+    var swipes = this.board.hintMoves();
     var board = this.board;
-    Board.forEachPossibleMatch(0, 0, this.board.width, this.board.height, function (x1, y1, x2, y2, x3, y3, x4, y4) {
-        var s1 = board.getShape(x1, y1);
-        var s2 = board.getShape(x2, y2);
-        var s3 = board.getShape(x3, y3);
-        var s4 = board.getShape(x4, y4);
-        if (s3.canSwap() && s4.canSwap()) {
-            if (s1.canMatch() && s2.canMatch() && s3.canMatch()) {
-                if (s1.type == s2.type && s1.type == s3.type) {
-                    swipes.push([{x: x3, y: y3}, {x: x4, y: y4}]);
-                }
-            }
-        }
-    });
     if (swipes.length > 0) {
         var r = Math.floor(Math.random() * swipes.length);
         this.board.addSwap(swipes[r][0], swipes[r][1]);

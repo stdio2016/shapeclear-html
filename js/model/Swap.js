@@ -16,10 +16,42 @@ Swap.prototype.reject = function() {
     this.tick = this.totalTicks;
 };
 
+Swap.isSpecialCombo = function (from, to) {
+    if (!from.canSwap() || !to.canSwap()) return false;
+    if (from instanceof StripedShape) {
+        if (to instanceof StripedShape) ;
+        else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) ;
+        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) ;
+        else return false;
+    }
+    else if (from instanceof WrappedShape && from.state === WrappedShape.NORMAL) {
+        if (to instanceof StripedShape) ;
+        else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) ;
+        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) ;
+        else return false;
+    }
+    else if (from instanceof TaserShape && from.state === TaserShape.NORMAL) {
+        if (to instanceof StripedShape) ;
+        else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) ;
+        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) ;
+        else if (to.canMatch()) ;
+        else return false;
+    }
+    else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
+        if (from.canMatch()) ;
+        else return false;
+    }
+    else {
+        return false;
+    }
+    return true;
+};
+
 Swap.prototype.specialCombo = function (board) {
     // many "return false"'s are unimplemented special combo
     var from = board.getShape(this.from.x, this.from.y);
     var to = board.getShape(this.to.x, this.to.y);
+    if (!Swap.isSpecialCombo(from, to)) return false;
     if (from instanceof StripedShape) {
         if (to instanceof StripedShape) {
             var e = new StripeEffect(board);
