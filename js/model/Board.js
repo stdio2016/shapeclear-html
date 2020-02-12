@@ -652,6 +652,7 @@ Board.prototype.shuffleUpdate = function () {
         }
         if (this.tick === 60) {
             this.state = Board.PLAYING;
+            this.emitSignal('shuffleFinish');
             this.changed = true;
             this.tick = 0;
         }

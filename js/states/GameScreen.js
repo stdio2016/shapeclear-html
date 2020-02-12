@@ -399,6 +399,12 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
                     else
                         spr.tint = 0xffffff;
                 }
+                if (board.state === Board.SHUFFLING) {
+                    if (board.tick > 30)
+                        spr.alpha = Math.max(0, (board.tick - 49) / 10);
+                    else
+                        spr.alpha = Math.max(0, (10 - board.tick) / 10);
+                }
                 spr.x = startX + (x - shape.dir.x * pos/10 + adjX) * gridSize;
                 spr.y = startY + (y - shape.dir.y * pos/10 + adjY) * gridSize;
                 spr.scale.x = scale * spr.alpha;
@@ -615,7 +621,7 @@ GameScreen.prototype.onBoardEvent = function (evt, args) {
         return;
     }
     if (evt == 'shuffle') {
-        this.addAnncs('Shuffling...');
+        this.addAnncs(Translation['Shuffling...']);
         return;
     }
 };
