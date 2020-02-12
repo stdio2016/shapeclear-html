@@ -36,6 +36,7 @@ Board.PLAYING = 1;
 Board.SHUFFLING = 2;
 Board.BONUS_TIME = 3;
 Board.ENDED = 4;
+Board.IDLE = 5;
 
 Board.prototype.generateSimple = function () {
     this.randomColors = [1,2,3,4,5,6];
@@ -249,6 +250,7 @@ Board.prototype.update = function () {
                     this.tick = 0;
                     return ;
                 }
+                else this.state = Board.IDLE;
             }
         }
     }
@@ -319,6 +321,7 @@ Board.prototype.shapeUpdate = function () {
 
 Board.prototype.updateSwaps = function () {
     for (var i = 0; i < this.swaps.length; i++) {
+        this.state = Board.PLAYING;
         var from = this.swaps[i].from;
         from = this.getShape(from.x, from.y);
         var to = this.swaps[i].to;
