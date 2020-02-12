@@ -52,10 +52,10 @@ Debug.prototype.runCommand = function (cmd) {
       case 'shuffle':
         this.board.state = Board.SHUFFLING; return;
     }
-    if (/^get /.test(cmd)) {
+    if (/^get /i.test(cmd)) {
         return this.runGetCommand(cmd.substr(4));
     }
-    if (/^set /.test(cmd)) {
+    if (/^set /i.test(cmd)) {
         return this.runSetCommand(cmd.substr(4));
     }
     if (cmd == 'april fools') {
