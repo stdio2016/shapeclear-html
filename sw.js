@@ -1,14 +1,15 @@
+importScripts('js/Configs.js');
 var CACHENAME = 'shapeclear';
 var VERSION = 'v0.7.1';
 var myPath = location.origin + location.pathname;
-var cacheEnableTest = 
-    caches.open(CACHENAME).then(function (cache) {
-        return cache.match(myPath + "cache/no");
-    }).then(function (result) {
-        return result == null;
-    })['catch'](function () {
-        return true;
+var cacheEnableTest =
+    Configs.get('cacheEnabled').then(function (r) {
+        return r !== false;
     });
+
+Configs.get('cacheEnabled').then(function (r) {
+    if (r === undefined) Configs.set('cacheEnabled', true);
+});
 
 myPath = myPath.match(/(.*\/)/)[1];
 
@@ -38,16 +39,12 @@ function cacheSettings(url, event) {
         event.respondWith(new Response(VERSION));
     }
     else if (url === "disable") {
-        event.waitUntil(caches.open(CACHENAME).then(function (c) {
-            c.put(new Request("cache/no"), new Response('yes', {'status':200}));
-        }));
+        event.waitUntil(Configs.set('cacheEnabled', false));
         cacheEnableTest = Promise.resolve(false);
         event.respondWith(new Response('ok'));
     }
     else if (url === "enable") {
-        event.waitUntil(caches.open(CACHENAME).then(function (c) {
-            c.delete(new Request("cache/no"));
-        }));
+        event.waitUntil(Configs.set('cacheEnabled', true));
         cacheEnableTest = Promise.resolve(true);
         event.respondWith(new Response('ok'));
     }
