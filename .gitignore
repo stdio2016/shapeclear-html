@@ -2,3 +2,6 @@
 # it's a LibGDX tool: Texture Packer
 # download from https://libgdx.badlogicgames.com/tools.html
 runnable-texturepacker.jar
+
+# atlas file is not used
+img/*.atlas
