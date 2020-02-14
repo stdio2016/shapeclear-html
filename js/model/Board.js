@@ -256,17 +256,33 @@ Board.prototype.update = function () {
     }
     if (this.remainingTime > 0)
         this.remainingTime--;
+    if (this.remainingTime == 0 && !this.changed && this.swaps.length == 0) {
+        if (this.state != Board.ENDED && this.state != Board.BONUS_TIME) {
+            this.state = Board.ENDED;
+            if (this.findFirstSpecial()) this.emitSignal("bonusTime");
+            else this.emitSignal("endGame");
+        }
+    }
     if (this.state === Board.BONUS_TIME && !this.changed) {
-        var hasSpecial = this.findSpecial(WrappedShape.SPECIAL);
-        if (!hasSpecial) hasSpecial = this.findSpecial(function (sh) {
-            return sh.special === StripedShape.HORIZONTAL || sh.special === StripedShape.VERTICAL;
-        });
-        if (!hasSpecial) hasSpecial = this.findSpecial(TaserShape.SPECIAL);
-        if (!hasSpecial) this.state = Board.ENDED;
+        var special = this.findFirstSpecial();
+        if (!special) {
+            this.state = Board.ENDED;
+            this.emitSignal("endGame");
+        }
+        else this.clearShape(special.x, special.y);
     }
     if (this.state !== Board.ENDED) {
         this.passedTime++;
     }
+};
+
+Board.prototype.findFirstSpecial = function () {
+    var hasSpecial = this.findSpecial(WrappedShape.SPECIAL);
+    if (!hasSpecial) hasSpecial = this.findSpecial(function (sh) {
+        return sh.special === StripedShape.HORIZONTAL || sh.special === StripedShape.VERTICAL;
+    });
+    if (!hasSpecial) hasSpecial = this.findSpecial(TaserShape.SPECIAL);
+    return hasSpecial;
 };
 
 Board.prototype.findSpecial = function (specialTest) {
@@ -279,11 +295,10 @@ Board.prototype.findSpecial = function (specialTest) {
     for (var i = 0; i < this.shapes.length; i++) {
         var sh = this.shapes[i];
         if (specialTest(sh)) {
-            this.clearShape(i%this.width, i/this.width|0);
-            return true;
+            return sh;
         }
     }
-    return false;
+    return null;
 };
 
 Board.prototype.itemClearUpdate = function () {

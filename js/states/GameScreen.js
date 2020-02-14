@@ -261,29 +261,6 @@ GameScreen.prototype.updateOnce = function () {
         this.timeText.setColor(0);
     }
     this.timeText.setScore(Math.ceil(remainingTime / 60));
-    if (this.board.remainingTime == 0 && !this.board.changed && this.board.swaps.length == 0) {
-        if (this.board.state == Board.ENDED && this.anncs.length == 0) {
-            this.speedup = 1;
-            var me = this;
-            if (promptCallback === doesNothing) {
-                me.saveScore(me.board.score);
-                alertBox(
-                  Translation["Time's up"] + '\n' +
-                  Translation["Your score: "] + me.board.score + '\n' + 
-                  Translation["Press OK to replay"], function () {
-                    me.state.start('MainMenu');
-                });
-                if (AppleFools.AutoGame) {
-                    setTimeout(function () {
-                        promptOK.onclick();
-                    }, 1000);
-                }
-            }
-        }
-        else {
-            this.board.state = Board.BONUS_TIME;
-        }
-    }
     // Uncomment this to test layout
     //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
     this.resizeUI();
@@ -622,7 +599,19 @@ GameScreen.prototype.onEndChain = function (args) {
     if (txt) this.addAnncs(txt);
 };
 
+GameScreen.prototype.waitForCond = function (condition, callback) {
+    var dummy = this.add.group();
+    var me = this;
+    dummy.update = function () {
+        if (condition()) {
+            callback();
+            dummy.destroy();
+        }
+    };
+};
+
 GameScreen.prototype.onBoardEvent = function (evt, args) {
+    var me = this;
     if (evt == 'endChain') {
         this.onEndChain(args);
         return;
@@ -634,5 +623,34 @@ GameScreen.prototype.onBoardEvent = function (evt, args) {
     if (evt == 'shuffle') {
         this.addAnncs(Translation['Shuffling...']);
         return;
+    }
+    if (evt == 'bonusTime') {
+        this.waitForCond(
+            function () { return me.anncs.length == 0; },
+            function () {
+                me.addAnncs(Translation['Bonus Time']);
+                me.board.state = Board.BONUS_TIME;
+            }
+        );
+    }
+    if (evt == 'endGame') {
+        this.waitForCond(
+            function () { return me.anncs.length == 0; },
+            function () {
+                me.speedup = 1;
+                me.saveScore(me.board.score);
+                alertBox(
+                  Translation["Time's up"] + '\n' +
+                  Translation["Your score: "] + me.board.score + '\n' + 
+                  Translation["Press OK to replay"], function () {
+                    me.state.start('MainMenu');
+                });
+                if (AppleFools.AutoGame) {
+                    setTimeout(function () {
+                        promptOK.onclick();
+                    }, 1000);
+                }
+            }
+        );
     }
 };
