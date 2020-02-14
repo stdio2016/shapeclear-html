@@ -615,7 +615,7 @@ GameScreen.prototype.addAnncs = function addAnncs(txt) {
 GameScreen.prototype.onEndChain = function (args) {
     var goodness = args.goodness;
     var txt = '';
-    if (goodness >= 12) txt = 'Awesome';
+    if (goodness >= 12) txt = 'Amazing!';
     else if (goodness >= 9) txt = 'Excellent';
     else if (goodness >= 6) txt = 'Great';
     else if (goodness >= 4) txt = 'Nice';
