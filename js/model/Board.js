@@ -662,7 +662,10 @@ Board.prototype.shuffleUpdate = function () {
     }
     else {
         if (this.tick === 30) {
+            // TODO: check impossible to move case
             this.shuffle();
+            // if not successful, reshuffle
+            if (this.hintMoves().length === 0) this.tick -= 1;
         }
         if (this.tick === 60) {
             this.state = Board.PLAYING;
