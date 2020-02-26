@@ -75,10 +75,6 @@ Board.prototype.generateSimple = function () {
             this.tileLocks.push([]);
         }
     }
-    if (AppleFools.DROP_COLOR_COUNT==4) {
-        this.setShape(5, 1, new TaserShape());
-        this.setShape(4, 4, -1);
-    }
 };
 
 Board.prototype.getShape = function (x, y) {
@@ -541,7 +537,7 @@ Board.prototype.fall = function () {
     for (var y = 1; y < this.height; y++) {
         for (var x = 0; x < this.width; x++) {
             var sh = this.getShape(x, y);
-            if (sh.pos >= 5 && sh.dir.x == 0) {
+            if (sh.pos >= 5 && sh.dir.x == 0 && sh.isMoving()) {
                 this.lockPosition(x-sh.dir.x, y-sh.dir.y, this.fall);
             }
         }

@@ -211,7 +211,6 @@ GameScreen.prototype.updateOnce = function () {
     }
     for (var i = 0; i < 1; i++) {
     */
-    var prevMoves = this.board.remainingMoves;
     if (AppleFools.DROP_COLOR_COUNT != 0)
         this.board.update();
     /*
@@ -219,7 +218,7 @@ GameScreen.prototype.updateOnce = function () {
     */
     this.hintTimer += 1;
     if (this.hintTimer == 240) this.hintTimer = 0;
-    if (this.board.remainingMoves < prevMoves || (this.board.state != Board.IDLE && this.board.state != Board.PLAYING))
+    if (this.board.changed || (this.board.state != Board.IDLE && this.board.state != Board.PLAYING))
         this.cachedHint = null;
     else if (!this.cachedHint && !this.board.changed) {
         var hint = this.board.hintMoves();
