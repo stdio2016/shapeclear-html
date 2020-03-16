@@ -81,20 +81,10 @@ function preLoad() {
         mustDownload[i] = myPath + mustDownload[i];
     }
     var c, names = [], must = new Set(mustDownload);
-    return caches.open(CACHENAME).then(function (cache) {
-        c = cache;
-        return c.keys().then(function (keys) {
-            names = keys;
-            return cache.addAll(mustDownload);
-        });
-    }).then(function () {
-        names.forEach(function (name) {
-            if (!must.has(name.url)) {
-                console.log("delete " + name.url);
-                c['delete'](name);
-            }
-        });
-        console.log('preloaded');
+    return caches.delete(CACHENAME).then(function (success) {
+        return caches.open(CACHENAME);
+    }).then(function (cache) {
+        return cache.addAll(mustDownload);
     })['catch'](function (x) {
         console.log(x);
     });
@@ -113,8 +103,8 @@ function fromCache(req, event) {
         if (i !== -1) req = req.url.substring(0, i);
         return c.match(req).then(function (result) {
             if (result) {
-                // update cache
-                if (event) event.waitUntil(updateCache(req, cache));
+                // don't update cache
+                //if (event) event.waitUntil(updateCache(req, cache));
                 return result;
             }
             nocache = true;
