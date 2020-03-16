@@ -1,7 +1,7 @@
 // get help from  https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register
 var hasServiceWorker = false;
 var swRegistration = null;
-var insecureContext = !window.isSecureContext;
+var insecureContext = window.ServiceWorker && !window.isSecureContext;
 if (navigator.serviceWorker) {
     navigator.serviceWorker.register('sw.js').then(function (reg) {
         console.log('Registration succeeded. Scope is ' + reg.scope);
@@ -22,6 +22,9 @@ if (navigator.serviceWorker) {
     })['catch'](function (x) {
         console.log('Registration failed with ' + x);
         if (x.name === "SecurityError") {
+            insecureContext = true;
+        }
+        if (x.name === "TypeError") {
             insecureContext = true;
         }
     });
