@@ -158,6 +158,7 @@ Board.prototype.swapShape = function (sh1, sh2) {
     this.shapes[sh1.x + sh1.y * this.width] = sh2;
     this.shapes[sh2.x + sh2.y * this.width] = sh1;
     sh1.swapping = sh2.swapping = true;
+    sh1.pos = sh2.pos = 10;
     var dx = sh2.x - sh1.x;
     var dy = sh2.y - sh1.y;
     sh1.dir = {x: dx, y: dy};
