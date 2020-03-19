@@ -7,8 +7,7 @@ function GameScreen() {
     this.music = null;
     this.showMatches = [];
     this.effectGroup = null;
-    this.shapeGroup = null;
-    this.boardGroup = null;
+    this.boardView = null;
     this.scoreText = null;
     this.scorePopups = [];
     this.digitGroup = null;
@@ -102,9 +101,7 @@ GameScreen.prototype.create = function () {
         });
     }
     this.board.addHook(this, this.onBoardEvent);
-    this.boardGroup = this.add.group();
-    this.boardGroup.alpha = 0.8;
-    this.shapeGroup = this.add.group();
+    this.boardView = new BoardView(this.game, this.board);
     this.effectGroup = this.add.group();
     this.touchDetector = new TouchDetector(this.game, this.board);
     this.addSelectSprite();
@@ -123,6 +120,7 @@ GameScreen.prototype.create = function () {
         this.soundEffects[name].allowMultiple = true;
     }
     this.brightShader = new Phaser.Filter(game, null, game.cache.getShader('bright'));
+    this.boardView.brightShader = this.brightShader;
     
     this.lblTime.inputEnabled = true;
     this.lblTime.events.onInputUp.add(function () {
@@ -237,6 +235,8 @@ GameScreen.prototype.updateOnce = function () {
                 this.cachedHint = hint[Math.floor(hint.length*Math.random())][2];
         }
     }
+    this.boardView.cachedHint = this.cachedHint;
+    this.boardView.hintTimer = this.hintTimer;
     if (this.board.swaps.length > 0 || !this.cachedHint) this.hintTimer = 0;
     if (AppleFools.DROP_COLOR_COUNT == 0) this.cachedHint = null; // level editor
     var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
@@ -341,98 +341,13 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     var scale = gridSize / this.game.state.states.Load.gridPx;
     var startX = leftX + (boardSize - board.width) / 2 * gridSize;
     var startY = topY + (boardSize - board.height) / 2 * gridSize;
-    for (var y = 0; y < board.height; y++){
-        for (var x = 0; x < board.width; x++){
-            var shape = board.shapes[y * board.width + x];
-            if (shape.sprite === null && shape.type > 0) {
-                shape.sprite = this.shapeGroup.getFirstDead(true, 100, 100, 'shapes', Shape.typeNames[shape.type - 1]);
-                shape.sprite.shader = this.brightShader;
-                shape.sprite.alpha = 1;
-                shape.sprite.anchor = new Phaser.Point(0.5, 0.5);
-                shape.sprite.data = shape;
-            }
-            var spr = shape.sprite;
-            if (spr !== null) {
-                var pos = shape.pos;
-                var frameName = Shape.typeNames[shape.type - 1];
-                var adjX = 0.5, adjY = 0.5;
-                if (shape.special == 1) frameName += "HStripe";
-                if (shape.special == 2) frameName += "VStripe";
-                if (shape.special == 3) frameName += "Wrapped";
-                if (shape.special === 5) frameName = "taser";
-                if (spr.frameName !== frameName)
-                    spr.frameName = frameName;
-                if (shape.special == 4) {
-                    var t = shape.tick % 30 / 30;
-                    if (t < 0.5) t = t * 2;
-                    else t = (1 - t) * 2;
-                    spr.tint = 0x010101 * Math.round(t * 95 + 160);
-                }
-                else {
-                    var isHint = false;
-                    if (this.cachedHint) {
-                        this.cachedHint.forEach(function (h) {
-                            if (shape.x == h.x && shape.y == h.y)
-                                isHint = true;
-                        });
-                    }
-                    if (isHint && this.hintTimer > 180) {
-                        var t = (this.hintTimer - 180) % 30 / 30;
-                        if (t < 0.5) t = t * 2;
-                        else t = (1 - t) * 2;
-                        spr.tint = 0x010101 * Math.round((1-t) * 95 + 160);
-                        adjY -= t * 0.1;
-                    }
-                    else
-                        spr.tint = 0xffffff;
-                }
-                if (board.state === Board.SHUFFLING) {
-                    if (board.tick > 30)
-                        spr.alpha = Math.max(0, (board.tick - 49) / 10);
-                    else
-                        spr.alpha = Math.max(0, (10 - board.tick) / 10);
-                }
-                spr.x = startX + (x - shape.dir.x * pos/10 + adjX) * gridSize;
-                spr.y = startY + (y - shape.dir.y * pos/10 + adjY) * gridSize;
-                spr.scale.x = scale * spr.alpha;
-                spr.scale.y = scale * spr.alpha;
-            }
-            var tile = board.tiles[y * board.width + x];
-            if (!tile.sprite) {
-                tile.sprite = this.boardGroup.create(0, 0, 'shapes', 'board');
-                tile.sprite.shader = this.brightShader;
-            }
-            tile = tile.sprite;
-            tile.x = startX + x * gridSize;
-            tile.y = startY + y * gridSize;
-            tile.scale.x = scale;
-            tile.scale.y = scale;
-            tile.visible = shape.type >= 0;
-        }
-    }
+    this.boardView.x = startX;
+    this.boardView.y = startY;
+    this.boardView.gridSize = gridSize;
+    this.boardView.drawShape();
     board.x = startX;
     board.y = startY;
     board.gridSize = size / boardSize;
-    var delSh = this.board.deletedShapes;
-    for (var i = 0; i < delSh.length; i++) {
-        var sh = delSh[i];
-        // some shapes have no sprites attached
-        if (sh.sprite) {
-            sh.sprite.alpha = sh.tickClear / sh.tickClearTotal;
-        }
-        if (sh.tickClear == 1) {
-            if (sh.sprite) {
-                sh.sprite.kill();
-            }
-        }
-    }
-    this.shapeGroup.forEachAlive(function (spr) {
-        var sh = spr.data;
-        if (this.board.getShape(sh.x, sh.y) !== sh) {
-            sh.sprite = null;
-            spr.kill();
-        }
-    });
     var scores = this.board.gainScores, aliveScoreTexts = [];
     for (var i = 0; i < scores.length; i++) {
         var s = scores[i];
@@ -451,31 +366,7 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         }
     }
     this.scorePopups = aliveScoreTexts;
-    var sc = 0;
-    for (var i = 0; i < this.board.runningItems.length; i++) {
-        var it = this.board.runningItems[i];
-        var pos = it.getSpritePositions();
-        for (var j = 0; j < pos.length; j++) {
-            var sp = this.effectSprites[sc++];
-            var frameName = pos[j][4];
-            if (!sp) {
-                sp = this.effectGroup.getFirstDead(true, 100, 100, 'shapes', frameName);
-                sp.shader = this.brightShader;
-                sp.alpha = 1;
-                sp.anchor = new Phaser.Point(0.5, 0.5);
-                this.effectSprites.push(sp);
-            }
-            if (sp.frameName !== frameName)
-                sp.frameName = frameName;
-            sp.x = startX + (pos[j][0] + 0.5) * gridSize;
-            sp.y = startY + (pos[j][1] + 0.5) * gridSize;
-            sp.scale.x = pos[j][2] * scale;
-            sp.scale.y = pos[j][3] * scale;
-        }
-    }
-    while (sc < this.effectSprites.length) {
-        this.effectSprites.pop().kill();
-    }
+    this.boardView.drawEffects(this.effectGroup);
     this.anncs.x = startX + this.board.width * gridSize / 2;
     this.anncs.y = startY + this.board.height * gridSize / 2;
 };
