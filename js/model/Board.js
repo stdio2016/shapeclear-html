@@ -8,7 +8,6 @@ function Board(game, width, height) {
     this.matchFinder = new MatchFinder();
     this.deletedShapes = [];
     this.runningItems = [];
-    this.stoppedItems = [];
     this.falling = false;
     this.changed = false;
     this.debug = new Debug(this);
@@ -301,14 +300,10 @@ Board.prototype.findSpecial = function (specialTest) {
 Board.prototype.itemClearUpdate = function () {
     var itemsToUpdate = this.runningItems;
     this.runningItems = [];
-    this.stoppedItems = [];
     for (var i = 0; i < itemsToUpdate.length; i++) {
         var alive = itemsToUpdate[i].update(this);
         if (alive) {
             this.runningItems.push(itemsToUpdate[i]);
-        }
-        else {
-            this.stoppedItems.push(itemsToUpdate[i]);
         }
     }
 };
@@ -469,7 +464,7 @@ Board.prototype.moveShape = function (shape, dx, dy) {
     }
     shape.dir = {x: dx, y: dy}; // assign direction
     var pos = shape.x + shape.y * this.width;
-    this.shapes[pos] = new Shape(0, shape.x + dx, shape.y + dy, this);
+    this.shapes[pos] = this.shapes[pos + this.width * dy + dx];
     this.shapes[pos + this.width * dy + dx] = shape;
     shape.x += dx; shape.y += dy;
 };
