@@ -82,8 +82,9 @@ ScoreText.prototype.showAtPosition = function (x, y, charHeight) {
     }
 };
 
-ScoreText.prototype.popup = function (boardx, boardy, boardsize) {
-    this.lifetime--;
+ScoreText.prototype.popup = function (boardx, boardy, boardsize, lifetime) {
+    if (lifetime == null) this.lifetime--;
+    else this.lifetime = lifetime;
     if (this.lifetime >= 90) {
         this.showAtPosition(
           boardx + boardsize * (this.x + 0.5),

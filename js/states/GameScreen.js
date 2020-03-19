@@ -212,6 +212,7 @@ GameScreen.prototype.update = function () {
     // Uncomment this to test layout
     //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
     this.updateSelectSprite();
+    this.updateScoreText();
 };
 
 GameScreen.prototype.fixTime = function () {
@@ -271,7 +272,19 @@ GameScreen.prototype.updateOnce = function () {
     if (AppleFools.DROP_COLOR_COUNT == 0) this.cachedHint = null; // level editor
     this.boardView.cachedHint = this.cachedHint;
     this.boardView.hintTimer = this.hintTimer;
-    this.updateScoreText();
+    var scoreTexts = this.scorePopups;
+    while (scoreTexts.length > 0 && scoreTexts[0].lifetime <= 0) {
+        if (scoreTexts[0].view) scoreTexts[0].view.kill();
+        scoreTexts.shift();
+    }
+    var scores = this.board.gainScores;
+    for (var i = 0; i < scores.length; i++) {
+        scores[i].lifetime = 100;
+        scoreTexts.push(scores[i]);
+    }
+    for (var i = 0; i < scoreTexts.length; i++) {
+        scoreTexts[i].lifetime -= 1;
+    }
 };
 
 GameScreen.prototype.updateSelectSprite = function () {
@@ -358,24 +371,12 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
 };
 
 GameScreen.prototype.updateScoreText = function () {
-    var scores = this.board.gainScores, aliveScoreTexts = [];
-    for (var i = 0; i < scores.length; i++) {
-        var s = scores[i];
-        var st = new ScoreText(s.score, s.type, s.x, s.y, this.digitGroup);
-        st.popup(board.x, board.y, board.gridSize);
-        aliveScoreTexts.push(st);
-    }
+    var board = this.boardView;
     for (var i = 0; i < this.scorePopups.length; i++) {
         var st = this.scorePopups[i];
-        st.popup(board.x, board.y, board.gridSize);
-        if (st.lifetime <= 0) {
-            st.kill();
-        }
-        else {
-            aliveScoreTexts.push(st);
-        }
+        if (!st.view) st.view = new ScoreText(st.score, st.type, st.x, st.y, this.digitGroup);
+        st.view.popup(board.x, board.y, board.gridSize, st.lifetime);
     }
-    this.scorePopups = aliveScoreTexts;
 };
 
 GameScreen.prototype.render = function (game) {
