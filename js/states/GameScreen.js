@@ -173,6 +173,7 @@ GameScreen.prototype.update = function () {
         this.speedup += 0.001;
     }
     this.fixTime();
+    this.resizeUI();
     this.touchDetector.update();
     var runTime = this.runTime;
     runTime[3] = Math.min(runTime[3] + runTime[5]/10 * 60, 5);
@@ -180,6 +181,37 @@ GameScreen.prototype.update = function () {
         this.updateOnce();
         runTime[3] -= Math.max(1 / this.speedup, 0.001);
     }
+
+    this.boardView.drawShape();
+    this.boardView.drawEffects(this.effectGroup);
+
+    this.anncs.x = this.boardView.x + this.board.width * this.boardView.gridSize / 2;
+    this.anncs.y = this.boardView.y + this.board.height * this.boardView.gridSize / 2;
+
+    var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
+    this.lblTime.fontSize = fontSize;
+    this.lblScore.fontSize = fontSize;
+    this.debug.fontSize = fontSize;
+    this.debug.text = this.board.debug.getDebugMessage();
+    this.background.width = game.width;
+    this.background.height = game.height;
+
+    var castleScale = Math.min(this.game.height * 0.9, this.game.width) / 800;
+    this.castle.scale.set(castleScale, castleScale);
+    this.castle.position.set(this.game.width / 2, this.game.height * 0.705);
+
+    this.scoreText.setScore(this.board.score);
+    var remainingTime = this.board.remainingTime;
+    if (Math.ceil(remainingTime / 60) <= 10 && (remainingTime-1)%60 >= 30 || remainingTime == 0) {
+        this.timeText.setColor(1);
+    }
+    else {
+        this.timeText.setColor(0);
+    }
+    this.timeText.setScore(Math.ceil(remainingTime / 60));
+    // Uncomment this to test layout
+    //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
+    this.updateSelectSprite();
 };
 
 GameScreen.prototype.fixTime = function () {
@@ -235,35 +267,11 @@ GameScreen.prototype.updateOnce = function () {
                 this.cachedHint = hint[Math.floor(hint.length*Math.random())][2];
         }
     }
-    this.boardView.cachedHint = this.cachedHint;
-    this.boardView.hintTimer = this.hintTimer;
     if (this.board.swaps.length > 0 || !this.cachedHint) this.hintTimer = 0;
     if (AppleFools.DROP_COLOR_COUNT == 0) this.cachedHint = null; // level editor
-    var fontSize = Math.round(Math.min(game.width, game.height) * 0.05);
-    this.lblTime.fontSize = fontSize;
-    this.lblScore.fontSize = fontSize;
-    this.debug.fontSize = fontSize;
-    this.debug.text = this.board.debug.getDebugMessage();
-    this.background.width = game.width;
-    this.background.height = game.height;
-
-    var castleScale = Math.min(this.game.height * 0.9, this.game.width) / 800;
-    this.castle.scale.set(castleScale, castleScale);
-    this.castle.position.set(this.game.width / 2, this.game.height * 0.705);
-
-    this.scoreText.setScore(this.board.score);
-    var remainingTime = this.board.remainingTime;
-    if (Math.ceil(remainingTime / 60) <= 10 && (remainingTime-1)%60 >= 30 || remainingTime == 0) {
-        this.timeText.setColor(1);
-    }
-    else {
-        this.timeText.setColor(0);
-    }
-    this.timeText.setScore(Math.ceil(remainingTime / 60));
-    // Uncomment this to test layout
-    //this.scoreText.setScore(Math.floor(this.scoreText.value * 1.1)+1);
-    this.resizeUI();
-    this.updateSelectSprite();
+    this.boardView.cachedHint = this.cachedHint;
+    this.boardView.hintTimer = this.hintTimer;
+    this.updateScoreText();
 };
 
 GameScreen.prototype.updateSelectSprite = function () {
@@ -344,10 +352,12 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     this.boardView.x = startX;
     this.boardView.y = startY;
     this.boardView.gridSize = gridSize;
-    this.boardView.drawShape();
     board.x = startX;
     board.y = startY;
     board.gridSize = size / boardSize;
+};
+
+GameScreen.prototype.updateScoreText = function () {
     var scores = this.board.gainScores, aliveScoreTexts = [];
     for (var i = 0; i < scores.length; i++) {
         var s = scores[i];
@@ -366,9 +376,6 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
         }
     }
     this.scorePopups = aliveScoreTexts;
-    this.boardView.drawEffects(this.effectGroup);
-    this.anncs.x = startX + this.board.width * gridSize / 2;
-    this.anncs.y = startY + this.board.height * gridSize / 2;
 };
 
 GameScreen.prototype.render = function (game) {
