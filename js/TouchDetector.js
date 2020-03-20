@@ -1,6 +1,7 @@
-function TouchDetector(game, board) {
+function TouchDetector(game, boardview) {
     this.game = game;
-    this.board = board;
+    this.board = boardview.board;
+    this.view = boardview;
     this.pointers = [];
     this.lastPointed = null; // last click position, a Phaser.Point(int, int)
     for (var i=0; i<10; i++){
@@ -78,9 +79,9 @@ TouchDetector.prototype.process = function (index, pointer) {
 };
 
 TouchDetector.prototype.convertPointToGrid = function (point) {
-    var board = this.board;
-    var x = Math.floor((point.x - board.x) / board.gridSize);
-    var y = Math.floor((point.y - board.y) / board.gridSize);
+    var board = this.board, view = this.view;
+    var x = Math.floor((point.x - view.x) / view.gridSize);
+    var y = Math.floor((point.y - view.y) / view.gridSize);
     if (x >= 0 && x < board.width && y >= 0 && y < board.height){
         return [x, y];
     }
@@ -88,9 +89,9 @@ TouchDetector.prototype.convertPointToGrid = function (point) {
 };
 
 TouchDetector.prototype.calcDirection = function (from, to) {
-    var board = this.board;
-    var cx = board.x + (from.x + 1/2) * board.gridSize;
-    var cy = board.y + (from.y + 1/2) * board.gridSize;
+    var board = this.board, view = this.view;
+    var cx = view.x + (from.x + 1/2) * view.gridSize;
+    var cy = view.y + (from.y + 1/2) * view.gridSize;
     var out;
     // if (to.x + to.y) > (cx + cy), then direction is right or down
     if (to.x - cx > to.y - cy) { // up or right

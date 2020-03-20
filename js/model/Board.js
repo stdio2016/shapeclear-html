@@ -24,11 +24,6 @@ function Board(game, width, height) {
     this.randomColors = [1,2,3,4,5,6];
     this.goodCount = 0;
     this.hooks = [];
-
-    // position of board in the game
-    this.x = 0;
-    this.y = 0;
-    this.gridSize = 0;
 }
 Board.STARTING = 0;
 Board.PLAYING = 1;

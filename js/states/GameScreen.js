@@ -103,7 +103,7 @@ GameScreen.prototype.create = function () {
     this.board.addHook(this, this.onBoardEvent);
     this.boardView = new BoardView(this.game, this.board);
     this.effectGroup = this.add.group();
-    this.touchDetector = new TouchDetector(this.game, this.board);
+    this.touchDetector = new TouchDetector(this.game, this.boardView);
     this.addSelectSprite();
     this.music = this.game.add.sound('music2');
     this.music.loop = true;
@@ -292,18 +292,18 @@ GameScreen.prototype.updateSelectSprite = function () {
     for (var i=0; i<ptrs.length; i++) {
         var spr = ptrs[i].selectSprite;
         spr.visible = ptrs[i].isDown && ptrs[i].tracking;
-        spr.x = this.board.x + this.board.gridSize * ptrs[i].x;
-        spr.y = this.board.y + this.board.gridSize * ptrs[i].y;
-        spr.width = this.board.gridSize;
-        spr.height = this.board.gridSize;
+        spr.x = this.boardView.x + this.boardView.gridSize * ptrs[i].x;
+        spr.y = this.boardView.y + this.boardView.gridSize * ptrs[i].y;
+        spr.width = this.boardView.gridSize;
+        spr.height = this.boardView.gridSize;
     }
     if (this.touchDetector.lastPointed !== null) {
         var spr = ptrs[0].selectSprite, pos = this.touchDetector.lastPointed;
         spr.visible = true;
-        spr.x = this.board.x + this.board.gridSize * pos.x;
-        spr.y = this.board.y + this.board.gridSize * pos.y;
-        spr.width = this.board.gridSize;
-        spr.height = this.board.gridSize;
+        spr.x = this.boardView.x + this.boardView.gridSize * pos.x;
+        spr.y = this.boardView.y + this.boardView.gridSize * pos.y;
+        spr.width = this.boardView.gridSize;
+        spr.height = this.boardView.gridSize;
     }
 };
 
@@ -365,9 +365,6 @@ GameScreen.prototype.resizeBoard = function(leftX, topY, size){
     this.boardView.x = startX;
     this.boardView.y = startY;
     this.boardView.gridSize = gridSize;
-    board.x = startX;
-    board.y = startY;
-    board.gridSize = size / boardSize;
 };
 
 GameScreen.prototype.updateScoreText = function () {
