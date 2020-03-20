@@ -103,8 +103,8 @@ function fromCache(req, event) {
         if (i !== -1) req = req.url.substring(0, i);
         return c.match(req).then(function (result) {
             if (result) {
-                // don't update cache
-                //if (event) event.waitUntil(updateCache(req, cache));
+                // update cache
+                if (event) event.waitUntil(updateCache(req, cache));
                 return result;
             }
             nocache = true;
