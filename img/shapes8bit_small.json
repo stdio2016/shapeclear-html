@@ -72,6 +72,14 @@
 	"sourceSize": {"w":36,"h":36}
 }
 ,{
+	"filename": "elc",
+	"frame": {"x":179,"y":33,"w":30,"h":30},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":3,"w":30,"h":30},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
 	"filename": "hexagon",
 	"frame": {"x":243,"y":1,"w":24,"h":30},
 	"rotated": false,
@@ -105,14 +113,6 @@
 }
 ,{
 	"filename": "rhombus",
-	"frame": {"x":179,"y":33,"w":30,"h":30},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":3,"y":3,"w":30,"h":30},
-	"sourceSize": {"w":36,"h":36}
-}
-,{
-	"filename": "rhombusHStripe",
 	"frame": {"x":179,"y":1,"w":30,"h":30},
 	"rotated": false,
 	"trimmed": true,
@@ -120,7 +120,7 @@
 	"sourceSize": {"w":36,"h":36}
 }
 ,{
-	"filename": "rhombusVStripe",
+	"filename": "rhombusHStripe",
 	"frame": {"x":211,"y":33,"w":30,"h":30},
 	"rotated": false,
 	"trimmed": true,
@@ -128,8 +128,16 @@
 	"sourceSize": {"w":36,"h":36}
 }
 ,{
-	"filename": "rhombusWrapped",
+	"filename": "rhombusVStripe",
 	"frame": {"x":211,"y":1,"w":30,"h":30},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":3,"w":30,"h":30},
+	"sourceSize": {"w":36,"h":36}
+}
+,{
+	"filename": "rhombusWrapped",
+	"frame": {"x":243,"y":33,"w":30,"h":30},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":3,"w":30,"h":30},
@@ -181,14 +189,6 @@
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":6,"w":24,"h":24},
-	"sourceSize": {"w":36,"h":36}
-}
-,{
-	"filename": "taser",
-	"frame": {"x":243,"y":33,"w":30,"h":30},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":3,"y":3,"w":30,"h":30},
 	"sourceSize": {"w":36,"h":36}
 }
 ,{

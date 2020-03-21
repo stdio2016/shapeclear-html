@@ -19,7 +19,7 @@ function Shape(type, x, y, board) {
 }
 
 Shape.typeNames = ['triangle', 'square', 'circle', 'hexagon',
- 'downTriangle', 'rhombus', 'apple', 'pineapple', 'pen', 'taser'];
+ 'downTriangle', 'rhombus', 'apple', 'pineapple', 'pen', 'elc'];
 Shape.UNMATCHABLE_TYPE = 100;
 
 Shape.prototype.canSwap = function () {

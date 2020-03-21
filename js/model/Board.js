@@ -272,7 +272,7 @@ Board.prototype.findFirstSpecial = function () {
     if (!hasSpecial) hasSpecial = this.findSpecial(function (sh) {
         return sh.special === StripedShape.HORIZONTAL || sh.special === StripedShape.VERTICAL;
     });
-    if (!hasSpecial) hasSpecial = this.findSpecial(TaserShape.SPECIAL);
+    if (!hasSpecial) hasSpecial = this.findSpecial(ElcShape.SPECIAL);
     return hasSpecial;
 };
 

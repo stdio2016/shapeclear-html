@@ -80,6 +80,14 @@
 	"sourceSize": {"w":72,"h":72}
 }
 ,{
+	"filename": "elc",
+	"frame": {"x":469,"y":67,"w":60,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
+	"sourceSize": {"w":72,"h":72}
+}
+,{
 	"filename": "hexagon",
 	"frame": {"x":817,"y":11,"w":52,"h":60},
 	"rotated": false,
@@ -129,7 +137,7 @@
 }
 ,{
 	"filename": "rhombus",
-	"frame": {"x":469,"y":67,"w":60,"h":60},
+	"frame": {"x":531,"y":67,"w":60,"h":60},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
@@ -153,7 +161,7 @@
 }
 ,{
 	"filename": "rhombusWrapped",
-	"frame": {"x":531,"y":67,"w":60,"h":60},
+	"frame": {"x":593,"y":67,"w":60,"h":60},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
@@ -205,14 +213,6 @@
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":11,"y":11,"w":50,"h":50},
-	"sourceSize": {"w":72,"h":72}
-}
-,{
-	"filename": "taser",
-	"frame": {"x":593,"y":67,"w":60,"h":60},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":6,"y":6,"w":60,"h":60},
 	"sourceSize": {"w":72,"h":72}
 }
 ,{

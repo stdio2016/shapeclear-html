@@ -46,7 +46,7 @@ BoardGen.instantiate = function instantiate(id, config) {
     if (id === "hs") return new StripedShape(99, StripedShape.HORIZONTAL);
     if (id === "vs") return new StripedShape(99, StripedShape.VERTICAL);
     if (id === "w") return new WrappedShape(99);
-    if (id === "t") return new TaserShape();
+    if (id === "t") return new ElcShape();
     // unrecognised
     return new Shape(99);
 };

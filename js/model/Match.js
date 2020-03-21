@@ -206,11 +206,11 @@ MatchFinder.prototype.clearMatch = function (board) {
             this.putSpecial(board, m, sh);
         }
         if (m.hlength >= 5) {
-            sh = new TaserShape(m.hx+2, m.hy, board);
+            sh = new ElcShape(m.hx+2, m.hy, board);
             this.putSpecial(board, m, sh);
         }
         if (m.vlength >= 5 && m.hlength < 5) {
-            sh = new TaserShape(m.vx, m.vy+2, board);
+            sh = new ElcShape(m.vx, m.vy+2, board);
             this.putSpecial(board, m, sh);
         }
         board.combo++;
@@ -289,7 +289,7 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
     // make special shape
     var spec = null;
     if (m.hlength >= 5 || m.vlength >= 5) {
-        spec = new TaserShape(x, y, board);
+        spec = new ElcShape(x, y, board);
     }
     else if (m.type === Match.CROSS) {
         spec = new WrappedShape(type, x, y, board);

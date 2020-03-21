@@ -1,67 +1,67 @@
-function TaserShape(x, y, board) {
+function ElcShape(x, y, board) {
     Shape.call(this, Shape.UNMATCHABLE_TYPE, x, y, board);
     this.state = WrappedShape.NORMAL;
-    this.special = TaserShape.SPECIAL;
+    this.special = ElcShape.SPECIAL;
 }
 
-TaserShape.SPECIAL = 5;
-TaserShape.NORMAL = 0;
-TaserShape.ACTIVE = 1;
-TaserShape.DISCHARGING = 2;
-TaserShape.FINISHED = 3;
+ElcShape.SPECIAL = 5;
+ElcShape.NORMAL = 0;
+ElcShape.ACTIVE = 1;
+ElcShape.DISCHARGING = 2;
+ElcShape.FINISHED = 3;
 
-TaserShape.prototype = new Shape();
-TaserShape.prototype.constructor = TaserShape;
+ElcShape.prototype = new Shape();
+ElcShape.prototype.constructor = ElcShape;
 
-TaserShape.prototype.update = function () {
-    if (this.state === TaserShape.ACTIVE) {
-        this.state = TaserShape.DISCHARGING;
+ElcShape.prototype.update = function () {
+    if (this.state === ElcShape.ACTIVE) {
+        this.state = ElcShape.DISCHARGING;
     }
 };
 
-TaserShape.prototype.canBeCleared = function () {
+ElcShape.prototype.canBeCleared = function () {
     if (Shape.prototype.canBeCleared.call(this)) {
-        return this.state === TaserShape.FINISHED;
+        return this.state === ElcShape.FINISHED;
     }
     return false;
 };
 
-TaserShape.prototype.canCrush = function () {
+ElcShape.prototype.canCrush = function () {
     if (Shape.prototype.canBeCleared.call(this)) {
-        return this.state === TaserShape.NORMAL || this.state === TaserShape.FINISHED;
+        return this.state === ElcShape.NORMAL || this.state === ElcShape.FINISHED;
     }
     return false;
 };
 
-TaserShape.prototype.crush = function (board, color) {
-    if (this.state === TaserShape.NORMAL) {
-        this.state = TaserShape.ACTIVE;
-        board.addItemToClear(new TaserEffect(board, color, this));
+ElcShape.prototype.crush = function (board, color) {
+    if (this.state === ElcShape.NORMAL) {
+        this.state = ElcShape.ACTIVE;
+        board.addItemToClear(new ElcEffect(board, color, this));
         board.goodCount += 1;
     }
     return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };
 
-TaserShape.prototype.canFall = function () {
-    return Shape.prototype.canFall.call(this) && this.state !== TaserShape.DISCHARGING;
+ElcShape.prototype.canFall = function () {
+    return Shape.prototype.canFall.call(this) && this.state !== ElcShape.DISCHARGING;
 };
 
-function TaserEffect(board, color, taser) {
+function ElcEffect(board, color, elc) {
     this.board = board;
     this.totalTicks = 3;
     this.tick = this.totalTicks;
     this.progress = 0;
     this.type = color || board.randomColors[this.board.game.rnd.between(0, AppleFools.COLOR_COUNT-1)];
-    this.taser = taser;
+    this.elc = elc;
     // shapes to clear
     this.all = [];
     this.clearing = [];
     this.count = 0;
     this.done = false;
-    taser.state = TaserShape.DISCHARGING;
+    elc.state = ElcShape.DISCHARGING;
 }
 
-TaserEffect.prototype.elcShape = function (type) {
+ElcEffect.prototype.elcShape = function (type) {
     var shapes = this.board.shapes;
     for (var i = 0; i < shapes.length; i++) {
         if (shapes[i].type == type && shapes[i].canCrush()) {
@@ -72,7 +72,7 @@ TaserEffect.prototype.elcShape = function (type) {
     }
 };
 
-TaserEffect.prototype.update = function () {
+ElcEffect.prototype.update = function () {
     'use strict';
     if (this.tick === this.totalTicks) {
         if (this.progress === 0) {
@@ -99,7 +99,7 @@ TaserEffect.prototype.update = function () {
                 this.done = true;
             }
         }
-        //  taser has no target!
+        //  elc has no target!
         if (this.count === 0) {
             this.done = true;
         }
@@ -113,10 +113,10 @@ TaserEffect.prototype.update = function () {
         this.progress++;
     }
     if (this.done) {
-        this.taser.state = TaserShape.FINISHED;
-        if (!this.taser.cleared) {
-            this.board.clearShape(this.taser.x, this.taser.y);
-            if (!this.taser.cleared) {
+        this.elc.state = ElcShape.FINISHED;
+        if (!this.elc.cleared) {
+            this.board.clearShape(this.elc.x, this.elc.y);
+            if (!this.elc.cleared) {
                 return true;
             }
         }
@@ -125,11 +125,11 @@ TaserEffect.prototype.update = function () {
 };
 
 // returns array of [x, y, width, height, frameName]'s
-TaserEffect.prototype.getSpritePositions = function () {
+ElcEffect.prototype.getSpritePositions = function () {
     var lb = Math.max(this.progress - 2, 0);
     var ub = Math.min(this.count, this.progress + 1);
     var ans = [];
-    var tz = this.taser;
+    var tz = this.elc;
     var tzx = (tz.x - tz.dir.x * tz.pos / 10);
     var tzy = (tz.y - tz.dir.y * tz.pos / 10);
     var sw = 0.6, sh = 0.6;
@@ -139,27 +139,27 @@ TaserEffect.prototype.getSpritePositions = function () {
         ans.push([
           (s.x - s.dir.x * s.pos / 10) * t + tzx * (1-t),
           (s.y - s.dir.y * s.pos / 10) * t + tzy * (1-t),
-          sw, sh, "taser"
+          sw, sh, "elc"
         ]);
     }
     return ans;
 };
 
-function TaserComboEffect(board, taser, shape) {
+function ElcComboEffect(board, elc, shape) {
     this.totalTicks = 10;
     this.initialDelay = 30;
     this.tick = 0;
-    this.taser = taser;
+    this.elc = elc;
     this.shape = shape;
     this.color = shape.type;
     this.type = shape.special;
     this.phase = 0;
     this.progress = 0;
     this.all = [];
-    board.lockPosition(taser.x, taser.y, this);
+    board.lockPosition(elc.x, elc.y, this);
 }
 
-TaserComboEffect.prototype.elcShape = function (board, type) {
+ElcComboEffect.prototype.elcShape = function (board, type) {
     var shapes = board.shapes;
     for (var i = 0; i < shapes.length; i++) {
         if (shapes[i].type == type && shapes[i].canCrush()) {
@@ -182,7 +182,7 @@ TaserComboEffect.prototype.elcShape = function (board, type) {
     }
 };
 
-TaserComboEffect.prototype.update = function (board) {
+ElcComboEffect.prototype.update = function (board) {
     this.tick++;
     if (this.phase === 0) {
         if (this.tick === 1) {
@@ -196,7 +196,7 @@ TaserComboEffect.prototype.update = function (board) {
         board.itemChanged = true;
     }
     else if (this.phase === 1) {
-        board.unlockPosition(this.taser.x, this.taser.y, this);
+        board.unlockPosition(this.elc.x, this.elc.y, this);
         if (this.tick === this.totalTicks) {
             this.tick = 0;
             while (this.progress < this.all.length) {
@@ -222,9 +222,9 @@ TaserComboEffect.prototype.update = function (board) {
     return true;
 };
 
-TaserComboEffect.prototype.getSpritePositions = function () {
+ElcComboEffect.prototype.getSpritePositions = function () {
     var ans = [];
-    var tz = this.taser;
+    var tz = this.elc;
     var tzx = (tz.x - tz.dir.x * tz.pos / 10);
     var tzy = (tz.y - tz.dir.y * tz.pos / 10);
     var sw = 0.6, sh = 0.6;
@@ -235,27 +235,27 @@ TaserComboEffect.prototype.getSpritePositions = function () {
             ans.push([
               (s.x - s.dir.x * s.pos / 10) * t + tzx * (1-t),
               (s.y - s.dir.y * s.pos / 10) * t + tzy * (1-t),
-              sw, sh, "taser"
+              sw, sh, "elc"
             ]);
         }
     }
     return ans;
 };
 
-function DoubleTaserEffect(board, taser1, taser2) {
+function DoubleElcEffect(board, elc1, elc2) {
     this.board = board;
     this.progress = 0;
     this.tick = 0;
     this.totalTicks = 1;
     this.showTime = 12;
-    this.taser1 = taser1;
-    this.taser2 = taser2;
+    this.elc1 = elc1;
+    this.elc2 = elc2;
     this.done = false;
-    taser1.state = TaserShape.DISCHARGING;
-    taser2.state = TaserShape.DISCHARGING;
+    elc1.state = ElcShape.DISCHARGING;
+    elc2.state = ElcShape.DISCHARGING;
 }
 
-DoubleTaserEffect.prototype.update = function (board) {
+DoubleElcEffect.prototype.update = function (board) {
     board.changed = true;
     this.tick++;
     if (this.tick >= this.totalTicks) {
@@ -276,11 +276,11 @@ DoubleTaserEffect.prototype.update = function (board) {
                 }
             }
             if (p >= board.width * board.height - 1) {
-                this.taser1.state = TaserShape.FINISHED;
-                this.taser2.state = TaserShape.FINISHED;
-                board.clearShape(this.taser1.x, this.taser1.y);
-                board.clearShape(this.taser2.x, this.taser2.y);
-                if (this.taser1.cleared && this.taser2.cleared)
+                this.elc1.state = ElcShape.FINISHED;
+                this.elc2.state = ElcShape.FINISHED;
+                board.clearShape(this.elc1.x, this.elc1.y);
+                board.clearShape(this.elc2.x, this.elc2.y);
+                if (this.elc1.cleared && this.elc2.cleared)
                     return false;
                 else { // try again
                     this.tick = this.totalTicks;
@@ -293,12 +293,12 @@ DoubleTaserEffect.prototype.update = function (board) {
     return true;
 };
 
-DoubleTaserEffect.prototype.getSpritePositions = function () {
+DoubleElcEffect.prototype.getSpritePositions = function () {
     var ans = [];
-    var tz = this.taser1;
+    var tz = this.elc1;
     var tzx = (tz.x - tz.dir.x * tz.pos / 10);
     var tzy = (tz.y - tz.dir.y * tz.pos / 10);
-    var tz2 = this.taser2;
+    var tz2 = this.elc2;
     var tz2x = (tz2.x - tz2.dir.x * tz2.pos / 10);
     var tz2y = (tz2.y - tz2.dir.y * tz2.pos / 10);
     var sw = 0.6, sh = 0.6;
@@ -311,7 +311,7 @@ DoubleTaserEffect.prototype.getSpritePositions = function () {
         ans.push([
           x * t + (tzx + tz2x) * 0.5 * (1-t),
           y * t + (tzy + tz2y) * 0.5 * (1-t),
-          sw, sh, "taser"
+          sw, sh, "elc"
         ]);
     }
     return ans;

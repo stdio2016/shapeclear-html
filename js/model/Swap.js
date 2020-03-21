@@ -21,23 +21,23 @@ Swap.isSpecialCombo = function (from, to) {
     if (from instanceof StripedShape) {
         if (to instanceof StripedShape) ;
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) ;
-        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) ;
+        else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) ;
         else return false;
     }
     else if (from instanceof WrappedShape && from.state === WrappedShape.NORMAL) {
         if (to instanceof StripedShape) ;
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) ;
-        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) ;
+        else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) ;
         else return false;
     }
-    else if (from instanceof TaserShape && from.state === TaserShape.NORMAL) {
+    else if (from instanceof ElcShape && from.state === ElcShape.NORMAL) {
         if (to instanceof StripedShape) ;
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) ;
-        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) ;
+        else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) ;
         else if (to.canMatch()) ;
         else return false;
     }
-    else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
+    else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) {
         if (from.canMatch()) ;
         else return false;
     }
@@ -68,9 +68,9 @@ Swap.prototype.specialCombo = function (board) {
             var e = new BigStripeEffect(board, from, to);
             board.addItemToClear(e);
         }
-        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
+        else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) {
             board.setShape(to.x, to.y, 0);
-            var e = new TaserComboEffect(board, to, from);
+            var e = new ElcComboEffect(board, to, from);
             board.addItemToClear(e);
         }
         else return false;
@@ -85,26 +85,26 @@ Swap.prototype.specialCombo = function (board) {
             board.clearShape(from.x, from.y);
             board.clearShape(to.x, to.y);
         }
-        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
+        else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) {
             board.setShape(to.x, to.y, 0);
-            var e = new TaserComboEffect(board, to, from);
+            var e = new ElcComboEffect(board, to, from);
             board.addItemToClear(e);
         }
         else return false;
     }
-    else if (from instanceof TaserShape && from.state === TaserShape.NORMAL) {
+    else if (from instanceof ElcShape && from.state === ElcShape.NORMAL) {
         if (to instanceof StripedShape) {
             board.setShape(from.x, from.y, 0);
-            var e = new TaserComboEffect(board, from, to);
+            var e = new ElcComboEffect(board, from, to);
             board.addItemToClear(e);
         }
         else if (to instanceof WrappedShape && to.state === WrappedShape.NORMAL) {
             board.setShape(from.x, from.y, 0);
-            var e = new TaserComboEffect(board, from, to);
+            var e = new ElcComboEffect(board, from, to);
             board.addItemToClear(e);
         }
-        else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
-            var e = new DoubleTaserEffect(board, from, to);
+        else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) {
+            var e = new DoubleElcEffect(board, from, to);
             board.addItemToClear(e);
         }
         else if (to.canMatch()) {
@@ -112,7 +112,7 @@ Swap.prototype.specialCombo = function (board) {
         }
         else return false;
     }
-    else if (to instanceof TaserShape && to.state === TaserShape.NORMAL) {
+    else if (to instanceof ElcShape && to.state === ElcShape.NORMAL) {
         if (from.canMatch()) {
             board.clearShape(to.x, to.y, from.type);
         }
