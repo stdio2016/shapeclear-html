@@ -2,6 +2,7 @@ function BoardView(game, board) {
     this.board = board;
     this.game = game;
     this.boardGroup = game.add.group(game.world, 'boardGroup');
+    this.boardGroup.alpha = 0.8;
     this.shapeGroup = game.add.group(game.world, 'shapeGroup');
     this.brightShader = null;
     this.cachedHint = null;
