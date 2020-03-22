@@ -645,7 +645,6 @@ Board.prototype.shuffle = function () {
 Board.prototype.shuffleUpdate = function () {
     this.swaps.length = 0;
     this.runningItems.length = 0;
-    this.stoppedItems.length = 0;
     if (this.tick === 0) this.emitSignal('shuffle');
     this.tick++;
     if (this.tick < 30) {
