@@ -77,7 +77,7 @@ BoardView.prototype.drawShape = function () {
                     else
                         spr.alpha = Math.max(0, (10 - board.tick) / 10);
                 }
-                if (y == 0) {
+                if (board.tiles[y * board.width + x].isDispenser) {
                     var f = spr.animations.currentFrame;
                     var yy = shape.dir.y * pos/10;
                     if (yy > (f.spriteSourceSizeY+f.height)/gridPx) spr.visible = false;

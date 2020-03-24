@@ -11,6 +11,7 @@ BoardGen.generateBoard = function genBoard(config) {
             board.setShape(j, i, oj);
         }
     }
+    BoardGen.autoCreateDispenser(board);
     // randomly assign color/shape
     for (var i = 0; i < h; i++) {
         for (var j = 0; j < w; j++) {
@@ -37,6 +38,30 @@ BoardGen.generateBoard = function genBoard(config) {
         }
     }
     return board;
+};
+
+BoardGen.autoCreateDispenser = function (board) {
+    var w = board.width, h = board.height;
+    for (var i = 0; i < w; i++) {
+        for (var j = 0; j < h; j++)
+            board.tiles[i + j * w].isDispenser = false;
+    }
+    for (var i = 0; i < w; i++) {
+        var j = 0;
+        while (j < h && board.getShape(i, j).type == -1) {
+            j++;
+        }
+        if (j < h) {
+            board.dispensers.push({
+                x: i, y: j,
+                generate: function generate(board) {
+                    var r = board.game.rnd.between(1, board.randomColors.length);
+                    return new Shape(board.randomColors[r-1]);
+                }
+            });
+            board.tiles[i + j * w].isDispenser = true;
+        }
+    }
 };
 
 BoardGen.instantiate = function instantiate(id, config) {

@@ -24,6 +24,7 @@ function Board(game, width, height) {
     this.randomColors = [1,2,3,4,5,6];
     this.goodCount = 0;
     this.hooks = [];
+    this.dispensers = [];
 }
 Board.STARTING = 0;
 Board.PLAYING = 1;
@@ -501,28 +502,29 @@ Board.prototype.fall = function () {
             }
         }
     }
-    for (var i = 0; i < this.width; i++) {
-        var dsh = this.shapes[i + this.width];
-        if (this.shapes[i].isEmpty() && !this.tileLocked(i)) {
+    // HACK way to simulate Candy Crush
+    for (var y = 0; y < this.height; y++) {
+        for (var x = 0; x < this.width; x++) {
+            this.unlockPosition(x, y, this.fall);
+        }
+    }
+    var disp = this.dispensers;
+    for (var i = 0; i < disp.length; i++) {
+        var pos = disp[i].x + disp[i].y  * this.width;
+        var dsh = this.shapes[pos + this.width];
+        if (this.shapes[pos].isEmpty() && !this.tileLocked(i)) {
             this.falling = true;
-            var r = this.game.rnd.between(0, AppleFools.DROP_COLOR_COUNT-1);
-            var sh = new Shape(this.randomColors[r], i, 0, this);
-            this.shapes[i] = sh;
+            var sh = disp[i].generate(this);
+            this.setShape(disp[i].x, disp[i].y, sh);
             sh.dir = {x: 0, y: 1};
             if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {
                 sh.pos = 10;
                 sh.speed = 0;
             }
             else {
-                sh.pos = this.shapes[i + this.width].pos;
-                sh.speed = this.shapes[i + this.width].speed;
+                sh.pos = this.shapes[pos + this.width].pos;
+                sh.speed = this.shapes[pos + this.width].speed;
             }
-        }
-    }
-    // HACK way to simulate Candy Crush
-    for (var y = 0; y < this.height; y++) {
-        for (var x = 0; x < this.width; x++) {
-            this.unlockPosition(x, y, this.fall);
         }
     }
     for (var y = 1; y < this.height; y++) {
@@ -537,7 +539,7 @@ Board.prototype.fall = function () {
     for (var i = 0; i < this.shapes.length; i++) {
         var j = i;
         var sh = this.shapes[i];
-        if (sh.type > 0 || i < this.width && sh.isEmpty()) {
+        if (sh.type > 0) {
             do {
                 wd[j] = true;
                 if (j < (this.height - 1) * this.width) {

@@ -124,7 +124,11 @@ GameScreen.prototype.create = function () {
     
     this.lblTime.inputEnabled = true;
     this.lblTime.events.onInputUp.add(function () {
-        AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT;
+        if (AppleFools.DROP_COLOR_COUNT == 0) {
+            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT;
+            this.board.dispensers = [];
+            BoardGen.autoCreateDispenser(this.board);
+        }
     }, this);
 };
 
