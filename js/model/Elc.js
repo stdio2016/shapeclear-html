@@ -2,6 +2,7 @@ function ElcShape(x, y, board) {
     Shape.call(this, Shape.UNMATCHABLE_TYPE, x, y, board);
     this.state = WrappedShape.NORMAL;
     this.special = ElcShape.SPECIAL;
+    this.apple = false;
 }
 
 ElcShape.SPECIAL = 5;
@@ -36,7 +37,9 @@ ElcShape.prototype.canCrush = function () {
 ElcShape.prototype.crush = function (board, color) {
     if (this.state === ElcShape.NORMAL) {
         this.state = ElcShape.ACTIVE;
-        board.addItemToClear(new ElcEffect(board, color, this));
+        var fx = new ElcEffect(board, color, this);
+        fx.apple = this.apple;
+        board.addItemToClear(fx);
         board.goodCount += 1;
     }
     return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
@@ -139,7 +142,7 @@ ElcEffect.prototype.getSpritePositions = function () {
         ans.push([
           (s.x - s.dir.x * s.pos / 10) * t + tzx * (1-t),
           (s.y - s.dir.y * s.pos / 10) * t + tzy * (1-t),
-          sw, sh, "elc"
+          sw, sh, this.apple ? "apple" : "elc"
         ]);
     }
     return ans;

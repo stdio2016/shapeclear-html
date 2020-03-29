@@ -42,6 +42,8 @@ BoardGen.generateBoard = function genBoard(config) {
 
 BoardGen.autoCreateDispenser = function (board) {
     var w = board.width, h = board.height;
+    var genApple = 0;
+    var appleFools = new Date().getMonth() == 3;
     for (var i = 0; i < w; i++) {
         for (var j = 0; j < h; j++)
             board.tiles[i + j * w].isDispenser = false;
@@ -56,6 +58,15 @@ BoardGen.autoCreateDispenser = function (board) {
                 x: i, y: j,
                 generate: function generate(board) {
                     var r = board.game.rnd.between(1, board.randomColors.length);
+                    if (appleFools) {
+                        if (board.combo < 4) genApple = 4;
+                        if (board.remainingTime > 0 && board.combo >= genApple) {
+                            genApple += 4;
+                            var e = new ElcShape();
+                            e.apple = true;
+                            return e;
+                        }
+                    }
                     return new Shape(board.randomColors[r-1]);
                 }
             });

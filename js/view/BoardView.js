@@ -44,6 +44,7 @@ BoardView.prototype.drawShape = function () {
                 if (shape.special == 2) frameName += "VStripe";
                 if (shape.special == 3) frameName += "Wrapped";
                 if (shape.special === 5) frameName = "elc";
+                if (shape.apple) frameName = "apple";
                 if (spr.frameName !== frameName)
                     spr.frameName = frameName;
                 if (shape.special == 4) {
