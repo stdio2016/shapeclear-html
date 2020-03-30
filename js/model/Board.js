@@ -471,11 +471,11 @@ Board.prototype.fall = function () {
         var sh = this.shapes[i], dsh = this.shapes[i + this.width];
         if (sh.isMoving()) {
             // diagonal fall is constant velocity
-            // even increasing the speed to 1.2 breaks the simulation
-            if (sh.dir.x) sh.speed = 1.1;
-            else sh.speed += 0.15; // gravity acceleration
-            if(sh.speed > 10) { // maximum speed
-                sh.speed = 10;
+            if (sh.dir.x) sh.speed = 1.2;
+            else if (sh.speed < 1.5) sh.speed += 0.15;
+            else sh.speed += 0.3; // gravity acceleration
+            if(sh.speed > 2.7) { // maximum speed
+                sh.speed = 2.7;
             }
             sh.pos -= sh.speed;
             if (!sh.bouncing) {
@@ -530,7 +530,7 @@ Board.prototype.fall = function () {
     for (var y = 1; y < this.height; y++) {
         for (var x = 0; x < this.width; x++) {
             var sh = this.getShape(x, y);
-            if (sh.pos >= 5 && sh.dir.x == 0 && sh.isMoving()) {
+            if (sh.pos >= 3 && sh.dir.x == 0 && sh.isMoving()) {
                 this.lockPosition(x-sh.dir.x, y-sh.dir.y, this.fall);
             }
         }
