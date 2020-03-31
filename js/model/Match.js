@@ -31,6 +31,7 @@ function MatchFinder() {
     this.swapMatches = [];
     this.matches = [];
     this.vertical = [];
+    this.shapes = [];
     this.getRankOfMatch = MatchFinder.getRankOfMatch;
     this.matchComparator = MatchFinder.matchComparator.bind(this);
 }
@@ -65,8 +66,9 @@ MatchFinder.prototype.findAndClearMatch = function (board, disableMatching) {
     for (var i = 0; i < board.shapes.length; i++) {
         this.vertical[i] = null;
     }
-    this.findVeritcalMatch(board);
-    this.findHorizontalMatch(board);
+    /*this.findVeritcalMatch(board);
+    this.findHorizontalMatch(board);*/
+    this.findMatch2(board);
     if (!disableMatching) this.clearMatch(board);
 };
 
@@ -135,6 +137,179 @@ MatchFinder.prototype.findHorizontalMatch = function (board) {
                 }
             }
             i += 1;
+        }
+    }
+};
+
+MatchFinder.prototype.findMatch2 = function (board) {
+    var shs = this.shapes;
+    var w = board.width, h = board.height;
+    if (shs.length == 0) {
+        for (var x = 0; x < w; x++) {
+            var r = [];
+            for (var y = 0; y < h; y++) r.push(0);
+            shs.push(r);
+        }
+    }
+    for (var x = 0; x < w; x++) {
+        for (var y = 0; y < h; y++) {
+            var oj = board.shapes[x + y * w];
+            if (oj.canMatch()) shs[x][y] = oj.type;
+            else shs[x][y] = 0;
+        }
+    }
+    
+    // find 5 match vertical
+    for (var x = 0; x < w; x++) {
+        var y = 0;
+        while (y < h - 4) {
+            var sh = shs[x][y];
+            if (sh > 0 && shs[x][y+1] == sh && shs[x][y+2] == sh
+                && shs[x][y+3] == sh && shs[x][y+4] == sh) {
+                var m = new Match(Match.VERTICAL, x, y, sh);
+                // strange cross rule
+                var left = x-1;
+                while (left >= 0 && shs[left][y] == sh) left -= 1;
+                var right = x+1;
+                while (right < w && shs[right][y] == sh) right += 1;
+                if (right - left > 3) {
+                    m.type = Match.CROSS;
+                    m.hx = left + 1;
+                    m.hy = y;
+                    m.hlength = right - left - 1;
+                    for (left = left+1; left < right; left++) {
+                        shs[left][y] = 0;
+                    }
+                }
+                // actual, normal vertical match
+                do {
+                    shs[x][y] = 0;
+                    y += 1;
+                    m.vlength += 1;
+                } while (y < h && shs[x][y] == sh) ;
+                this.matches.push(m);
+            }
+            else y += 1;
+        }
+    }
+    
+    // find 5 match horizontal
+    for (var y = 0; y < h; y++) {
+        var x = 0;
+        while (x < w - 4) {
+            var sh = shs[x][y];
+            if (sh > 0 && shs[x+1][y] == sh && shs[x+2][y] == sh
+                && shs[x+3][y] == sh && shs[x+4][y] == sh) {
+                var m = new Match(Match.HORIZONTAL, x, y, sh);
+                do {
+                    shs[x][y] = 0;
+                    x += 1;
+                    m.hlength += 1;
+                } while (x < w && shs[x][y] == sh) ;
+                this.matches.push(m);
+            }
+            else x += 1;
+        }
+    }
+    
+    // find cross
+    for (var x = 0; x < w; x++) {
+        var y = 0;
+        while (y < h - 2) {
+            var sh = shs[x][y];
+            if (sh > 0 && shs[x][y+1] == sh && shs[x][y+2] == sh) {
+                var m = new Match(Match.VERTICAL, x, y, sh);
+                do {
+                    var left = x-1;
+                    while (left >= 0 && shs[left][y] == sh) left -= 1;
+                    var right = x+1;
+                    while (right < w && shs[right][y] == sh) right += 1;
+                    if (m.type == Match.VERTICAL && right - left > 3) {
+                        m.type = Match.CROSS;
+                        m.hx = left + 1;
+                        m.hy = y;
+                        m.hlength = right - left - 1;
+                        for (left = left+1; left < right; left++) {
+                            shs[left][y] = 0;
+                        }
+                    }
+                    y += 1;
+                    m.vlength += 1;
+                } while (y < h && shs[x][y] == sh) ;
+                if (m.type == Match.CROSS) {
+                    this.matches.push(m);
+                    for (var i = m.vy; i < y; i++) {
+                        shs[x][i] = 0;
+                    }
+                }
+            }
+            else y += 1;
+        }
+    }
+    
+    // find 4 match vertical
+    for (var x = 0; x < w; x++) {
+        var y = 0;
+        while (y < h - 3) {
+            var sh = shs[x][y];
+            if (sh > 0 && shs[x][y+1] == sh && shs[x][y+2] == sh
+                && shs[x][y+3] == sh) {
+                var m = new Match(Match.VERTICAL, x, y, sh);
+                for (var i = 0; i < 4; i++) shs[x][y+i] = 0;
+                m.vlength = 4;
+                this.matches.push(m);
+                y += 4;
+            }
+            else y += 1;
+        }
+    }
+    
+    // find 4 match horizontal
+    for (var y = 0; y < h; y++) {
+        var x = 0;
+        while (x < w - 3) {
+            var sh = shs[x][y];
+            if (sh > 0 && shs[x+1][y] == sh && shs[x+2][y] == sh
+                && shs[x+3][y] == sh) {
+                var m = new Match(Match.HORIZONTAL, x, y, sh);
+                for (var i = 0; i < 4; i++) shs[x+i][y] = 0;
+                m.hlength = 4;
+                this.matches.push(m);
+                x += 4;
+            }
+            else x += 1;
+        }
+    }
+    
+    // find 3 match vertical
+    for (var x = 0; x < w; x++) {
+        var y = 0;
+        while (y < h - 2) {
+            var sh = shs[x][y];
+            if (sh > 0 && shs[x][y+1] == sh && shs[x][y+2] == sh) {
+                var m = new Match(Match.VERTICAL, x, y, sh);
+                for (var i = 0; i < 3; i++) shs[x][y+i] = 0;
+                m.vlength = 3;
+                this.matches.push(m);
+                y += 3;
+            }
+            else y += 1;
+        }
+    }
+    
+    // find 3 match horizontal
+    for (var y = 0; y < h; y++) {
+        var x = 0;
+        while (x < w - 2) {
+            var sh = shs[x][y];
+            if (sh > 0 && shs[x+1][y] == sh && shs[x+2][y] == sh) {
+                var m = new Match(Match.HORIZONTAL, x, y, sh);
+                for (var i = 0; i < 3; i++) shs[x+i][y] = 0;
+                m.hlength = 3;
+                this.matches.push(m);
+                x += 3;
+            }
+            else x += 1;
         }
     }
 };
@@ -262,7 +437,7 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
     var m = new Match(0, 0, 0, type);
     m.type = 0;
     var mx = x, my = y;
-    if (upMatch + downMatch >= 2) {
+    if (upMatch + downMatch >= 2 && leftMatch + rightMatch < 4 || upMatch + downMatch >= 4) {
         m.type |= Match.VERTICAL;
         m.vx = x;
         m.vy = y - upMatch;
@@ -272,7 +447,7 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
         }
         my = m.vy + (m.vlength - 1) / 2;
     }
-    if (leftMatch + rightMatch >= 2) {
+    if (leftMatch + rightMatch >= 2 && (upMatch + downMatch < 4 || upMatch == 0)) {
         m.type |= Match.HORIZONTAL;
         m.hx = x - leftMatch;
         m.hy = y;
@@ -317,7 +492,7 @@ MatchFinder.prototype.clearSwapMatch = function (board, x, y) {
 };
 
 MatchFinder.prototype.makeMatchSound = function (board) {
-    if (this.matches.length > 0 || this.swapMatches.length > 0) {
+    if ((this.matches.length > 0 || this.swapMatches.length > 0) && !board.debug.disableMatching) {
         var lv = Math.min(board.combo - 1, 14);
         var cn = [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24][lv];
         board.emitSignal('playSound', {name: 'match', pitch: Math.pow(2, cn/12)});
