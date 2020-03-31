@@ -538,10 +538,11 @@ GameScreen.prototype.onBoardEvent = function (evt, args) {
             function () {
                 me.speedup = 1;
                 me.saveScore(me.board.score);
-                alertBox(
-                  Translation["Time's up"] + '\n' +
+                var msg = Translation["Time's up"] + '\n' +
                   Translation["Your score: "] + me.board.score + '\n' + 
-                  Translation["Press OK to replay"], function () {
+                  Translation["Press OK to replay"];
+                if (board.state == Board.NO_MOVES) msg = Translation['No more possible moves'];
+                alertBox(msg, function () {
                     me.state.start('MainMenu');
                 });
                 if (AppleFools.AutoGame) {

@@ -60,6 +60,10 @@ Shape.prototype.canCrush = function () {
     return this.type > 0 && !this.swapping && !this.cleared;
 };
 
+Shape.prototype.canShuffle = function () {
+    return this.special == 0 && this.type > 0;
+}
+
 Shape.prototype.stopSwapping = function () {
     this.swapping = false;
     this.dir = {x: 0, y: 0};

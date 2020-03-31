@@ -72,7 +72,7 @@ BoardView.prototype.drawShape = function () {
                         spr.tint = 0xffffff;
                 }
                 spr.alpha = shape.tickClear / shape.tickClearTotal;
-                if (board.state === Board.SHUFFLING) {
+                if (board.state === Board.SHUFFLING && shape.canShuffle()) {
                     if (board.tick > 30)
                         spr.alpha = Math.max(0, (board.tick - 49) / 10);
                     else

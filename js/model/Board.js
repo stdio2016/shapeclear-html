@@ -32,6 +32,7 @@ Board.SHUFFLING = 2;
 Board.BONUS_TIME = 3;
 Board.ENDED = 4;
 Board.IDLE = 5;
+Board.NO_MOVES = 100;
 
 Board.prototype.generateSimple = function () {
     this.randomColors = [1,2,3,4,5,6];
@@ -202,6 +203,7 @@ Board.prototype.tileLocked = function (index) {
 
 Board.prototype.update = function () {
     if (this.state === Board.SHUFFLING) return this.shuffleUpdate();
+    if (this.state >= 100) return ;
     this.debug.autoSwipeTest();
     this.gainScores = [];
     this.falling = false;
@@ -621,7 +623,7 @@ Board.prototype.shuffle = function () {
         var sh = this.shapes[i];
         sh.tick = 0;
         sh.cleared = false;
-        if (sh.canSwap()) {
+        if (sh.canShuffle()) {
             r.push(sh);
         }
     }
@@ -632,7 +634,7 @@ Board.prototype.shuffle = function () {
         r[rr] = tmp;
     }
     for (var i = 0; i < this.shapes.length; i++) {
-        if (this.shapes[i].canSwap()) {
+        if (this.shapes[i].canShuffle()) {
             var sh = r.pop();
             sh.x = i%this.width;
             sh.y = i/this.width | 0;
@@ -654,16 +656,21 @@ Board.prototype.shuffleUpdate = function () {
     }
     else {
         if (this.tick === 30) {
-            // TODO: check impossible to move case
             this.shuffle();
-            // if not successful, reshuffle
-            if (this.hintMoves().length === 0) this.tick -= 1;
+            if (BoardGen.canShuffle(this)) {
+                // if not successful, reshuffle
+                if (this.hintMoves().length === 0) this.tick -= 1;
+            }
         }
         if (this.tick === 60) {
             this.state = Board.PLAYING;
             this.emitSignal('shuffleFinish');
             this.changed = true;
             this.tick = 0;
+            if (this.hintMoves().length === 0) {
+                this.state = Board.NO_MOVES;
+                this.emitSignal('endGame');
+            }
         }
     }
 };

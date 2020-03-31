@@ -86,3 +86,50 @@ BoardGen.instantiate = function instantiate(id, config) {
     // unrecognised
     return new Shape(99);
 };
+
+BoardGen.canShuffle = function shuffle(board) {
+    var shapes = board.shapes;
+    var w = board.width;
+    var h = board.height;
+    var colors = [-100, 0, 0, 0, 0, 0, 0];
+    for (var i = 0; i < w * h; i++) {
+        if (shapes[i].canShuffle()) {
+            colors[shapes[i].type] += 1;
+        }
+    }
+    var possible = false;
+    for (var i = 1; i <= 6; i++) {
+        if (colors[i] >= 3) possible = true;
+    }
+    if (!possible) return false;
+    var hasSpace = false;
+    Board.forEachPossibleMatch(0, 0, w, h, function (x1, y1, x2, y2, x3, y3, x4, y4) {
+        var sh1 = shapes[x1 + y1 * w];
+        var sh2 = shapes[x2 + y2 * w];
+        var sh3 = shapes[x3 + y3 * w];
+        var sh4 = shapes[x4 + y4 * w];
+        var common = 0, same = 0;
+        if (sh3.canSwap() && sh4.canSwap()) {
+            if (!sh1.canMatch()) return;
+            if (!sh2.canMatch()) return;
+            if (!sh3.canMatch()) return;
+            if (!sh1.canShuffle()) {
+                if (common == 0 || common == sh1.type) common = sh1.type;
+                else return ;
+                same += 1;
+            }
+            if (!sh2.canShuffle()) {
+                if (common == 0 || common == sh2.type) common = sh2.type;
+                else return ;
+                same += 1;
+            }
+            if (!sh3.canShuffle()) {
+                if (common == 0 || common == sh3.type) common = sh3.type;
+                else return ;
+                same += 1;
+            }
+            hasSpace = common == 0 || colors[common] >= 3-same;
+        }
+    });
+    return hasSpace;
+};

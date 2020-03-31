@@ -17,5 +17,6 @@
   "Input debug command:": "輸入調試指令",
   "Shuffling...": "洗牌中…",
   "Bonus Time": "加分時間",
+  "No more possible moves": "沒有辦法再移動了\n關卡設計錯誤！",
   "": ""
 }
