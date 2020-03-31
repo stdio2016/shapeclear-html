@@ -12,6 +12,11 @@
     removeResolutionFromCode(Phaser.Cache.prototype, "addBitmapFont");
     removeResolutionFromCode(Phaser.Cache.prototype, "addSpriteSheet");
     removeResolutionFromCode(Phaser.Cache.prototype, "addTextureAtlas");
+    var onEndedHandler = Phaser.Sound.prototype.onEndedHandler;
+    Phaser.Sound.prototype.onEndedHandler = function () {
+        if (this._sound)
+            onEndedHandler.call(this);
+    };
 }());
 // patch applicable only for old version of Phaser
 if (Phaser.VERSION.startsWith("2.6."))

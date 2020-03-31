@@ -403,18 +403,18 @@ GameScreen.prototype.render = function (game) {
         var m = matches[i];
         if (m.type & Match.HORIZONTAL) {
             getSprite.call(this);
-            spr.x = this.board.x + m.hx * this.board.gridSize;
-            spr.width = m.hlength * this.board.gridSize;
-            spr.y = this.board.y + (m.hy + 0.4) * this.board.gridSize;
-            spr.height = 0.2 * this.board.gridSize;
+            spr.x = this.boardView.x + m.hx * this.boardView.gridSize;
+            spr.width = m.hlength * this.boardView.gridSize;
+            spr.y = this.boardView.y + (m.hy + 0.4) * this.boardView.gridSize;
+            spr.height = 0.2 * this.boardView.gridSize;
             spr.tint = colors[i % colors.length];
         }
         if (m.type & Match.VERTICAL) {
             getSprite.call(this);
-            spr.y = this.board.y + m.vy * this.board.gridSize;
-            spr.height = m.vlength * this.board.gridSize;
-            spr.x = this.board.x + (m.vx + 0.4) * this.board.gridSize;
-            spr.width = 0.2 * this.board.gridSize;
+            spr.y = this.boardView.y + m.vy * this.boardView.gridSize;
+            spr.height = m.vlength * this.boardView.gridSize;
+            spr.x = this.boardView.x + (m.vx + 0.4) * this.boardView.gridSize;
+            spr.width = 0.2 * this.boardView.gridSize;
             spr.tint = colors[i % colors.length];
         }
     }
