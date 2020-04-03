@@ -69,7 +69,6 @@ ElcEffect.prototype.elcShape = function (type) {
     for (var i = 0; i < shapes.length; i++) {
         if (shapes[i].type == type && shapes[i].canCrush()) {
             this.count++;
-            shapes[i].cleared = true;
             this.all.push(shapes[i]);
         }
     }
@@ -85,7 +84,6 @@ ElcEffect.prototype.update = function () {
         if (this.progress < this.count+2 && this.progress > 1) {
             var sh = this.all[this.progress-2];
             if (this.board.getShape(sh.x, sh.y) === sh) {
-                sh.cleared = false;
                 var sco = this.board.clearShape(sh.x, sh.y);
                 var score = (sco.score + sco.addition) * this.count + sco.jelly + sco.blocker;
                 if (score != 0) {
