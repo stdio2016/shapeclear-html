@@ -1,0 +1,22 @@
+{
+  "Start!": "开始!",
+  "Shape Clear": "形状消消乐",
+  "Play!": "玩!",
+  "Board with holes": "有洞的盘面",
+  "Easy mode": "简单模式",
+  "Time": "时间",
+  "Score": "分数",
+  "Time's up": "时间到",
+  "Your score: ": "你的分数: ",
+  "Press OK to replay": "按 OK 键重玩",
+  "Copyright": "版权所有 (c) 2016~2020 陈羿丰",
+  "Licensed": "以 MIT 授权释出",
+  "UsePhaser": "本游戏使用 Phaser 游戏引擎",
+  "You played ": "你玩过",
+  "? times": "次",
+  "Input debug command:": "输入调试指令",
+  "Shuffling...": "洗牌中…",
+  "Bonus Time": "加分时间",
+  "No more possible moves": "没有办法再移动了\n关卡设计错误！",
+  "": ""
+}

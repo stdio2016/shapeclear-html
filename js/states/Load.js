@@ -69,12 +69,20 @@ Load.prototype.preload = function () {
     game.load.json('text', 'lang/en.json');
     var lang = navigator.languages || [navigator.language || navigator.browserLanguage];
     var supportedLanguage = {
-      "en": 1, "zh-TW": 1
+      "en": 1,
+      "zh": 1,
+      "zh-TW": 1, "zh-Hant": 1, "zh-tw": 1, "zh-hant": 1,
+      "zh-CN": 1, "zh-Hans": 1, "zh-cn": 1, "zh-hans": 1,
+      "zh-HK": 1, "zh-MO": 1, "zh-hk": 1, "zh-mo": 1
     };
     for (var i = 0; i < lang.length; i++) {
       if (lang[i] in supportedLanguage) break;
     }
-    game.load.json('translation', 'lang/' + lang[i] + '.json');
+    var langname = lang[i];
+    // Chinese is special case
+    if (/^(zh-Hant|zh-HK|zh-MO)$/i.test(langname)) langname = "zh-TW";
+    if (/^(zh-Hans|zh)$/i.test(langname)) langname = "zh-CN";
+    game.load.json('translation', 'lang/' + langname + '.json');
 
     // create texture for showing match-3
     this.game.create.texture('whiteSquare', ['2']);
