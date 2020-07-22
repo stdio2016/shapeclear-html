@@ -488,6 +488,10 @@ Board.prototype.fall = function () {
         }
         wd.push(false);
     }
+    var disp = this.dispensers;
+    for (var i = 0; i < disp.length; i++) {
+        disp[i].updateAccel(this);
+    }
     for (var x = 0; x < this.width; x++) {
         for (var y = this.height - 2; y >= 0; y--) {
             var pos = y * this.width + x;
@@ -509,23 +513,15 @@ Board.prototype.fall = function () {
             }
         }
     }
-    var disp = this.dispensers;
     for (var i = 0; i < disp.length; i++) {
+        disp[i].preDispense(this);
         var pos = disp[i].x + disp[i].y  * this.width;
         var dsh = this.shapes[pos + this.width];
         if (this.shapes[pos].isEmpty() && !this.tileLocked(i)) {
             this.falling = true;
-            var sh = disp[i].generate(this);
+            var sh = disp[i].dispense(this);
             this.setShape(disp[i].x, disp[i].y, sh);
             sh.dir = {x: 0, y: 1};
-            if (dsh.isEmpty() || dsh.isStopped()) {
-                sh.pos = 10;
-                sh.speed = 0;
-            }
-            else {
-                sh.pos = this.shapes[pos + this.width].pos;
-                sh.speed = this.shapes[pos + this.width].speed;
-            }
         }
     }
     for (var y = 1; y < this.height; y++) {
