@@ -451,13 +451,13 @@ Board.prototype.moveShape = function (shape, dx, dy) {
     if (shape.isStopped()) {
         shape.pos = 10 - shape.speed;
     }
-    else if (shape.bouncing && dx != 0) {
+    else if (dx != 0) {
         shape.pos = 10;
         shape.speed = 0;
-        shape.bouncing = false;
+        shape.bouncing = 0;
     }
     else {
-        shape.bouncing = false;
+        shape.bouncing = 0;
         shape.pos += 10;
     }
     shape.dir = {x: dx, y: dy}; // assign direction
@@ -480,12 +480,10 @@ Board.prototype.fall = function () {
                 sh.speed = 2.7;
             }
             sh.pos -= sh.speed;
-            if (dsh && dsh.dir.y == 1 && dsh.dir.x == 0 && sh.pos < dsh.pos && !dsh.bouncing) {
+            if (dsh && dsh.dir.y == 1 && dsh.dir.x == 0 && sh.pos < dsh.pos) {
                 sh.pos = dsh.pos;
             }
-            if (!sh.bouncing) {
-                this.falling = true;
-            }
+            this.falling = true;
             this.changed = true;
         }
         wd.push(false);
@@ -520,7 +518,7 @@ Board.prototype.fall = function () {
             var sh = disp[i].generate(this);
             this.setShape(disp[i].x, disp[i].y, sh);
             sh.dir = {x: 0, y: 1};
-            if (dsh.isEmpty() || dsh.isStopped() || dsh.bouncing) {
+            if (dsh.isEmpty() || dsh.isStopped()) {
                 sh.pos = 10;
                 sh.speed = 0;
             }
@@ -552,7 +550,7 @@ Board.prototype.fall = function () {
                     break;
                 }
                 sh = this.shapes[j];
-            } while (!wd[j] && (sh.swapping || sh.isEmpty())) ;
+            } while (!wd[j] && (sh.isEmpty())) ;
         }
     }
     for (var i = 0; i < this.shapes.length; i++) {
@@ -592,15 +590,6 @@ Board.prototype.fall = function () {
             }
             if (diagonal) {
                 this.falling = true;
-                pos -= this.width;
-                sh = this.shapes[pos];
-                while (pos >= 0 && sh.canFall()) {
-                    if (sh.bouncing) {
-                        sh.stopFalling();
-                    }
-                    pos -= this.width;
-                    sh = this.shapes[pos];
-                }
                 var j = dpos;
                 do {
                     wd[j] = true;

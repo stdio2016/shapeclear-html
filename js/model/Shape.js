@@ -6,7 +6,7 @@ function Shape(type, x, y, board) {
     this.dir = {x:0, y:0};
     this.pos = 0;
     this.speed = 0;
-    this.bouncing = false;
+    this.bouncing = 0;
     this.swapping = false;
     this.cleared = false;
     this.tickClearTotal = 10;
@@ -27,7 +27,7 @@ Shape.prototype.canSwap = function () {
 };
 
 Shape.prototype.canMatch = function () {
-    return !this.swapping && (!this.isMoving() || this.bouncing) &&
+    return !this.swapping && (!this.isMoving()) &&
     (this.type > 0 && this.type !== Shape.UNMATCHABLE_TYPE) && !this.cleared;
 };
 
@@ -45,7 +45,7 @@ Shape.prototype.isEmpty = function () {
 
 Shape.prototype.canFall = function () {
     return !this.swapping && this.type > 0 &&
-     (this.isStopped() || this.pos <= 0 || this.bouncing);
+     (this.isStopped() || this.pos <= 0);
 };
 
 Shape.prototype.isDeleted = function () {
@@ -71,14 +71,14 @@ Shape.prototype.stopSwapping = function () {
 
 Shape.prototype.stopFalling = function () {
     if (this.speed > 1 && this.dir.x === 0) {
-        this.speed = -0.4;
-        this.pos = 0.4;
-        this.bouncing = true;
+        this.speed = 0;
+        this.pos = 0;
+        this.bouncing = 6;
     }
     else {
         this.dir = {x: 0, y: 0};
         this.speed = 0;
-        this.bouncing = false;
+        this.bouncing = 0;
         this.pos = 0;
     }
 };
