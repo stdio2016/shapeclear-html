@@ -206,8 +206,6 @@ BigStripeEffect.prototype.update = function (board) {
                     e.addLine(i, this.y, StripeEffect.VERTICAL, this.color);
             }
             board.addItemToClear(e);
-        }
-        else if (this.progress === 3) {
             return false;
         }
         this.tick = this.totalTicks;
@@ -221,7 +219,10 @@ BigStripeEffect.prototype.getSpritePositions = function () {
     if (this.progress === 0 && (this.totalTicks - this.tick) < 10) {
         size = 1 + (this.totalTicks - this.tick) / 10;
     }
-    var frm = Shape.typeNames[this.color-1];
-    frm += this.progress >= 2 ? "VStripe" : "HStripe";
-    return [[this.x, this.y, size, size, frm]];
+    if (this.progress <= 2) {
+        var frm = Shape.typeNames[this.color-1];
+        frm += this.progress >= 2 ? "VStripe" : "HStripe";
+        return [[this.x, this.y, size, size, frm]];
+    }
+    return [];
 };
