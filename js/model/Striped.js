@@ -161,7 +161,7 @@ StripeEffect.prototype.getSpritePositions = function () {
 
 function BigStripeEffect(board, from, to) {
     this.board = board;
-    this.totalTicks = 30;
+    this.totalTicks = 20;
     this.tick = this.totalTicks;
     this.progress = 0;
     this.color = from instanceof StripedShape ? from.type : to.type;
