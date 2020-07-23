@@ -96,18 +96,6 @@ WrappedEffect.prototype.explode = function () {
                 score += s.addition + s.jelly + s.blocker;
             }
         }
-        var sh;
-        while (j >= 0) {
-            sh = this.board.getShape(i, j);
-            if (sh.canFall() && (sh.dir.y === 0 || sh.dir.y === 1)) {
-                // explosion pull force
-                sh.pos += 0.4;
-                sh.speed -= 0.4;
-                if (sh.speed < -10) sh.speed = -10;
-                sh.dir.y = +1;
-            }
-            j--;
-        }
     }
     this.board.gainScores.push({
       x: this.x,
