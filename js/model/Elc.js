@@ -51,7 +51,7 @@ ElcShape.prototype.canFall = function () {
 
 function ElcEffect(board, color, elc) {
     this.board = board;
-    this.totalTicks = 3;
+    this.totalTicks = 6;
     this.tick = this.totalTicks;
     this.progress = 0;
     this.type = color || board.randomColors[this.board.game.rnd.between(0, AppleFools.COLOR_COUNT-1)];
@@ -59,6 +59,7 @@ function ElcEffect(board, color, elc) {
     // shapes to clear
     this.all = [];
     this.clearing = [];
+    this.div7 = [];
     this.count = 0;
     this.done = false;
     elc.state = ElcShape.DISCHARGING;
@@ -72,6 +73,13 @@ ElcEffect.prototype.elcShape = function (type) {
             this.all.push(shapes[i]);
         }
     }
+    this.div7.push(0);
+    var cnt = this.count;
+    for (var i = 0; i < 7; i++) {
+        var divs = Math.floor(cnt / (7-i));
+        this.div7.push(this.div7[i] + divs);
+        cnt -= divs;
+    }
 };
 
 ElcEffect.prototype.update = function () {
@@ -81,22 +89,25 @@ ElcEffect.prototype.update = function () {
             this.elcShape(this.type);
         }
         
-        if (this.progress < this.count+2 && this.progress > 1) {
-            var sh = this.all[this.progress-2];
-            if (this.board.getShape(sh.x, sh.y) === sh) {
-                var sco = this.board.clearShape(sh.x, sh.y);
-                var score = (sco.score + sco.addition) * this.count + sco.jelly + sco.blocker;
-                if (score != 0) {
-                    this.board.gainScores.push({
-                      x: sh.x,
-                      y: sh.y,
-                      type: this.type,
-                      score: score
-                    });
+        if (this.progress < 7+2 && this.progress > 1) {
+            var prog = this.progress;
+            for (var i = this.div7[prog-2]; i < this.div7[prog-1]; i++) {
+                var sh = this.all[i];
+                if (this.board.getShape(sh.x, sh.y) === sh) {
+                    var sco = this.board.clearShape(sh.x, sh.y);
+                    var score = (sco.score + sco.addition) * this.count + sco.jelly + sco.blocker;
+                    if (score != 0) {
+                        this.board.gainScores.push({
+                          x: sh.x,
+                          y: sh.y,
+                          type: this.type,
+                          score: score
+                        });
+                    }
+                    this.board.score += score;
                 }
-                this.board.score += score;
             }
-            if (this.progress === this.count+1) {
+            if (this.progress === 7+1) {
                 this.done = true;
             }
         }
@@ -105,7 +116,7 @@ ElcEffect.prototype.update = function () {
             this.done = true;
         }
     }
-    if (this.progress < this.count+1 || this.tick > 0) {
+    if (this.progress < 7+1 || this.tick > 0) {
         this.board.itemChanged = true;
     }
     this.tick--;
@@ -122,13 +133,13 @@ ElcEffect.prototype.update = function () {
             }
         }
     }
-    return this.progress < this.count+4;
+    return this.progress < 7+4;
 };
 
 // returns array of [x, y, width, height, frameName]'s
 ElcEffect.prototype.getSpritePositions = function () {
     var lb = Math.max(this.progress - 2, 0);
-    var ub = Math.min(this.count, this.progress + 1);
+    var ub = Math.min(7, this.progress + 1);
     var ans = [];
     var tz = this.elc;
     var tzx = (tz.x - tz.dir.x * tz.pos / 10);
@@ -136,12 +147,14 @@ ElcEffect.prototype.getSpritePositions = function () {
     var sw = 0.6, sh = 0.6;
     for (var i = lb; i < ub; i++) {
         var t = (this.progress-i + 1 - this.tick / this.totalTicks) / 3;
-        var s = this.all[i];
-        ans.push([
-          (s.x - s.dir.x * s.pos / 10) * t + tzx * (1-t),
-          (s.y - s.dir.y * s.pos / 10) * t + tzy * (1-t),
-          sw, sh, this.apple ? "apple" : "elc"
-        ]);
+        for (var j = this.div7[i]; j < this.div7[i+1]; j++) {
+            var s = this.all[j];
+            ans.push([
+              (s.x - s.dir.x * s.pos / 10) * t + tzx * (1-t),
+              (s.y - s.dir.y * s.pos / 10) * t + tzy * (1-t),
+              sw, sh, this.apple ? "apple" : "elc"
+            ]);
+        }
     }
     return ans;
 };
