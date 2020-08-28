@@ -93,6 +93,9 @@ BoardView.prototype.drawShape = function () {
                 spr.scale.y = scale * spr.alpha;
                 adjX += 0.5 - spr.alpha * 0.5;
                 adjY += 0.5 - spr.alpha * 0.5;
+                if (shape.bouncing) {
+                    adjY -= (6 - shape.bouncing) * shape.bouncing / 9 * 0.05;
+                }
                 spr.x = startX + (x - shape.dir.x * pos/10 + adjX) * gridSize;
                 spr.y = startY + (y - shape.dir.y * pos/10 + adjY) * gridSize;
             }

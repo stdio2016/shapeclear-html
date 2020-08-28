@@ -17,6 +17,7 @@ WrappedShape.prototype = new Shape();
 WrappedShape.prototype.constructor = WrappedShape;
 
 WrappedShape.prototype.update = function () {
+    Shape.prototype.update.call(this);
     if (this.state === WrappedShape.EXPLODED) {
         this.state = WrappedShape.WAIT_EXPLODE_AGAIN;
         this.special = WrappedShape.SPECIAL_WAIT_EXPLODE;

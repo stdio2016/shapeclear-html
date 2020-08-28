@@ -15,6 +15,7 @@ ElcShape.prototype = new Shape();
 ElcShape.prototype.constructor = ElcShape;
 
 ElcShape.prototype.update = function () {
+    Shape.prototype.update.call(this);
     if (this.state === ElcShape.ACTIVE) {
         this.state = ElcShape.DISCHARGING;
     }

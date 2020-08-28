@@ -71,6 +71,7 @@ Shape.prototype.stopSwapping = function () {
 
 Shape.prototype.stopFalling = function () {
     if (this.speed > 1 && this.dir.x === 0) {
+        this.dir = {x: 0, y: 0};
         this.speed = 0;
         this.pos = 0;
         this.bouncing = 6;
@@ -95,7 +96,8 @@ Shape.prototype.deleteUpdate = function () {
 };
 
 Shape.prototype.update = function () {
-    ;
+    if (this.bouncing > 0)
+        this.bouncing -= 1;
 };
 
 Shape.prototype.toString = function () {
