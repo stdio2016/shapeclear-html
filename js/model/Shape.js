@@ -53,11 +53,11 @@ Shape.prototype.isDeleted = function () {
 };
 
 Shape.prototype.canBeCleared = function () {
-    return this.type > 0 && !this.swapping && !this.cleared;
+    return this.type > 0 && !this.cleared;
 };
 
 Shape.prototype.canCrush = function () {
-    return this.type > 0 && !this.swapping && !this.cleared;
+    return this.type > 0 && !this.cleared;
 };
 
 Shape.prototype.canShuffle = function () {
