@@ -69,6 +69,13 @@ MainMenu.prototype.create = function () {
     this.btnEasy.tint = 0xffff00;
     this.lblEasy = this.add.text(-1000, -1000, Translation['Easy mode']);
     this.lblEasy.anchor.set(0.5, 0.5);
+
+    this.btnMoves = this.add.button(-1000, -1000, 'ui', this.playGame, this, 'buttonHover', 'button', 'buttonPressed', 'button');
+    this.btnMoves.anchor.set(0.5, 0.5);
+    this.btnMoves.tint = 0xffff00;
+    this.lblMoves = this.add.text(-1000, -1000, Translation['Moves mode']);
+    this.lblMoves.anchor.set(0.5, 0.5);
+
     this.lblVersion = this.add.text(-1000, -1000, this.game.version);
     this.lblVersion.anchor.set(1, 1);
     this.game.bounceTime = 0;
@@ -90,6 +97,12 @@ MainMenu.prototype.resumed = function () {
     this.music.resume();
 }
 
+MainMenu.moveButton = function (btn, lbl, dim) {
+    lbl.position.copyFrom(btn.position);
+    lbl.y += window.devicePixelRatio || 1;
+    btn.scale.setTo(dim / btn.texture.frame.width * (125/360));
+};
+
 MainMenu.prototype.update = function () {
     var gw = this.game.width, gh = this.game.height, dim = Math.min(gw, gh);
     this.background.width = gw;
@@ -102,27 +115,25 @@ MainMenu.prototype.update = function () {
     this.lblHelp.fontSize = dim / 25;
     this.lblEasy.fontSize = dim / 25;
     this.lblVersion.fontSize = dim / 25;
-    if (gw > gh) {
+    this.lblMoves.fontSize = dim / 25;
+    if (gw > gh * 0.9) {
         this.title.position.set(gw / 2, gh * 0.2);
-        this.btnPlay.position.set(gw / 2, gh * 0.5);
-        this.btnHelp.position.set(gw / 2, gh * 0.65);
-        this.btnEasy.position.set(gw / 2, gh * 0.8);
+        this.btnPlay.position.set(gw / 2 - gh * 0.23, gh * 0.6);
+        this.btnMoves.position.set(gw / 2 + gh * 0.23, gh * 0.6);
+        this.btnHelp.position.set(gw / 2 - gh * 0.23, gh * 0.8);
+        this.btnEasy.position.set(gw / 2 + gh * 0.23, gh * 0.8);
     }
     else {
         this.title.position.set(gw / 2, gh * 0.5 - gw * 0.3);
         this.btnPlay.position.set(gw / 2, gh * 0.5);
-        this.btnHelp.position.set(gw / 2, gh * 0.5 + gw * 0.15);
-        this.btnEasy.position.set(gw / 2, gh * 0.5 + gw * 0.3);
+        this.btnMoves.position.set(gw / 2, gh * 0.5 + gw * 0.15);
+        this.btnHelp.position.set(gw / 2, gh * 0.5 + gw * 0.3);
+        this.btnEasy.position.set(gw / 2, gh * 0.5 + gw * 0.45);
     }
-    this.lblPlay.position.copyFrom(this.btnPlay.position);
-    this.lblPlay.y += window.devicePixelRatio || 1;
-    this.btnPlay.scale.setTo(dim / this.btnPlay.texture.frame.width * (125/360));
-    this.lblHelp.position.copyFrom(this.btnHelp.position);
-    this.lblHelp.y += window.devicePixelRatio || 1;
-    this.btnHelp.scale.setTo(dim / this.btnPlay.texture.frame.width * (125/360));
-    this.lblEasy.position.copyFrom(this.btnEasy.position);
-    this.lblEasy.y += window.devicePixelRatio || 1;
-    this.btnEasy.scale.setTo(dim / this.btnEasy.texture.frame.width * (125/360));
+    MainMenu.moveButton(this.btnPlay, this.lblPlay, dim);
+    MainMenu.moveButton(this.btnHelp, this.lblHelp, dim);
+    MainMenu.moveButton(this.btnEasy, this.lblEasy, dim);
+    MainMenu.moveButton(this.btnMoves, this.lblMoves, dim);
     this.lblVersion.position.set(gw, gh);
     this.lblVersion.text = this.game.version + '.' + this.game.bounceTime;
 };
@@ -150,6 +161,11 @@ MainMenu.prototype.playGame = function (btn) {
         else if (btn === this.btnEasy) {
             Debug.testDiagonalFall = false;
             AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 4;
+            this.state.start("GameScreen");
+        }
+        else if (btn === this.btnMoves) {
+            Debug.testDiagonalFall = false;
+            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
             this.state.start("GameScreen");
         }
     }
