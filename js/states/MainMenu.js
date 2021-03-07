@@ -166,7 +166,7 @@ MainMenu.prototype.playGame = function (btn) {
         else if (btn === this.btnMoves) {
             Debug.testDiagonalFall = false;
             AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
-            this.state.start("GameScreen");
+            this.state.start("GameScreen", true, false, {remainingMoves: 25, remainingTime: null});
         }
     }
 };

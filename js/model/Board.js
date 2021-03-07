@@ -122,12 +122,16 @@ Board.prototype.clearShape = function (x, y, color, setting) {
     return {score: 0, addition: 0, multiply: 0, jelly: 0, blocker: 0};
 };
 
+Board.prototype.gameEnds = function () {
+    return this.remainingTime == 0 || this.remainingMoves == 0 && this.remainingTime === null;
+};
+
 Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
     //if (this.changed || this.swaps.length > 0) return;
     if (this.state === Board.SHUFFLING) return ;
     if (AppleFools.DROP_COLOR_COUNT == 0) return ;
-    if (this.remainingTime <= 0 && !this.debug.allowIllegalMove) return ;
+    if (this.gameEnds() && !this.debug.allowIllegalMove) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
     if ((!sh1.canSwap() || !sh2.canSwap()) && !this.debug.allowIllegalMove) {
@@ -250,7 +254,7 @@ Board.prototype.update = function () {
     }
     if (this.remainingTime > 0)
         this.remainingTime--;
-    if (this.remainingTime == 0 && !this.changed && this.swaps.length == 0) {
+    if (this.gameEnds() && !this.changed && this.swaps.length == 0) {
         if (this.state != Board.ENDED && this.state != Board.BONUS_TIME) {
             this.state = Board.ENDED;
             if (this.findFirstSpecial()) this.emitSignal("bonusTime");

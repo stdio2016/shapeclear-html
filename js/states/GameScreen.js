@@ -23,10 +23,15 @@ function GameScreen() {
     this.brightShader = null;
     this.cachedHint = null;
     this.hintTimer = 0;
+    this.levelSetting = null;
 }
 
 GameScreen.prototype.preload = function () {
     console.log("I don't know how to use Phaser game engine");
+};
+
+GameScreen.prototype.init = function (x) {
+    this.levelSetting = x;
 };
 
 GameScreen.prototype.create = function () {
@@ -101,6 +106,7 @@ GameScreen.prototype.create = function () {
         });
     }
     this.board.addHook(this, this.onBoardEvent);
+    Object.assign(this.board, this.levelSetting || {});
     this.boardView = new BoardView(this.game, this.board);
     this.effectGroup = this.add.group();
     this.touchDetector = new TouchDetector(this.game, this.boardView);
@@ -206,6 +212,11 @@ GameScreen.prototype.update = function () {
 
     this.scoreText.setScore(this.board.score);
     var remainingTime = this.board.remainingTime;
+    // moves level!
+    if (remainingTime === null) {
+        remainingTime = this.board.remainingMoves * 60;
+        this.lblTime.text = Translation["Moves"];
+    }
     if (Math.ceil(remainingTime / 60) <= 10 && (remainingTime-1)%60 >= 30 || remainingTime == 0) {
         this.timeText.setColor(1);
     }
