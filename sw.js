@@ -1,6 +1,6 @@
 importScripts('js/Configs.js');
 var CACHENAME = 'shapeclear';
-var VERSION = 'v0.7.1';
+var VERSION = 'v0.8';
 var myPath = location.origin + location.pathname;
 var cacheEnableTest =
     Configs.get('cacheEnabled').then(function (r) {
