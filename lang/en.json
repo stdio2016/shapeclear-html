@@ -4,9 +4,12 @@
   "Play!": "Play!",
   "Board with holes": "Board with holes",
   "Easy mode": "Easy mode",
+  "Moves mode": "Moves mode",
   "Time": "Time",
+  "Moves": "Moves",
   "Score": "Score",
   "Time's up": "Time's up",
+  "Out of moves": "Out of moves",
   "Your score: ": "Your score: ",
   "Press OK to replay": "Press OK to replay",
   "Copyright": "Copyright (c) 2016~2020 Yi-Feng Chen(陳羿豐)",
@@ -18,7 +21,5 @@
   "Shuffling...": "Shuffling…",
   "Bonus Time": "Bonus Time",
   "No more possible moves": "No more possible moves.\nLevel design error!",
-  "Moves mode": "Moves mode",
-  "Moves": "Moves",
   "": ""
 }

@@ -549,7 +549,10 @@ GameScreen.prototype.onBoardEvent = function (evt, args) {
             function () {
                 me.speedup = 1;
                 me.saveScore(me.board.score);
-                var msg = Translation["Time's up"] + '\n' +
+                var reason = "unknown";
+                if (this.board.remainingTime === 0) reason = "Time's up";
+                if (this.board.remainingTime === null) reason = "Out of moves";
+                var msg = Translation[reason] + '\n' +
                   Translation["Your score: "] + me.board.score + '\n' + 
                   Translation["Press OK to replay"];
                 if (board.state == Board.NO_MOVES) msg = Translation['No more possible moves'];

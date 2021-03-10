@@ -92,7 +92,7 @@ Debug.prototype.runSetCommand = function (cmd) {
 
 Debug.prototype.autoSwipeTest = function () {
     // no swap after time is up
-    if (!this.autoSwipe || this.board.remainingTime <= 0 || this.board.changed) return ;
+    if (!this.autoSwipe || this.board.gameEnds() || this.board.changed) return ;
     this.autoSwipeLoop++;
     if (this.autoSwipeLoop < 30) return ;
     this.autoSwipeLoop = 0;

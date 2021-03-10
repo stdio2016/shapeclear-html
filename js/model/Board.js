@@ -123,7 +123,7 @@ Board.prototype.clearShape = function (x, y, color, setting) {
 };
 
 Board.prototype.gameEnds = function () {
-    return this.remainingTime == 0 || this.remainingMoves == 0 && this.remainingTime === null;
+    return this.remainingTime == 0 || this.remainingMoves <= 0 && this.remainingTime === null;
 };
 
 Board.prototype.addSwap = function(from, to) {
@@ -640,6 +640,7 @@ Board.prototype.shuffle = function () {
         }
     }
     this.deletedShapes.length = 0;
+    this.combo = 0;
 };
 
 Board.prototype.shuffleUpdate = function () {

@@ -4,9 +4,12 @@
   "Play!": "玩!",
   "Board with holes": "有洞的盤面",
   "Easy mode": "簡單模式",
+  "Moves mode": "限步數模式",
   "Time": "時間",
+  "Moves": "步數",
   "Score": "分數",
   "Time's up": "時間到",
+  "Out of moves": "沒有步數了",
   "Your score: ": "你的分數: ",
   "Press OK to replay": "按 OK 鍵重玩",
   "Copyright": "版權所有 (c) 2016~2020 陳羿豐",
@@ -18,7 +21,5 @@
   "Shuffling...": "洗牌中…",
   "Bonus Time": "加分時間",
   "No more possible moves": "沒有辦法再移動了\n關卡設計錯誤！",
-  "Moves mode": "限步數模式",
-  "Moves": "步數",
   "": ""
 }
