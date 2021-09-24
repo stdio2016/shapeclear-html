@@ -139,7 +139,7 @@ GameScreen.prototype.create = function () {
 };
 
 GameScreen.prototype.addDebugText = function () {
-    var style = { font: "32px", fill: "black" };
+    var style = { fill: "black" };
     this.debug = this.game.add.text(0, 0, "0", style);
     this.debug.inputEnabled = true;
     this.debug.events.onInputUp.add(function () {
@@ -153,7 +153,7 @@ GameScreen.prototype.addDebugText = function () {
 };
 
 GameScreen.prototype.createText = function (txt) {
-    var style = { font: "32px", fill: "black" };
+    var style = { fill: "black" };
     var txt = this.add.text(0, 0, txt, style);
     return txt;
 };
