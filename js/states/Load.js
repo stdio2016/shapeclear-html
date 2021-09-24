@@ -80,8 +80,8 @@ Load.prototype.preload = function () {
     }
     var langname = lang[i];
     // Chinese is special case
-    if (/^(zh-Hant|zh-HK|zh-MO)$/i.test(langname)) langname = "zh-TW";
-    if (/^(zh-Hans|zh)$/i.test(langname)) langname = "zh-CN";
+    if (/^(zh-Hant|zh-HK|zh-MO|zh-tw)$/i.test(langname)) langname = "zh-TW";
+    if (/^(zh-Hans|zh|zh-cn)$/i.test(langname)) langname = "zh-CN";
     game.load.json('translation', 'lang/' + langname + '.json');
 
     // create texture for showing match-3
