@@ -4,6 +4,7 @@ BoardGen.generateBoard = function genBoard(config) {
     var w = config.width;
     var h = config.height;
     var board = new Board(game, w, h);
+    board.colorCount = config.colorCount || 6;
     board.generateSimple();
     for (var i = 0; i < h; i++) {
         for (var j = 0; j < w; j++) {
@@ -30,8 +31,8 @@ BoardGen.generateBoard = function genBoard(config) {
             }
             var r;
             do {
-                r = board.randomColors[Math.floor(Math.random() * AppleFools.COLOR_COUNT)];
-            } while ((r1 == r || r2 == r) && AppleFools.COLOR_COUNT > 2) ;
+                r = board.randomColors[Math.floor(Math.random() * board.colorCount)];
+            } while ((r1 == r || r2 == r) && board.colorCount > 2) ;
             if (board.getShape(j, i).type === 99) {
                 board.getShape(j, i).type = r;
             }

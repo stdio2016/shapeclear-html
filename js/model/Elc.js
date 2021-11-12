@@ -55,7 +55,7 @@ function ElcEffect(board, color, elc) {
     this.totalTicks = 6;
     this.tick = this.totalTicks;
     this.progress = 0;
-    this.type = color || board.randomColors[this.board.game.rnd.between(0, AppleFools.COLOR_COUNT-1)];
+    this.type = color || board.randomColors[this.board.game.rnd.between(0, board.randomColors.length-1)];
     this.elc = elc;
     // shapes to clear
     this.all = [];

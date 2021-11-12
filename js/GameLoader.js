@@ -74,9 +74,7 @@ loadScript('lib/phaser2.13.3.js', function (e) {
       'js/view/Ball.js',
       'js/view/ScoreText.js',
       'js/view/BoardView.js',
-      'js/TouchDetector.js',
-      'js/applefools/AppleFools.js',
-      'js/applefools/MainMenu.js'
+      'js/TouchDetector.js'
     ];
     var count = srcs.length;
     loadProgress.value = 0;

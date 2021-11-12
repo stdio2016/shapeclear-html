@@ -79,7 +79,7 @@ MainMenu.prototype.create = function () {
     this.lblVersion = this.add.text(-1000, -1000, this.game.version);
     this.lblVersion.anchor.set(1, 1);
     this.game.bounceTime = 0;
-    if (AppleFools.AutoGame) {
+    if (Debug.AutoGame) {
         setTimeout(function () {
             mainMenu.btnPlay.frameName = 'buttonPressed';
             mainMenu.playGame(mainMenu.btnPlay);
@@ -150,22 +150,18 @@ MainMenu.prototype.playGame = function (btn) {
     if (/Pressed/.test(btn.frameName)) {
         if (btn === this.btnPlay) {
             Debug.testDiagonalFall = false;
-            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
-            this.state.start("GameScreen");
+            this.state.start("GameScreen", true, false);
         }
         else if (btn === this.btnHelp) {
             Debug.testDiagonalFall = true;
-            AppleFools.DROP_COLOR_COUNT = 0; AppleFools.COLOR_COUNT = 6;
-            this.state.start("GameScreen");
+            this.state.start("GameScreen", true, false);
         }
         else if (btn === this.btnEasy) {
             Debug.testDiagonalFall = false;
-            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 4;
-            this.state.start("GameScreen");
+            this.state.start("GameScreen", true, false, {colorCount: 4});
         }
         else if (btn === this.btnMoves) {
             Debug.testDiagonalFall = false;
-            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT = 6;
             this.state.start("GameScreen", true, false, {remainingMoves: 25, remainingTime: null});
         }
     }

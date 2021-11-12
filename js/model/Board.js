@@ -25,6 +25,7 @@ function Board(game, width, height) {
     this.goodCount = 0;
     this.hooks = [];
     this.dispensers = [];
+    this.colorCount = 6;
 }
 Board.STARTING = 0;
 Board.PLAYING = 1;
@@ -36,7 +37,7 @@ Board.NO_MOVES = 100;
 
 Board.prototype.generateSimple = function () {
     this.randomColors = [1,2,3,4,5,6];
-    for (var i = 0; i < 6 - AppleFools.COLOR_COUNT; i++) {
+    for (var i = 0; i < 6 - this.colorCount; i++) {
         var r = this.game.rnd.between(0, this.randomColors.length - 1);
         this.randomColors.splice(r, 1);
     }
@@ -61,8 +62,8 @@ Board.prototype.generateSimple = function () {
             }
             var r;
             do {
-                r = this.randomColors[this.game.rnd.between(0, AppleFools.COLOR_COUNT-1)];
-            } while ((r1 == r || r2 == r) && AppleFools.COLOR_COUNT > 2) ;
+                r = this.randomColors[this.game.rnd.between(0, this.colorCount-1)];
+            } while ((r1 == r || r2 == r) && this.colorCount > 2) ;
             if (Debug.testDiagonalFall && this.game.rnd.between(1, 10)  == 1) r = -1;
             var sh = new Shape(r, j, i, this);
             arr[i * width + j] = sh;
@@ -130,7 +131,7 @@ Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
     //if (this.changed || this.swaps.length > 0) return;
     if (this.state === Board.SHUFFLING) return ;
-    if (AppleFools.DROP_COLOR_COUNT == 0) return ;
+    if ('level edit' == 0) return ;
     if (this.gameEnds() && !this.debug.allowIllegalMove) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
@@ -708,9 +709,9 @@ Board.prototype.hintMoves = function () {
 };
 
 Board.prototype.addClick = function (aa) {
-    if (AppleFools.DROP_COLOR_COUNT == 0) {
+    if ('level edit' == 0) {
         if (this.getShape(aa.x, aa.y).type == -1) {
-            this.setShape(aa.x, aa.y, this.randomColors[0|Math.random() * AppleFools.COLOR_COUNT]);
+            this.setShape(aa.x, aa.y, this.randomColors[0|Math.random() * this.randomColors.length]);
         }
         else this.setShape(aa.x, aa.y, -1);
         var aa = [];

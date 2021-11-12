@@ -31,7 +31,7 @@ GameScreen.prototype.preload = function () {
 };
 
 GameScreen.prototype.init = function (x) {
-    this.levelSetting = x;
+    this.levelSetting = x || {};
 };
 
 GameScreen.prototype.create = function () {
@@ -71,7 +71,7 @@ GameScreen.prototype.create = function () {
             ]
         });
     }
-    else if (AppleFools.DROP_COLOR_COUNT === 6) {
+    else if (this.levelSetting.colorCount != 4) {
         window.board = this.board = BoardGen.generateBoard({
             "width": 9,
             "height": 9,
@@ -102,7 +102,8 @@ GameScreen.prototype.create = function () {
               [1, 1, 1, 1,  1,  1, 1, 1, 1],
               [1, 1, 1, 1,  1,  1, 1, 1, 1],
               [1, 1, 1, 1,  1,  1, 1, 1, 1]
-            ]
+            ],
+            'colorCount': 4
         });
     }
     this.board.addHook(this, this.onBoardEvent);
@@ -130,8 +131,8 @@ GameScreen.prototype.create = function () {
     
     this.lblTime.inputEnabled = true;
     this.lblTime.events.onInputUp.add(function () {
-        if (AppleFools.DROP_COLOR_COUNT == 0) {
-            AppleFools.DROP_COLOR_COUNT = AppleFools.COLOR_COUNT;
+        if ('level edit' == 0) {
+            level_edit = 0;
             this.board.dispensers = [];
             BoardGen.autoCreateDispenser(this.board);
         }
@@ -257,7 +258,7 @@ GameScreen.prototype.updateOnce = function () {
     }
     for (var i = 0; i < 1; i++) {
     */
-    if (AppleFools.DROP_COLOR_COUNT != 0)
+    if ('level edit' != 0)
         this.board.update();
     /*
     }
@@ -284,7 +285,7 @@ GameScreen.prototype.updateOnce = function () {
         }
     }
     if (this.board.swaps.length > 0 || !this.cachedHint) this.hintTimer = 0;
-    if (AppleFools.DROP_COLOR_COUNT == 0) this.cachedHint = null; // level editor
+    if ('level edit' == 0) this.cachedHint = null; // level editor
     this.boardView.cachedHint = this.cachedHint;
     this.boardView.hintTimer = this.hintTimer;
     var scoreTexts = this.scorePopups;
@@ -559,7 +560,7 @@ GameScreen.prototype.onBoardEvent = function (evt, args) {
                 alertBox(msg, function () {
                     me.state.start('MainMenu');
                 });
-                if (AppleFools.AutoGame) {
+                if (Debug.AutoGame) {
                     setTimeout(function () {
                         promptOK.onclick();
                     }, 1000);

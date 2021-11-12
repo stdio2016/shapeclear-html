@@ -7,7 +7,7 @@ function Debug(board) {
     this.autoSwipe = false;
     this.autoSwipeLoop = 0;
     this.debugged = false;
-    if (AppleFools.AutoGame) {
+    if (Debug.AutoGame) {
         this.autoSwipe = true;
         this.board.game.stage.disableVisibilityChange = true;
         this.debugged = true;
@@ -15,6 +15,7 @@ function Debug(board) {
 }
 
 Debug.testDiagonalFall = false;
+Debug.AutoGame = false;
 
 Debug.prototype.runCommand = function (cmd) {
     if (!cmd) return;
@@ -58,14 +59,6 @@ Debug.prototype.runCommand = function (cmd) {
     if (/^set /i.test(cmd)) {
         return this.runSetCommand(cmd.substr(4));
     }
-    if (cmd == 'april fools') {
-        try {
-            localStorage.ShapeClear_AppleFools17 = +new Date();
-        }
-        catch (x) {
-            ;
-        }
-    }
     console.log('Unknown command: ' + cmd);
 };
 
@@ -105,7 +98,7 @@ Debug.prototype.autoSwipeTest = function () {
 };
 
 Debug.prototype.getDebugMessage = function () {
-    if (AppleFools.DROP_COLOR_COUNT == 0)
+    if ('level edit' == 0)
         return "Level edit mode!";
     if (ChristmasIsComing()) {
         if ((new Date()).getMonth() == 11) return "Merry Xmas!";
