@@ -56,7 +56,7 @@ Load.prototype.preload = function () {
     if (Load.shouldLoadAudio()) {
         if (ChristmasIsComing()) {
             game.load.audio('music', ['assets/special/music3.ogg', 'assets/special/music3.mp3']);
-            game.load.audio('music2', ['assets/special/deckthehall.ogg', 'assets/sound/deckthehall.mp3']);
+            game.load.audio('music2', ['assets/special/deckthehall.ogg', 'assets/special/deckthehall.mp3']);
         }
         else {
             game.load.audio('music', ['assets/sound/music.ogg', 'assets/sound/music.m4a', 'assets/sound/music.mp3']);
