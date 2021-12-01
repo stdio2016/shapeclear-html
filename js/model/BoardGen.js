@@ -4,6 +4,7 @@ BoardGen.generateBoard = function genBoard(config) {
     var w = config.width;
     var h = config.height;
     var board = new Board(game, w, h);
+    Object.assign(board, config || {});
     board.colorCount = config.colorCount || 6;
     board.generateSimple();
     for (var i = 0; i < h; i++) {

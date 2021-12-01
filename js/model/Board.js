@@ -34,6 +34,7 @@ Board.BONUS_TIME = 3;
 Board.ENDED = 4;
 Board.IDLE = 5;
 Board.NO_MOVES = 100;
+Board.LEVEL_EDIT = 101;
 
 Board.prototype.generateSimple = function () {
     this.randomColors = [1,2,3,4,5,6];
@@ -131,7 +132,7 @@ Board.prototype.addSwap = function(from, to) {
     // NOTE: uncomment this to prevent multi swipe at the same time
     //if (this.changed || this.swaps.length > 0) return;
     if (this.state === Board.SHUFFLING) return ;
-    if ('level edit' == 0) return ;
+    if (this.state === Board.LEVEL_EDIT) return ;
     if (this.gameEnds() && !this.debug.allowIllegalMove) return ;
     var sh1 = this.getShape(from.x, from.y);
     var sh2 = this.getShape(to.x, to.y);
@@ -709,7 +710,7 @@ Board.prototype.hintMoves = function () {
 };
 
 Board.prototype.addClick = function (aa) {
-    if ('level edit' == 0) {
+    if (this.state === Board.LEVEL_EDIT) {
         if (this.getShape(aa.x, aa.y).type == -1) {
             this.setShape(aa.x, aa.y, this.randomColors[0|Math.random() * this.randomColors.length]);
         }

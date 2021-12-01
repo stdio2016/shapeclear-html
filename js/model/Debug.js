@@ -98,7 +98,7 @@ Debug.prototype.autoSwipeTest = function () {
 };
 
 Debug.prototype.getDebugMessage = function () {
-    if ('level edit' == 0)
+    if (this.board.state === Board.LEVEL_EDIT)
         return "Level edit mode!";
     if (ChristmasIsComing()) {
         if ((new Date()).getMonth() == 11) return "Merry Xmas!";

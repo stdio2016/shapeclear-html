@@ -31,7 +31,22 @@ GameScreen.prototype.preload = function () {
 };
 
 GameScreen.prototype.init = function (x) {
-    this.levelSetting = x || {};
+    this.levelSetting = x || {
+        // default settings
+        "width": 9,
+        "height": 9,
+        "tiles": [
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ]
+    };
 };
 
 GameScreen.prototype.create = function () {
@@ -40,21 +55,8 @@ GameScreen.prototype.create = function () {
     this.castle = this.add.image(this.game.width/2, this.game.height * 0.705, 'castle');
     this.castle.anchor.set(0.5, 0.72);
     this.addDebugText();
-    if (Debug.testDiagonalFall) {
-        var tiles = [];
-        for (var i = 0; i < 9; i++) {
-            tiles.push([]);
-            for (var j = 0; j < 9; j++) {
-                tiles[i].push(Math.random() < 0.1 ? -1 : 1);
-            }
-        }
-        window.board = this.board = BoardGen.generateBoard({
-            "width": 9,
-            "height": 9,
-            "tiles": tiles
-        });
-    }
-    else if ("hard" == "level") {
+    window.board = this.board = BoardGen.generateBoard(this.levelSetting);
+    if ("hard" == "level") {
         window.board = this.board = BoardGen.generateBoard({
             "width": 9,
             "height": 9,
@@ -71,43 +73,7 @@ GameScreen.prototype.create = function () {
             ]
         });
     }
-    else if (this.levelSetting.colorCount != 4) {
-        window.board = this.board = BoardGen.generateBoard({
-            "width": 9,
-            "height": 9,
-            "tiles": [
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1]
-            ]
-        });
-    }
-    else {
-        window.board = this.board = BoardGen.generateBoard({
-            "width": 9,
-            "height": 9,
-            "tiles": [
-              [1, 1, 1, 1,  1,  1, 1, 1, 1],
-              [1, 1, 1, 1,  1,"t", 1, 1, 1],
-              [1, 1, 1, 1,  1,  1, 1, 1, 1],
-              [1, 1, 1, 1,  1,  1, 1, 1, 1],
-              [1, 1, 1, 1, -1,  1, 1, 1, 1],
-              [1, 1, 1, 1,  1,  1, 1, 1, 1],
-              [1, 1, 1, 1,  1,  1, 1, 1, 1],
-              [1, 1, 1, 1,  1,  1, 1, 1, 1],
-              [1, 1, 1, 1,  1,  1, 1, 1, 1]
-            ],
-            'colorCount': 4
-        });
-    }
     this.board.addHook(this, this.onBoardEvent);
-    Object.assign(this.board, this.levelSetting || {});
     this.boardView = new BoardView(this.game, this.board);
     this.effectGroup = this.add.group();
     this.touchDetector = new TouchDetector(this.game, this.boardView);
@@ -131,8 +97,8 @@ GameScreen.prototype.create = function () {
     
     this.lblTime.inputEnabled = true;
     this.lblTime.events.onInputUp.add(function () {
-        if ('level edit' == 0) {
-            level_edit = 0;
+        if (this.board.state === Board.LEVEL_EDIT) {
+            this.board.state = Board.PLAYING;
             this.board.dispensers = [];
             BoardGen.autoCreateDispenser(this.board);
         }
@@ -258,7 +224,7 @@ GameScreen.prototype.updateOnce = function () {
     }
     for (var i = 0; i < 1; i++) {
     */
-    if ('level edit' != 0)
+    if (this.board.state !== Board.LEVEL_EDIT)
         this.board.update();
     /*
     }
@@ -285,7 +251,7 @@ GameScreen.prototype.updateOnce = function () {
         }
     }
     if (this.board.swaps.length > 0 || !this.cachedHint) this.hintTimer = 0;
-    if ('level edit' == 0) this.cachedHint = null; // level editor
+    if (this.board.state === Board.LEVEL_EDIT) this.cachedHint = null; // level editor
     this.boardView.cachedHint = this.cachedHint;
     this.boardView.hintTimer = this.hintTimer;
     var scoreTexts = this.scorePopups;

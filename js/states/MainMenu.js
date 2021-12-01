@@ -154,15 +154,58 @@ MainMenu.prototype.playGame = function (btn) {
         }
         else if (btn === this.btnHelp) {
             Debug.testDiagonalFall = true;
-            this.state.start("GameScreen", true, false);
+            var tiles = [];
+            for (var i = 0; i < 9; i++) {
+                tiles.push([]);
+                for (var j = 0; j < 9; j++) {
+                    tiles[i].push(this.game.rnd.frac() < 0.1 ? -1 : 1);
+                }
+            }
+            this.state.start("GameScreen", true, false, {
+                height: 9,
+                width: 9,
+                tiles: tiles,
+                state: Board.LEVEL_EDIT
+            });
         }
         else if (btn === this.btnEasy) {
             Debug.testDiagonalFall = false;
-            this.state.start("GameScreen", true, false, {colorCount: 4});
+            this.state.start("GameScreen", true, false, {
+                "width": 9,
+                "height": 9,
+                "tiles": [
+                  [1, 1, 1, 1,  1,  1, 1, 1, 1],
+                  [1, 1, 1, 1,  1,"t", 1, 1, 1],
+                  [1, 1, 1, 1,  1,  1, 1, 1, 1],
+                  [1, 1, 1, 1,  1,  1, 1, 1, 1],
+                  [1, 1, 1, 1, -1,  1, 1, 1, 1],
+                  [1, 1, 1, 1,  1,  1, 1, 1, 1],
+                  [1, 1, 1, 1,  1,  1, 1, 1, 1],
+                  [1, 1, 1, 1,  1,  1, 1, 1, 1],
+                  [1, 1, 1, 1,  1,  1, 1, 1, 1]
+                ],
+                "colorCount": 4
+            });
         }
         else if (btn === this.btnMoves) {
             Debug.testDiagonalFall = false;
-            this.state.start("GameScreen", true, false, {remainingMoves: 25, remainingTime: null});
+            this.state.start("GameScreen", true, false, {
+                "width": 9,
+                "height": 9,
+                "tiles": [
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                  [1, 1, 1, 1, 1, 1, 1, 1, 1]
+                ],
+                "remainingMoves": 25,
+                "remainingTime": null
+            });
         }
     }
 };
