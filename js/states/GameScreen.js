@@ -419,7 +419,8 @@ GameScreen.prototype.saveScore = function (score) {
     try {
         var xp = +localStorage.ShapeClear_xp;
         if (!xp) xp = 0;
-        xp += Math.floor(score / 10);
+        var scoreFactor = this.board.colorCount <= 4 ? 70 : 10;
+        xp += Math.floor(score / scoreFactor);
         localStorage.ShapeClear_xp = xp;
         var times = +localStorage.ShapeClear_played;
         if (!times) times = 0;
