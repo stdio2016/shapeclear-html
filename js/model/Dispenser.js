@@ -44,8 +44,7 @@ Dispenser.prototype.updateAccel = function updateAccel(board) {
         if (sh.isMoving()) {
             // diagonal fall is constant velocity
             if (sh.dir.x) sh.speed = 1.2;
-            else if (sh.speed < 1.5) sh.speed += 0.15;
-            else sh.speed += 0.3; // gravity acceleration
+            else sh.speed += 0.2; // gravity acceleration
             if(sh.speed > 2.7) { // maximum speed
                 sh.speed = 2.7;
             }

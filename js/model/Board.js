@@ -94,13 +94,11 @@ Board.prototype.setShape = function (x, y, sh) {
     }
     else if (typeof sh === "number") {
         var sp = this.shapes[x + y * this.width];
-        if (sp.sprite) sp.sprite.kill();
         if (sh === 0) {
             this.shapes[x + y * this.width] = new Shape(0, x, y, this);
         }
         else {
             sp.type = sh;
-            sp.sprite = null;
         }
     }
 };
@@ -480,8 +478,7 @@ Board.prototype.fall = function () {
         if (sh.isMoving()) {
             // diagonal fall is constant velocity
             if (sh.dir.x) sh.speed = 1.2;
-            else if (sh.speed < 1.5) sh.speed += 0.15;
-            else sh.speed += 0.3; // gravity acceleration
+            else sh.speed += 0.2; // gravity acceleration
             if(sh.speed > 2.7) { // maximum speed
                 sh.speed = 2.7;
             }
@@ -636,8 +633,6 @@ Board.prototype.shuffle = function () {
             var sh = r.pop();
             sh.x = i%this.width;
             sh.y = i/this.width | 0;
-            if (sh.sprite) sh.sprite.kill();
-            sh.sprite = null;
             this.shapes[i] = sh;
         }
     }
