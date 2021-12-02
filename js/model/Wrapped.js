@@ -111,20 +111,21 @@ WrappedEffect.prototype.explode = function () {
 WrappedEffect.prototype.update = function () {
     'use strict';
     this.tick--;
-    if (this.stillChanging) {
-        this.board.itemChanged = true;
-    }
     return this.tick > 0;
 };
 
 // returns array of [x, y, width, height, frameName]'s
 WrappedEffect.prototype.getSpritePositions = function () {
-    var t = 1 - this.tick / this.totalTicks;
+    var t = (1 - this.tick / this.totalTicks) * this.size;
     var sw = 0.6, sh = 0.6, frm = Shape.typeNames[this.type-1];
     return [
         [this.x-t, this.y-t, sw, sh, frm],
         [this.x-t, this.y+t, sw, sh, frm],
         [this.x+t, this.y-t, sw, sh, frm],
-        [this.x+t, this.y+t, sw, sh, frm]
+        [this.x+t, this.y+t, sw, sh, frm],
+        [this.x-t, this.y, sw, sh, frm],
+        [this.x+t, this.y, sw, sh, frm],
+        [this.x, this.y-t, sw, sh, frm],
+        [this.x, this.y+t, sw, sh, frm]
     ];
 };
