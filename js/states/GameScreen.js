@@ -456,7 +456,7 @@ GameScreen.prototype.addAnncs = function addAnncs(txt) {
     t.t = 0;
     this.anncs.add(t);
     t.update = function () {
-        var delta = t.game.time.elapsed;
+        var delta = t.game.time.physicsElapsedMS;
         t.fontSize = Math.round(Math.min(t.game.width, t.game.height) * 0.05) * 2.5;
         t.y -= delta * 0.01;
         t.t += delta;
