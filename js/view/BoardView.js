@@ -29,7 +29,7 @@ BoardView.prototype.drawShape = function () {
                 spr = this.shapeGroup.create(100, 100, 'shapes', Shape.typeNames[shape.type - 1]);
                 spr.shader = this.brightShader;
                 spr.alpha = 1;
-                spr.anchor = new Phaser.Point(0, 0);
+                spr.anchor = new Phaser.Point(0.5, 0.5);
                 used++;
             }
             else {
@@ -39,7 +39,7 @@ BoardView.prototype.drawShape = function () {
             if (spr !== null) {
                 var pos = shape.pos;
                 var frameName = Shape.typeNames[shape.type - 1];
-                var adjX = 0, adjY = 0;
+                var adjX = 0.5, adjY = 0.5;
                 if (shape.special == 1) frameName += "HStripe";
                 if (shape.special == 2) frameName += "VStripe";
                 if (shape.special == 3) frameName += "Wrapped";
@@ -81,18 +81,24 @@ BoardView.prototype.drawShape = function () {
                 if (board.tiles[y * board.width + x].isDispenser) {
                     var f = spr.animations.currentFrame;
                     var yy = shape.dir.y * pos/10;
-                    if (yy > (f.spriteSourceSizeY+f.height)/gridPx) spr.visible = false;
-                    else if (yy > f.spriteSourceSizeY/gridPx) {
-                        spr.crop(new Phaser.Rectangle(0, yy * gridPx - f.spriteSourceSizeY, gridPx, gridPx));
-                        adjY += yy-f.spriteSourceSizeY/gridPx;
+                    var top = (gridPx - f.sourceSizeH) / 2;
+                    if (f.trimmed) {
+                        top = f.spriteSourceSizeY;
+                    }
+                    if (yy > 1 - top/gridPx) spr.visible = false;
+                    else if (yy > top/gridPx) {
+                        spr.crop(new Phaser.Rectangle(0, (yy * gridPx - top), f.width, f.height));
+                        if (f.trimmed) {
+                            adjY += (yy * gridPx - top) / gridPx;
+                        } else {
+                            adjY += (yy - top / gridPx) * 0.5;
+                        }
                     }
                     else spr.crop(null);
                 }
                 else spr.crop(null);
                 spr.scale.x = scale * spr.alpha;
                 spr.scale.y = scale * spr.alpha;
-                adjX += 0.5 - spr.alpha * 0.5;
-                adjY += 0.5 - spr.alpha * 0.5;
                 if (shape.bouncing) {
                     adjY -= (6 - shape.bouncing) * shape.bouncing / 9 * 0.05;
                 }
